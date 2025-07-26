@@ -31,7 +31,7 @@ from helpers.dataHelper import getItems
 from helpers.formattingHelper import getMaxFontSize, findOptimalAttributeLayout
 from os.path import join
 from PIL import Image, ImageDraw, ImageFont
-from PIL.Image import Resampling
+from PIL.Image import Resampling, Transpose
 
 from helpers.tupleHelper import twoDSub, twoDTruncate
 
@@ -70,7 +70,7 @@ class ImageHandler:
                 raise FileNotFoundError(imagePath)
             image = Image.open(f"{imagePath}.{IMAGE_FORMAT}").convert("RGBA")
             if flip:
-                image = image.transpose(Image.FLIP_LEFT_RIGHT)
+                image = image.transpose(Transpose.FLIP_LEFT_RIGHT)
             if rotate:
                 image = image.rotate(rotate, expand=True, resample=Resampling.BICUBIC)
 
