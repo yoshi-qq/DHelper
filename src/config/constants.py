@@ -46,10 +46,11 @@ ITEM_ABSOLUTE_IMAGE_MAX_SIZE: tuple[int, int] = twoDTruncate(ITEM_RELATIVE_IMAGE
 # =============
 # = CONSTANT
 # =============
-ROOT = dirname(getattr(__main__, '__file__', ""))
+SRC = dirname(getattr(__main__, '__file__', ""))
+ROOT = dirname(SRC)
 
 # = Font Paths =
-FONTS_FOLDER_PATH = join(ROOT, "fonts")
+FONTS_FOLDER_PATH = join(SRC, "fonts")
 REGULAR_FONT_PATH = join(FONTS_FOLDER_PATH, "timesbd.ttf")
 BOLD_FONT_PATH = join(FONTS_FOLDER_PATH, "timesbd.ttf")
 ITALIC_FONT_PATH = join(FONTS_FOLDER_PATH, "timesi.ttf")
@@ -66,7 +67,7 @@ PRICE_FONT_PATH = FONT_PATHS["bold"]
 
 # = Image Paths =
 IMAGE_FORMAT = "png"
-ASSETS_PATH = join(ROOT, "assets")
+ASSETS_PATH = join(SRC, "assets")
 ITEM_IMAGES_PATH = join(ASSETS_PATH, "items")
 SPELLS_IMAGES_PATH = join(ASSETS_PATH, "spells")
 
