@@ -4,7 +4,7 @@ from typing import List
 from os.path import join
 from PIL import Image, ImageTk
 
-from classes.types import Item, DamageType, AttributeType
+from classes.types import Item, DamageType, AttributeType, Damage
 from config.constants import OUTPUT_PATH
 from helpers.dataHelper import (
     getItems,
@@ -36,6 +36,20 @@ class InterfaceHandler:
         style.configure("TLabel", background=dark_bg, foreground=fg)
         style.configure("TCheckbutton", background=dark_bg, foreground=fg)
         style.configure("TButton", background="#444", foreground=fg)
+        style.configure(
+            "TEntry",
+            fieldbackground="#444",
+            background="#444",
+            foreground=fg,
+            insertcolor=fg,
+        )
+        style.configure(
+            "TCombobox",
+            fieldbackground="#444",
+            background="#444",
+            foreground=fg,
+            selectbackground="#555",
+        )
         style.map("TButton", background=[("active", "#555")])
         self.root.configure(bg=dark_bg)
 
@@ -73,17 +87,30 @@ class InterfaceHandler:
 
         entries: dict[str, tk.Entry] = {}
         row = 0
-        for label in ["ID", "Name", "Price", "Weight", "Damage Dice Amount", "Damage Dice Type", "Damage Bonus"]:
+        for label in ["ID", "Name", "Price", "Weight"]:
             ttk.Label(window, text=label).grid(row=row, column=0, sticky="e", padx=5, pady=2)
             entry = ttk.Entry(window)
             entry.grid(row=row, column=1, padx=5, pady=2)
             entries[label] = entry
             row += 1
 
+        # === Damage Row ===
+        dice_sizes = [4, 6, 8, 10, 12]
         damage_types = list(DamageType.__args__)  # type: ignore
-        ttk.Label(window, text="Damage Type").grid(row=row, column=0, sticky="e", padx=5, pady=2)
+        ttk.Label(window, text="Damage").grid(row=row, column=0, sticky="e", padx=5, pady=2)
+        dmg_frame = ttk.Frame(window)
+        dmg_frame.grid(row=row, column=1, sticky="w")
+        entries["Damage Dice Amount"] = ttk.Entry(dmg_frame, width=4)
+        entries["Damage Dice Amount"].pack(side="left")
+        ttk.Label(dmg_frame, text="d").pack(side="left")
+        dmg_dice_type = ttk.Combobox(dmg_frame, values=dice_sizes, width=4, state="readonly")
+        dmg_dice_type.pack(side="left", padx=2)
+        entries["Damage Dice Type"] = dmg_dice_type
+        entries["Damage Bonus"] = ttk.Entry(dmg_frame, width=4)
+        entries["Damage Bonus"].pack(side="left", padx=2)
         dmg_type_var = tk.StringVar(value="")
-        ttk.Combobox(window, textvariable=dmg_type_var, values=[""] + damage_types, state="readonly").grid(row=row, column=1, padx=5, pady=2)
+        dmg_type_cb = ttk.Combobox(dmg_frame, textvariable=dmg_type_var, values=[""] + damage_types, state="readonly", width=10)
+        dmg_type_cb.pack(side="left", padx=2)
         row += 1
 
         attribute_types = list(AttributeType.__args__)  # type: ignore
@@ -96,12 +123,16 @@ class InterfaceHandler:
 
         def toggle_range(at: str) -> None:
             frame = range_frames.get(at)
-            if not frame:
-                return
-            if attr_vars[at].get():
-                frame.pack(anchor="w", padx=15)
-            else:
-                frame.pack_forget()
+            if frame:
+                if attr_vars[at].get():
+                    frame.pack(anchor="w", padx=15)
+                else:
+                    frame.pack_forget()
+            if at == "Vielseitig":
+                if attr_vars[at].get():
+                    vers_frame.grid()
+                else:
+                    vers_frame.grid_remove()
 
         for at in attribute_types:
             var = tk.BooleanVar(value=False)
@@ -120,6 +151,23 @@ class InterfaceHandler:
                 range_entries[at] = (e_min, e_max)
         row += 1
 
+        # === Versatile Damage (hidden by default) ===
+        vers_frame = ttk.Frame(window)
+        ttk.Label(vers_frame, text="Vielseitig").grid(row=0, column=0, sticky="e", padx=5, pady=2)
+        vers_inner = ttk.Frame(vers_frame)
+        vers_inner.grid(row=0, column=1, sticky="w")
+        entries["Versatile Dice Amount"] = ttk.Entry(vers_inner, width=4)
+        entries["Versatile Dice Amount"].pack(side="left")
+        ttk.Label(vers_inner, text="d").pack(side="left")
+        vers_dice_type = ttk.Combobox(vers_inner, values=dice_sizes, width=4, state="readonly")
+        vers_dice_type.pack(side="left", padx=2)
+        entries["Versatile Dice Type"] = vers_dice_type
+        entries["Versatile Damage Bonus"] = ttk.Entry(vers_inner, width=4)
+        entries["Versatile Damage Bonus"].pack(side="left", padx=2)
+        vers_frame.grid(row=row, column=0, columnspan=2, sticky="w")
+        vers_frame.grid_remove()
+        row += 1
+
         def submit() -> None:
             try:
                 _id = entries["ID"].get().strip()
@@ -129,6 +177,9 @@ class InterfaceHandler:
                 dmg_amount = int(entries["Damage Dice Amount"].get()) if entries["Damage Dice Amount"].get() else 0
                 dmg_type = int(entries["Damage Dice Type"].get()) if entries["Damage Dice Type"].get() else 1
                 dmg_bonus = int(entries["Damage Bonus"].get()) if entries["Damage Bonus"].get() else 0
+                vers_amount = int(entries["Versatile Dice Amount"].get()) if entries["Versatile Dice Amount"].get() else 0
+                vers_type = int(entries["Versatile Dice Type"].get()) if entries["Versatile Dice Type"].get() else 1
+                vers_bonus = int(entries["Versatile Damage Bonus"].get()) if entries["Versatile Damage Bonus"].get() else 0
                 damage_type = dmg_type_var.get() or None
                 attributes = [at for at in attribute_types if attr_vars[at].get()]
                 ranges = {}
@@ -156,6 +207,7 @@ class InterfaceHandler:
                 damageDiceType=dmg_type,
                 damageBonus=dmg_bonus,
                 damageType=damage_type,  # type: ignore
+                versatileDamage=Damage(vers_amount, vers_type, vers_bonus, damage_type) if vers_amount or vers_bonus else None,
                 attributes=attributes,
                 ranges=ranges,
             )
