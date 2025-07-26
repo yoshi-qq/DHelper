@@ -1,9 +1,8 @@
 from datetime import timedelta
 from enum import Enum
-from typing import Optional, Type, TypedDict, Annotated, Tuple
+from typing import Optional, Type, TypedDict, Annotated, Tuple, Literal
 from helpers.translationHelper import translate, to_enum
 import re
-from src.classes.types import JsonDamage
 
 HexColor = Annotated[
     str,
@@ -18,7 +17,6 @@ RGBA = Annotated[
     lambda value: all(0 <= v <= 255 for v in value)
 ]
 
-# TODO: Enums to be translated later
 class DamageType(Enum):
     LIGHTNING = "Lightning"
     FORCE = "Force"
@@ -53,17 +51,82 @@ class AttributeType(Enum):
     def __str__(self) -> str:  # pragma: no cover - simple delegation
         return translate(self)
 
-SpellType = Literal["Bannmagie", "Beschwörungsmagie", "Verwandlungsmagie", "Hervorrufungsmagie", "Illusionsmagie", "Nekromantie", "Verzauberungsmagie", "Erkenntnismagie"]
+class SpellType(Enum):
+    ABJURATION = "Bannmagie"
+    CONJURATION = "Beschwörungsmagie"
+    TRANSMUTATION = "Verwandlungsmagie"
+    EVOCATION = "Hervorrufungsmagie"
+    ILLUSION = "Illusionsmagie"
+    NECROMANCY = "Nekromantie"
+    ENCHANTMENT = "Verzauberungsmagie"
+    DIVINATION = "Erkenntnismagie"
 
-CasterClassType = Literal["Barde", "Kleriker", "Druide", "Hexenmeister", "Magier", "Paladin", "Waldläufer", "Zauberer", "Kunsthandwerker"]
+    def __str__(self) -> str:  # pragma: no cover - simple delegation
+        return translate(self)
 
-CastingTimeType = Literal["Aktion", "Bonusaktion", "Reaktion", "1 Minute", "10 Minuten", "1 Stunde", "8 Stunden", "24 Stunden"]
+class CasterClassType(Enum):
+    BARD = "Barde"
+    CLERIC = "Kleriker"
+    DRUID = "Druide"
+    WARLOCK = "Hexenmeister"
+    WIZARD = "Magier"
+    PALADIN = "Paladin"
+    RANGER = "Waldläufer"
+    SORCERER = "Zauberer"
+    ARTIFICER = "Kunsthandwerker"
 
-TargetType = Literal["Selbst", "Kreatur", "Objekt", "Punkt", "Bereich", "Kegel", "Linie", "Kugel", "Zylinder", "Würfel"]
+    def __str__(self) -> str:  # pragma: no cover - simple delegation
+        return translate(self)
 
-SavingThrowType = Literal["Stärke", "Geschicklichkeit", "Konstitution", "Intelligenz", "Weisheit", "Charisma"]
+class CastingTimeType(Enum):
+    ACTION = "Aktion"
+    BONUS_ACTION = "Bonusaktion"
+    REACTION = "Reaktion"
+    ONE_MINUTE = "1 Minute"
+    TEN_MINUTES = "10 Minuten"
+    ONE_HOUR = "1 Stunde"
+    EIGHT_HOURS = "8 Stunden"
+    TWENTY_FOUR_HOURS = "24 Stunden"
 
-AreaOfEffectType = Literal["Kegel", "Würfel", "Zylinder", "Linie", "Kugel", "Rechteck"]
+    def __str__(self) -> str:  # pragma: no cover - simple delegation
+        return translate(self)
+
+class TargetType(Enum):
+    SELF = "Selbst"
+    CREATURE = "Kreatur"
+    OBJECT = "Objekt"
+    POINT = "Punkt"
+    AREA = "Bereich"
+    CONE = "Kegel"
+    LINE = "Linie"
+    SPHERE = "Kugel"
+    CYLINDER = "Zylinder"
+    CUBE = "Würfel"
+
+    def __str__(self) -> str:  # pragma: no cover - simple delegation
+        return translate(self)
+
+class SavingThrowType(Enum):
+    STRENGTH = "Stärke"
+    DEXTERITY = "Geschicklichkeit"
+    CONSTITUTION = "Konstitution"
+    INTELLIGENCE = "Intelligenz"
+    WISDOM = "Weisheit"
+    CHARISMA = "Charisma"
+
+    def __str__(self) -> str:  # pragma: no cover - simple delegation
+        return translate(self)
+
+class AreaOfEffectType(Enum):
+    CONE = "Kegel"
+    CUBE = "Würfel"
+    CYLINDER = "Zylinder"
+    LINE = "Linie"
+    SPHERE = "Kugel"
+    RECTANGLE = "Rechteck"
+
+    def __str__(self) -> str:  # pragma: no cover - simple delegation
+        return translate(self)
 
 
 # ========
@@ -83,7 +146,7 @@ class JsonDamage(TypedDict):
     diceAmount: int
     diceType: int
     bonus: int
-    damageType: DamageType
+    damageType: str
 
 class JsonItem(TypedDict, total=False):
     name: str
@@ -91,15 +154,15 @@ class JsonItem(TypedDict, total=False):
     weight: float
     damage: JsonDamage | None
     versatileDamage: JsonDamage | None
-    attributes: list[AttributeType]
+    attributes: list[str]
     ranges: dict[str, list[int]]
 
 class JsonSpell(TypedDict):
     id: str
     name: str
     level: int
-    type: SpellType
-    casterClass: CasterClassType
+    type: str
+    casterClass: str
     duration: float # in seconds
     cooldown: float # in seconds
     range: float
@@ -107,12 +170,12 @@ class JsonSpell(TypedDict):
     damage: JsonDamage | None
     components: JsonComponents
     levelBonus: str
-    castingTime: CastingTimeType
+    castingTime: str
     ritual: bool
     concentration: bool
-    target: TargetType
-    savingThrow: Optional[SavingThrowType]
-    areaOfEffect: Optional[AreaOfEffectType]
+    target: str
+    savingThrow: Optional[str]
+    areaOfEffect: Optional[str]
 
 class JsonItemCache(TypedDict):
     rotate: float
@@ -228,8 +291,8 @@ class Spell:
             "id": self.id,
             "name": self.name,
             "level": self.level,
-            "type": self.type,
-            "casterClass": self.casterClass,
+            "type": self.type.value,
+            "casterClass": self.casterClass.value,
             "duration": self.duration.total_seconds(),
             "cooldown": self.cooldown.total_seconds(),
             "range": self.range,
@@ -237,10 +300,10 @@ class Spell:
             "damage": self.damage.toJsonDamage() if self.damage else None,
             "components": self.components.toJsonComponents(),
             "levelBonus": self.levelBonus,
-            "castingTime": self.castingTime,
+            "castingTime": self.castingTime.value,
             "ritual": self.ritual,
             "concentration": self.concentration,
-            "target": self.target,
-            "savingThrow": self.savingThrow,
-            "areaOfEffect": self.areaOfEffect
+            "target": self.target.value,
+            "savingThrow": self.savingThrow.value if self.savingThrow else None,
+            "areaOfEffect": self.areaOfEffect.value if self.areaOfEffect else None
         }

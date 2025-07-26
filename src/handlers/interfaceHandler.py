@@ -410,7 +410,7 @@ class InterfaceHandler:
                         vers_amount,
                         vers_type,
                         vers_bonus,
-                        (to_enum(DamageType, dmg_type_var.get()) if dmg_type_var.get() else damage_type)
+                        to_enum(DamageType, dmg_type_var.get()) if dmg_type_var.get() else (damage_type if damage_type is not None else DamageType.SLASHING)
                     )
                     if (vers_amount or vers_bonus) and (dmg_type_var.get() or damage_type)
                     else None

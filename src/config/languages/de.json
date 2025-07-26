@@ -79,5 +79,64 @@
     "INVALID_RANGE": "Ungültige Reichweite für {attr}",
     "INVALID_VALUE": "Ungültiger Wert: {error}",
     "ID_NAME_REQUIRED": "ID und Name sind erforderlich"
+  },
+  "SpellType": {
+    "ABJURATION": "Bannmagie",
+    "CONJURATION": "Beschwörungsmagie",
+    "TRANSMUTATION": "Verwandlungsmagie",
+    "EVOCATION": "Hervorrufungsmagie",
+    "ILLUSION": "Illusionsmagie",
+    "NECROMANCY": "Nekromantie",
+    "ENCHANTMENT": "Verzauberungsmagie",
+    "DIVINATION": "Erkenntnismagie"
+  },
+  "CasterClassType": {
+    "BARD": "Barde",
+    "CLERIC": "Kleriker",
+    "DRUID": "Druide",
+    "WARLOCK": "Hexenmeister",
+    "WIZARD": "Magier",
+    "PALADIN": "Paladin",
+    "RANGER": "Waldläufer",
+    "SORCERER": "Zauberer",
+    "ARTIFICER": "Kunsthandwerker"
+  },
+  "CastingTimeType": {
+    "ACTION": "Aktion",
+    "BONUS_ACTION": "Bonusaktion",
+    "REACTION": "Reaktion",
+    "ONE_MINUTE": "1 Minute",
+    "TEN_MINUTES": "10 Minuten",
+    "ONE_HOUR": "1 Stunde",
+    "EIGHT_HOURS": "8 Stunden",
+    "TWENTY_FOUR_HOURS": "24 Stunden"
+  },
+  "TargetType": {
+    "SELF": "Selbst",
+    "CREATURE": "Kreatur",
+    "OBJECT": "Objekt",
+    "POINT": "Punkt",
+    "AREA": "Bereich",
+    "CONE": "Kegel",
+    "LINE": "Linie",
+    "SPHERE": "Kugel",
+    "CYLINDER": "Zylinder",
+    "CUBE": "Würfel"
+  },
+  "SavingThrowType": {
+    "STRENGTH": "Stärke",
+    "DEXTERITY": "Geschicklichkeit",
+    "CONSTITUTION": "Konstitution",
+    "INTELLIGENCE": "Intelligenz",
+    "WISDOM": "Weisheit",
+    "CHARISMA": "Charisma"
+  },
+  "AreaOfEffectType": {
+    "CONE": "Kegel",
+    "CUBE": "Würfel",
+    "CYLINDER": "Zylinder",
+    "LINE": "Linie",
+    "SPHERE": "Kugel",
+    "RECTANGLE": "Rechteck"
   }
 }

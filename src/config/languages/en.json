@@ -79,5 +79,64 @@
     "INVALID_RANGE": "Invalid range for {attr}",
     "INVALID_VALUE": "Invalid value: {error}",
     "ID_NAME_REQUIRED": "ID and Name are required"
+  },
+  "SpellType": {
+    "ABJURATION": "Abjuration",
+    "CONJURATION": "Conjuration",
+    "TRANSMUTATION": "Transmutation",
+    "EVOCATION": "Evocation",
+    "ILLUSION": "Illusion",
+    "NECROMANCY": "Necromancy",
+    "ENCHANTMENT": "Enchantment",
+    "DIVINATION": "Divination"
+  },
+  "CasterClassType": {
+    "BARD": "Bard",
+    "CLERIC": "Cleric",
+    "DRUID": "Druid",
+    "WARLOCK": "Warlock",
+    "WIZARD": "Wizard",
+    "PALADIN": "Paladin",
+    "RANGER": "Ranger",
+    "SORCERER": "Sorcerer",
+    "ARTIFICER": "Artificer"
+  },
+  "CastingTimeType": {
+    "ACTION": "Action",
+    "BONUS_ACTION": "Bonus Action",
+    "REACTION": "Reaction",
+    "ONE_MINUTE": "1 Minute",
+    "TEN_MINUTES": "10 Minutes",
+    "ONE_HOUR": "1 Hour",
+    "EIGHT_HOURS": "8 Hours",
+    "TWENTY_FOUR_HOURS": "24 Hours"
+  },
+  "TargetType": {
+    "SELF": "Self",
+    "CREATURE": "Creature",
+    "OBJECT": "Object",
+    "POINT": "Point",
+    "AREA": "Area",
+    "CONE": "Cone",
+    "LINE": "Line",
+    "SPHERE": "Sphere",
+    "CYLINDER": "Cylinder",
+    "CUBE": "Cube"
+  },
+  "SavingThrowType": {
+    "STRENGTH": "Strength",
+    "DEXTERITY": "Dexterity",
+    "CONSTITUTION": "Constitution",
+    "INTELLIGENCE": "Intelligence",
+    "WISDOM": "Wisdom",
+    "CHARISMA": "Charisma"
+  },
+  "AreaOfEffectType": {
+    "CONE": "Cone",
+    "CUBE": "Cube",
+    "CYLINDER": "Cylinder",
+    "LINE": "Line",
+    "SPHERE": "Sphere",
+    "RECTANGLE": "Rectangle"
   }
 }
