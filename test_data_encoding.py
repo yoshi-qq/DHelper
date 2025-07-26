@@ -20,10 +20,11 @@ def test_data_encoding():
         
         # Check for umlauts in attributes specifically
         for attr in item.attributes:
-            if any(char in attr for char in ['ä', 'ö', 'ü', 'Ä', 'Ö', 'Ü', 'ß']):
-                print(f"  ✓ Found umlaut in attribute: {attr}")
-            if 'Ã' in attr:  # This indicates encoding problem
-                print(f"  ✗ Encoding issue detected in: {attr}")
+            attr_str = str(attr)
+            if any(char in attr_str for char in ['ä', 'ö', 'ü', 'Ä', 'Ö', 'Ü', 'ß']):
+                print(f"  ✓ Found umlaut in attribute: {attr_str}")
+            if 'Ã' in attr_str:  # This indicates encoding problem
+                print(f"  ✗ Encoding issue detected in: {attr_str}")
         print()
 
 if __name__ == "__main__":

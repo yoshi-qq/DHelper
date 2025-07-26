@@ -7,11 +7,11 @@
             "diceAmount": 2,
             "diceType": 6,
             "bonus": 0,
-            "damageType": "Wucht"
+            "damageType": "Bludgeoning"
         },
         "attributes": [
-            "schwer",
-            "zweihändig"
+            "Heavy",
+            "Two-Handed"
         ]
     },
     "dolch": {
@@ -22,14 +22,14 @@
             "diceAmount": 1,
             "diceType": 4,
             "bonus": 0,
-            "damageType": "Stich"
+            "damageType": "Piercing"
         },
         "attributes": [
-            "leicht",
-            "Wurfwaffe"
+            "Light",
+            "Thrown"
         ],
         "ranges": {
-            "Wurfwaffe": [
+            "Thrown": [
                 6,
                 18
             ]

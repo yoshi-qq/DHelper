@@ -27,6 +27,7 @@ from config.constants import (
     WEIGHT_SUFFIX,
 )
 from classes.types import AttributeType, Currency, Damage, Item
+from helpers.translationHelper import translate
 from helpers.dataHelper import getItems
 from helpers.formattingHelper import getMaxFontSize, findOptimalAttributeLayout
 from os.path import join
@@ -120,22 +121,23 @@ class ImageHandler:
             damage: Optional[Damage],
             versatile: Optional[Damage],
             attributes: list[AttributeType],
-            ranges: dict[str, tuple[int, int]],
+            ranges: dict[AttributeType, tuple[int, int]],
         ) -> None:
             fixedRows: list[str] = []
-            fixedRows.append(f"{WEIGHT_PREFIX}{weight}{WEIGHT_SUFFIX}")
+            fixedRows.append(f"{translate(WEIGHT_PREFIX)}{weight}{translate(WEIGHT_SUFFIX)}")
             if damage:
-                fixedRows.append(f"{DAMAGE_PREFIX}{format_damage(damage, True)}")
+                fixedRows.append(f"{translate(DAMAGE_PREFIX)}{format_damage(damage, True)}")
 
             attr_strings: list[str] = []
             for attr in attributes:
-                if attr == "Vielseitig" and versatile:
-                    attr_strings.append(f"{attr} ({format_damage(versatile)})")
+                name = str(attr)
+                if attr == AttributeType.VERSATILE and versatile:
+                    attr_strings.append(f"{name} ({format_damage(versatile)})")
                 elif attr in ranges:
                     low, high = ranges[attr]
-                    attr_strings.append(f"{attr} ({low}/{high})")
+                    attr_strings.append(f"{name} ({low}/{high})")
                 else:
-                    attr_strings.append(str(attr))
+                    attr_strings.append(name)
 
             optimalRows, optimalFontSize = findOptimalAttributeLayout(
                 attr_strings,

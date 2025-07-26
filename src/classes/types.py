@@ -1,5 +1,6 @@
 from enum import Enum
-from typing import Literal, Optional, Type, TypedDict, Annotated, Tuple
+from typing import Optional, Type, TypedDict, Annotated, Tuple
+from helpers.translationHelper import translate, to_enum
 import re
 
 HexColor = Annotated[
@@ -16,8 +17,39 @@ RGBA = Annotated[
 ]
 
 
-DamageType = Literal["Blitz", "Energie", "Feuer", "Gift", "Gleißend", "Hieb", "Kälte", "Nekrotisch", "Psychisch", "Säure", "Schall", "Stich", "Wucht"]
-AttributeType = Literal["Finesse", "Geschosse", "Laden", "Leicht", "Reichweite", "Schwer", "Speziell", "Vielseitig", "Weitreichend", "Wurfwaffe", "Zweihändig"]
+class DamageType(Enum):
+    LIGHTNING = "Lightning"
+    FORCE = "Force"
+    FIRE = "Fire"
+    POISON = "Poison"
+    RADIANT = "Radiant"
+    SLASHING = "Slashing"
+    COLD = "Cold"
+    NECROTIC = "Necrotic"
+    PSYCHIC = "Psychic"
+    ACID = "Acid"
+    THUNDER = "Thunder"
+    PIERCING = "Piercing"
+    BLUDGEONING = "Bludgeoning"
+
+    def __str__(self) -> str:  # pragma: no cover - simple delegation
+        return translate(self)
+
+class AttributeType(Enum):
+    FINESSE = "Finesse"
+    AMMUNITION = "Ammunition"
+    LOADING = "Loading"
+    LIGHT = "Light"
+    REACH = "Reach"
+    HEAVY = "Heavy"
+    SPECIAL = "Special"
+    VERSATILE = "Versatile"
+    RANGED = "Ranged"
+    THROWN = "Thrown"
+    TWO_HANDED = "Two-Handed"
+
+    def __str__(self) -> str:  # pragma: no cover - simple delegation
+        return translate(self)
 
 
 # ========
@@ -64,7 +96,7 @@ class Damage:
             "diceAmount": self.diceAmount,
             "diceType": self.diceType,
             "bonus": self.bonus,
-            "damageType": self.damageType
+            "damageType": self.damageType.value,
         }
 
 class Item:
@@ -79,7 +111,7 @@ class Item:
         damageBonus: int = 0,
         damageType: Optional[DamageType] = None,
         attributes: Optional[list[AttributeType]] = None,
-        ranges: Optional[dict[str, tuple[int, int]]] = None,
+        ranges: Optional[dict[AttributeType, tuple[int, int]]] = None,
         versatileDamage: Optional[Damage] = None,
     ) -> None:
         self.id: str = _id
@@ -89,7 +121,7 @@ class Item:
         self.damage = Damage(damageDiceAmount, damageDiceType, damageBonus, damageType) if damageType is not None else None
         self.versatileDamage: Optional[Damage] = versatileDamage
         self.attributes: list[AttributeType] = attributes if attributes else []
-        self.ranges: dict[str, tuple[int, int]] = ranges if ranges else {}
+        self.ranges: dict[AttributeType, tuple[int, int]] = ranges if ranges else {}
     def toJsonItem(self) -> JsonItem:
         return {
             "name": self.name,
@@ -97,7 +129,7 @@ class Item:
             "weight": self.weight,
             "damage": self.damage.toJsonDamage() if self.damage else None,
             "versatileDamage": self.versatileDamage.toJsonDamage() if self.versatileDamage else None,
-            "attributes": self.attributes,
-            **({"ranges": {k: [v[0], v[1]] for k, v in self.ranges.items()}} if self.ranges else {})
+            "attributes": [a.value for a in self.attributes],
+            **({"ranges": {k.value: [v[0], v[1]] for k, v in self.ranges.items()}} if self.ranges else {})
         }  # type: ignore
 
