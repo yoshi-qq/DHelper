@@ -9,6 +9,9 @@ from helpers.conversionHelper import toRGBA
 SRC = dirname(dirname(__file__))
 ROOT = dirname(SRC)
 
+# = Game =
+DICE_SIZES = [4, 6, 8, 10, 12, 20]
+
 # = Card =
 # (x, y)
 CARD_RESOLUTION: tuple[int, int] = (356, 497)

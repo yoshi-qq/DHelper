@@ -5,7 +5,7 @@ from os.path import join
 from PIL import Image, ImageTk
 
 from classes.types import Item, DamageType, AttributeType, Damage
-from config.constants import OUTPUT_PATH
+from config.constants import DICE_SIZES, OUTPUT_PATH
 from helpers.dataHelper import (
     getItems,
     addItem,
@@ -95,7 +95,6 @@ class InterfaceHandler:
             row += 1
 
         # === Damage Row ===
-        dice_sizes = [4, 6, 8, 10, 12]
         damage_types = list(DamageType.__args__)  # type: ignore
         ttk.Label(window, text="Damage").grid(row=row, column=0, sticky="e", padx=5, pady=2)
         dmg_frame = ttk.Frame(window)
@@ -103,7 +102,7 @@ class InterfaceHandler:
         entries["Damage Dice Amount"] = ttk.Entry(dmg_frame, width=4)
         entries["Damage Dice Amount"].pack(side="left")
         ttk.Label(dmg_frame, text="d").pack(side="left")
-        dmg_dice_type = ttk.Combobox(dmg_frame, values=dice_sizes, width=4, state="readonly")
+        dmg_dice_type = ttk.Combobox(dmg_frame, values=[str(d) for d in DICE_SIZES], width=4, state="readonly")
         dmg_dice_type.pack(side="left", padx=2)
         entries["Damage Dice Type"] = dmg_dice_type
         entries["Damage Bonus"] = ttk.Entry(dmg_frame, width=4)
@@ -159,7 +158,7 @@ class InterfaceHandler:
         entries["Versatile Dice Amount"] = ttk.Entry(vers_inner, width=4)
         entries["Versatile Dice Amount"].pack(side="left")
         ttk.Label(vers_inner, text="d").pack(side="left")
-        vers_dice_type = ttk.Combobox(vers_inner, values=dice_sizes, width=4, state="readonly")
+        vers_dice_type = ttk.Combobox(vers_inner, values=[str(d) for d in DICE_SIZES], width=4, state="readonly")
         vers_dice_type.pack(side="left", padx=2)
         entries["Versatile Dice Type"] = vers_dice_type
         entries["Versatile Damage Bonus"] = ttk.Entry(vers_inner, width=4)
@@ -207,7 +206,16 @@ class InterfaceHandler:
                 damageDiceType=dmg_type,
                 damageBonus=dmg_bonus,
                 damageType=damage_type,  # type: ignore
-                versatileDamage=Damage(vers_amount, vers_type, vers_bonus, damage_type) if vers_amount or vers_bonus else None,
+                versatileDamage=(
+                    Damage(
+                        vers_amount,
+                        vers_type,
+                        vers_bonus,
+                        (dmg_type_var.get() if dmg_type_var.get() else damage_type)  # type: ignore
+                    )
+                    if (vers_amount or vers_bonus) and dmg_type_var.get()
+                    else None
+                ),
                 attributes=attributes,
                 ranges=ranges,
             )

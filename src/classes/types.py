@@ -31,7 +31,7 @@ class JsonDamage(TypedDict):
 
 class JsonItem(TypedDict, total=False):
     name: str
-    price: int
+    price: float
     weight: float
     damage: JsonDamage | None
     versatileDamage: JsonDamage | None
@@ -72,7 +72,7 @@ class Item:
         self,
         _id: str,
         name: str,
-        price: int,
+        price: float,
         weight: float,
         damageDiceAmount: int = 0,
         damageDiceType: int = 1,
@@ -84,7 +84,7 @@ class Item:
     ) -> None:
         self.id: str = _id
         self.name: str = name
-        self.price: int = price
+        self.price: float = price
         self.weight: float = weight
         self.damage = Damage(damageDiceAmount, damageDiceType, damageBonus, damageType) if damageType is not None else None
         self.versatileDamage: Optional[Damage] = versatileDamage

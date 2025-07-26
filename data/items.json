@@ -34,32 +34,5 @@
                 18
             ]
         }
-    },
-    "speer": {
-        "name": "Speer",
-        "price": 1,
-        "weight": 1,
-        "damage": {
-            "diceAmount": 1,
-            "diceType": 6,
-            "bonus": 0,
-            "damageType": "Stich"
-        },
-        "versatileDamage": {
-            "diceAmount": 1,
-            "diceType": 8,
-            "bonus": 0,
-            "damageType": "Stich"
-        },
-        "attributes": [
-            "Wurfwaffe",
-            "Vielseitig"
-        ],
-        "ranges": {
-            "Wurfwaffe": [
-                6,
-                18
-            ]
-        }
     }
 }
