@@ -29,12 +29,18 @@ class JsonDamage(TypedDict):
     bonus: int
     damageType: DamageType
 
-class JsonItem(TypedDict):
+class JsonItem(TypedDict, total=False):
     name: str
     price: int
     weight: float
     damage: JsonDamage | None
     attributes: list[AttributeType]
+    ranges: dict[str, list[int]]
+
+class JsonItemCache(TypedDict):
+    rotate: float
+    scale: float
+    flip: bool
 
 
 # ==========
@@ -61,19 +67,33 @@ class Damage:
         }
 
 class Item:
-    def __init__(self, _id: str, name: str, price: int, weight: float, damageDiceAmount: int = 0, damageDiceType: int = 1, damageBonus: int = 0, damageType: Optional[DamageType] = None, attributes: Optional[list[AttributeType]] = None) -> None:
+    def __init__(
+        self,
+        _id: str,
+        name: str,
+        price: int,
+        weight: float,
+        damageDiceAmount: int = 0,
+        damageDiceType: int = 1,
+        damageBonus: int = 0,
+        damageType: Optional[DamageType] = None,
+        attributes: Optional[list[AttributeType]] = None,
+        ranges: Optional[dict[str, tuple[int, int]]] = None,
+    ) -> None:
         self.id: str = _id
         self.name: str = name
         self.price: int = price
         self.weight: float = weight
         self.damage = Damage(damageDiceAmount, damageDiceType, damageBonus, damageType) if damageType is not None else None
         self.attributes: list[AttributeType] = attributes if attributes else []
+        self.ranges: dict[str, tuple[int, int]] = ranges if ranges else {}
     def toJsonItem(self) -> JsonItem:
         return {
             "name": self.name,
             "price": self.price,
             "weight": self.weight,
             "damage": self.damage.toJsonDamage() if self.damage else None,
-            "attributes": self.attributes
+            "attributes": self.attributes,
+            **({"ranges": {k: [v[0], v[1]] for k, v in self.ranges.items()}} if self.ranges else {})
         }
 

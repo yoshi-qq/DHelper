@@ -1,19 +1,23 @@
 from classes.types import RGB, JsonItem, Item, HexColor, RGBA
 def toItem(_id: str, jsonItem: JsonItem) -> Item:
+    ranges = {k: tuple(v) for k, v in jsonItem.get("ranges", {}).items()}
     return Item(
-        _id = _id,
-        name = jsonItem['name'],
-        price = jsonItem['price'],
-        weight = jsonItem['weight'],
-        attributes = jsonItem['attributes'],
+        _id=_id,
+        name=jsonItem["name"],
+        price=jsonItem["price"],
+        weight=jsonItem["weight"],
+        attributes=jsonItem["attributes"],
+        ranges=ranges,
         **(
             {
-                "damageDiceAmount": jsonItem['damage']['diceAmount'],
-                "damageDiceType": jsonItem['damage']['diceType'],
-                "damageBonus": jsonItem['damage']['bonus'],
-                "damageType": jsonItem['damage']['damageType']
-            } if jsonItem['damage'] else {}
-        )
+                "damageDiceAmount": jsonItem["damage"]["diceAmount"],
+                "damageDiceType": jsonItem["damage"]["diceType"],
+                "damageBonus": jsonItem["damage"]["bonus"],
+                "damageType": jsonItem["damage"]["damageType"],
+            }
+            if jsonItem["damage"]
+            else {}
+        ),
     )
 
 def toRGBA(hex: HexColor) -> RGBA:

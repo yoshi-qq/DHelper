@@ -1,4 +1,3 @@
-import __main__
 from os.path import join, dirname
 from helpers.tupleHelper import twoDTruncate
 from helpers.conversionHelper import toRGBA
@@ -7,7 +6,7 @@ from helpers.conversionHelper import toRGBA
 # =============
 # = CONSTANT
 # =============
-SRC = dirname(getattr(__main__, '__file__', ""))
+SRC = dirname(dirname(__file__))
 ROOT = dirname(SRC)
 
 # = Card =
@@ -50,6 +49,9 @@ SPELLS_LIST_PATH = join(DATA_PATH, "spells.json")
 
 # = Paths =
 OUTPUT_PATH = join(ROOT, "output")
+# Cache
+CACHE_PATH = join(ROOT, "cache")
+ITEM_CACHE_PATH = join(CACHE_PATH, "itemCache.json")
 
 
 

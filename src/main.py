@@ -1,7 +1,11 @@
-from handlers.imageHandler import ImageHandler
+from handlers.interfaceHandler import InterfaceHandler
+
+
 def main() -> None:
-    I = ImageHandler()
-    I.createItemCards()
+    app = InterfaceHandler()
+    app.run()
+
 
 if __name__ == "__main__":
     main()
+
