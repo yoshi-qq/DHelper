@@ -5,6 +5,8 @@ from os.path import join
 from PIL import Image, ImageTk
 
 from classes.types import Item, DamageType, AttributeType, Damage
+from classes.textKeys import UIText, MessageText
+from helpers.translationHelper import translate, to_enum
 from config.constants import DICE_SIZES, OUTPUT_PATH
 from helpers.dataHelper import (
     getItems,
@@ -18,7 +20,7 @@ from handlers.imageHandler import ImageHandler
 class InterfaceHandler:
     def __init__(self) -> None:
         self.root = tk.Tk()
-        self.root.title("DHelper")
+        self.root.title(translate(UIText.APP_TITLE))
         self._set_dark_theme()
         self.image_handler = ImageHandler()
         self._build_main_menu()
@@ -65,45 +67,51 @@ class InterfaceHandler:
         self._clear_root()
         frame = ttk.Frame(self.root, padding=20)
         frame.pack(fill="both", expand=True)
-        ttk.Button(frame, text="Items", command=self._open_items_menu, width=30).pack(pady=10)
-        ttk.Button(frame, text="Spells", command=self._open_spells_menu, width=30).pack(pady=10)
+        ttk.Button(frame, text=translate(UIText.BUTTON_ITEMS), command=self._open_items_menu, width=30).pack(pady=10)
+        ttk.Button(frame, text=translate(UIText.BUTTON_SPELLS), command=self._open_spells_menu, width=30).pack(pady=10)
 
     def _open_items_menu(self) -> None:
         self._clear_root()
         frame = ttk.Frame(self.root, padding=20)
         frame.pack(fill="both", expand=True)
-        ttk.Button(frame, text="Add Item", command=self._open_add_item).pack(pady=5, fill="x")
-        ttk.Button(frame, text="Manage Items", command=self._open_manage_items).pack(pady=5, fill="x")
-        ttk.Button(frame, text="Print Items", command=self._open_print_items).pack(pady=5, fill="x")
-        ttk.Button(frame, text="Back", command=self._build_main_menu).pack(pady=10)
+        ttk.Button(frame, text=translate(UIText.BUTTON_ADD_ITEM), command=self._open_add_item).pack(pady=5, fill="x")
+        ttk.Button(frame, text=translate(UIText.BUTTON_MANAGE_ITEMS), command=self._open_manage_items).pack(pady=5, fill="x")
+        ttk.Button(frame, text=translate(UIText.BUTTON_PRINT_ITEMS), command=self._open_print_items).pack(pady=5, fill="x")
+        ttk.Button(frame, text=translate(UIText.BUTTON_BACK), command=self._build_main_menu).pack(pady=10)
 
     def _open_spells_menu(self) -> None:
         self._clear_root()
         frame = ttk.Frame(self.root, padding=20)
         frame.pack(fill="both", expand=True)
-        ttk.Label(frame, text="Spells functionality not implemented yet").pack(pady=10)
-        ttk.Button(frame, text="Back", command=self._build_main_menu).pack(pady=10)
+        ttk.Label(frame, text=translate(UIText.SPELLS_NOT_IMPLEMENTED)).pack(pady=10)
+        ttk.Button(frame, text=translate(UIText.BUTTON_BACK), command=self._build_main_menu).pack(pady=10)
 
     # ===== Manage Items =====
     def _open_manage_items(self) -> None:
         window = tk.Toplevel(self.root)
-        window.title("Manage Items")
+        window.title(translate(UIText.MANAGE_ITEMS_TITLE))
         window.configure(bg=self.root["background"])
 
         items = getItems()
 
         search_var = tk.StringVar()
-        sort_var = tk.StringVar(value="ID")
+        sort_var = tk.StringVar(value=translate(UIText.COLUMN_ID))
 
-        ttk.Label(window, text="Search").grid(row=0, column=0, sticky="e", padx=5, pady=2)
+        ttk.Label(window, text=translate(UIText.SEARCH_LABEL)).grid(row=0, column=0, sticky="e", padx=5, pady=2)
         search_entry = ttk.Entry(window, textvariable=search_var)
         search_entry.grid(row=0, column=1, sticky="ew", padx=5, pady=2)
 
-        ttk.Label(window, text="Sort by").grid(row=1, column=0, sticky="e", padx=5, pady=2)
-        sort_cb = ttk.Combobox(window, textvariable=sort_var, values=["ID", "Name", "Price", "Weight"], state="readonly")
+        ttk.Label(window, text=translate(UIText.SORT_BY_LABEL)).grid(row=1, column=0, sticky="e", padx=5, pady=2)
+        sort_map = {
+            "id": UIText.COLUMN_ID,
+            "name": UIText.COLUMN_NAME,
+            "price": UIText.COLUMN_PRICE,
+            "weight": UIText.COLUMN_WEIGHT,
+        }
+        sort_cb = ttk.Combobox(window, textvariable=sort_var, values=[translate(v) for v in sort_map.values()], state="readonly")
         sort_cb.grid(row=1, column=1, sticky="ew", padx=5, pady=2)
 
-        attribute_types = list(AttributeType.__args__)  # type: ignore
+        attribute_types = [str(at) for at in AttributeType]
         attr_vars: dict[str, tk.BooleanVar] = {}
         attr_frame = ttk.Frame(window)
         attr_frame.grid(row=2, column=0, columnspan=2, sticky="w", padx=5)
@@ -115,8 +123,14 @@ class InterfaceHandler:
 
         columns = ("id", "name", "price", "weight")
         tree = ttk.Treeview(window, columns=columns, show="headings", selectmode="browse")
+        headings = {
+            "id": UIText.COLUMN_ID,
+            "name": UIText.COLUMN_NAME,
+            "price": UIText.COLUMN_PRICE,
+            "weight": UIText.COLUMN_WEIGHT,
+        }
         for col in columns:
-            tree.heading(col, text=col.capitalize())
+            tree.heading(col, text=translate(headings[col]))
             tree.column(col, width=100, anchor="center")
         tree.grid(row=3, column=0, columnspan=2, sticky="nsew", padx=5, pady=5)
         window.grid_rowconfigure(3, weight=1)
@@ -124,14 +138,14 @@ class InterfaceHandler:
 
         btn_frame = ttk.Frame(window)
         btn_frame.grid(row=4, column=0, columnspan=2, pady=5)
-        ttk.Button(btn_frame, text="View Card", command=lambda: view_card()).pack(side="left", padx=2)
-        ttk.Button(btn_frame, text="Edit Data", command=lambda: edit_selected()).pack(side="left", padx=2)
-        ttk.Button(btn_frame, text="Edit Card", command=lambda: edit_card()).pack(side="left", padx=2)
-        ttk.Button(btn_frame, text="Close", command=window.destroy).pack(side="left", padx=2)
+        ttk.Button(btn_frame, text=translate(UIText.BUTTON_VIEW_CARD), command=lambda: view_card()).pack(side="left", padx=2)
+        ttk.Button(btn_frame, text=translate(UIText.BUTTON_EDIT_DATA), command=lambda: edit_selected()).pack(side="left", padx=2)
+        ttk.Button(btn_frame, text=translate(UIText.BUTTON_EDIT_CARD), command=lambda: edit_card()).pack(side="left", padx=2)
+        ttk.Button(btn_frame, text=translate(UIText.BUTTON_CLOSE), command=window.destroy).pack(side="left", padx=2)
 
         def filter_items() -> List[Item]:
             search = search_var.get().lower()
-            selected = [a for a, v in attr_vars.items() if v.get()]
+            selected = [to_enum(AttributeType, a) for a, v in attr_vars.items() if v.get()]
             filtered = []
             for it in items:
                 if search not in it.name.lower() and search not in it.id.lower():
@@ -144,7 +158,8 @@ class InterfaceHandler:
         def update_list(*_args: object) -> None:
             tree.delete(*tree.get_children())
             data = filter_items()
-            key = sort_var.get().lower()
+            reverse_map = {translate(v): k for k, v in sort_map.items()}
+            key = reverse_map.get(sort_var.get(), "name")
             if key == "id":
                 sort_key = lambda i: i.id
             elif key == "name":
@@ -171,7 +186,10 @@ class InterfaceHandler:
         def view_card() -> None:
             item = get_selected_item()
             if not item:
-                messagebox.showwarning("No selection", "Select an item first")
+                messagebox.showwarning(
+                    translate(MessageText.NO_SELECTION_TITLE),
+                    translate(MessageText.NO_SELECTION_TEXT),
+                )
                 return
             try:
                 cache = loadItemCache()
@@ -191,12 +209,18 @@ class InterfaceHandler:
                 lbl.image = tk_img # type: ignore (anti garbage collection)
                 lbl.pack()
             except Exception as e:
-                messagebox.showerror("Error", str(e))
+                messagebox.showerror(
+                    translate(MessageText.ERROR_TITLE),
+                    str(e),
+                )
 
         def edit_selected() -> None:
             item = get_selected_item()
             if not item:
-                messagebox.showwarning("No selection", "Select an item first")
+                messagebox.showwarning(
+                    translate(MessageText.NO_SELECTION_TITLE),
+                    translate(MessageText.NO_SELECTION_TEXT),
+                )
                 return
             self._open_edit_item(item)
             items.clear()
@@ -206,7 +230,10 @@ class InterfaceHandler:
         def edit_card() -> None:
             item = get_selected_item()
             if not item:
-                messagebox.showwarning("No selection", "Select an item first")
+                messagebox.showwarning(
+                    translate(MessageText.NO_SELECTION_TITLE),
+                    translate(MessageText.NO_SELECTION_TEXT),
+                )
                 return
             cache = loadItemCache()
             PreviewWindow(self.root, [item], self.image_handler, cache)
@@ -222,25 +249,27 @@ class InterfaceHandler:
 
         entries: dict[str, tk.Entry] = {}
         row = 0
-        for label in ["ID", "Name", "Price", "Weight"]:
-            ttk.Label(window, text=label).grid(row=row, column=0, sticky="e", padx=5, pady=2)
+        labels = [UIText.COLUMN_ID, UIText.COLUMN_NAME, UIText.COLUMN_PRICE, UIText.COLUMN_WEIGHT]
+        for label in labels:
+            text = translate(label)
+            ttk.Label(window, text=text).grid(row=row, column=0, sticky="e", padx=5, pady=2)
             entry = ttk.Entry(window)
             entry.grid(row=row, column=1, padx=5, pady=2)
             if item:
                 match label:
-                    case "ID":
+                    case UIText.COLUMN_ID:
                         entry.insert(0, item.id)
-                    case "Name":
+                    case UIText.COLUMN_NAME:
                         entry.insert(0, item.name)
-                    case "Price":
+                    case UIText.COLUMN_PRICE:
                         entry.insert(0, str(item.price))
-                    case "Weight":
+                    case UIText.COLUMN_WEIGHT:
                         entry.insert(0, str(item.weight))
-            entries[label] = entry
+            entries[text] = entry
             row += 1
 
-        damage_types = list(DamageType.__args__)  # type: ignore
-        ttk.Label(window, text="Damage").grid(row=row, column=0, sticky="e", padx=5, pady=2)
+        damage_types = [str(dt) for dt in DamageType]
+        ttk.Label(window, text=translate(UIText.DAMAGE_LABEL)).grid(row=row, column=0, sticky="e", padx=5, pady=2)
         dmg_frame = ttk.Frame(window)
         dmg_frame.grid(row=row, column=1, sticky="w")
         entries["Damage Dice Amount"] = ttk.Entry(dmg_frame, width=4)
@@ -258,14 +287,14 @@ class InterfaceHandler:
             entries["Damage Dice Amount"].insert(0, str(item.damage.diceAmount))
             dmg_dice_type.set(str(item.damage.diceType))
             entries["Damage Bonus"].insert(0, str(item.damage.bonus))
-            dmg_type_var.set(item.damage.damageType)
+            dmg_type_var.set(str(item.damage.damageType))
         row += 1
 
-        attribute_types = list(AttributeType.__args__)  # type: ignore
+        attribute_types = [str(at) for at in AttributeType]
         attr_vars: dict[str, tk.BooleanVar] = {}
         range_frames: dict[str, ttk.Frame] = {}
         range_entries: dict[str, tuple[tk.Entry, tk.Entry]] = {}
-        ttk.Label(window, text="Attributes").grid(row=row, column=0, sticky="ne", padx=5, pady=2)
+        ttk.Label(window, text=translate(UIText.ATTRIBUTES_LABEL)).grid(row=row, column=0, sticky="ne", padx=5, pady=2)
         attr_frame = ttk.Frame(window)
         attr_frame.grid(row=row, column=1, sticky="w")
 
@@ -276,18 +305,18 @@ class InterfaceHandler:
                     frame.pack(anchor="w", padx=15)
                 else:
                     frame.pack_forget()
-            if at == "Vielseitig":
+            if at == translate(AttributeType.VERSATILE):
                 if attr_vars[at].get():
                     vers_frame.grid()
                 else:
                     vers_frame.grid_remove()
 
         for at in attribute_types:
-            var = tk.BooleanVar(value=item is not None and at in item.attributes)
+            var = tk.BooleanVar(value=item is not None and to_enum(AttributeType, at) in item.attributes)
             chk = ttk.Checkbutton(attr_frame, text=at, variable=var, command=lambda a=at: toggle_range(a))
             chk.pack(anchor="w")
             attr_vars[at] = var
-            if at in ("Wurfwaffe", "Geschosse"):
+            if at in (translate(AttributeType.THROWN), translate(AttributeType.AMMUNITION)):
                 r_frame = ttk.Frame(attr_frame)
                 ttk.Label(r_frame, text="min").pack(side="left")
                 e_min = ttk.Entry(r_frame, width=4)
@@ -295,8 +324,8 @@ class InterfaceHandler:
                 ttk.Label(r_frame, text="/").pack(side="left")
                 e_max = ttk.Entry(r_frame, width=4)
                 e_max.pack(side="left")
-                if item and at in item.ranges:
-                    low, high = item.ranges[at]
+                if item and to_enum(AttributeType, at) in item.ranges:
+                    low, high = item.ranges[to_enum(AttributeType, at)]
                     e_min.insert(0, str(low))
                     e_max.insert(0, str(high))
                 range_frames[at] = r_frame
@@ -306,7 +335,7 @@ class InterfaceHandler:
         row += 1
 
         vers_frame = ttk.Frame(window)
-        ttk.Label(vers_frame, text="Vielseitig").grid(row=0, column=0, sticky="e", padx=5, pady=2)
+        ttk.Label(vers_frame, text=translate(AttributeType.VERSATILE)).grid(row=0, column=0, sticky="e", padx=5, pady=2)
         vers_inner = ttk.Frame(vers_frame)
         vers_inner.grid(row=0, column=1, sticky="w")
         entries["Versatile Dice Amount"] = ttk.Entry(vers_inner, width=4)
@@ -322,7 +351,7 @@ class InterfaceHandler:
             entries["Versatile Dice Amount"].insert(0, str(item.versatileDamage.diceAmount))
             vers_dice_type.set(str(item.versatileDamage.diceType))
             entries["Versatile Damage Bonus"].insert(0, str(item.versatileDamage.bonus))
-        if item and "Vielseitig" in item.attributes:
+        if item and AttributeType.VERSATILE in item.attributes:
             vers_frame.grid()
         else:
             vers_frame.grid_remove()
@@ -330,33 +359,42 @@ class InterfaceHandler:
 
         def submit() -> None:
             try:
-                _id = entries["ID"].get().strip()
-                name = entries["Name"].get().strip()
-                price = float(entries["Price"].get()) if entries["Price"].get() else 0
-                weight = float(entries["Weight"].get()) if entries["Weight"].get() else 0
+                _id = entries[translate(UIText.COLUMN_ID)].get().strip()
+                name = entries[translate(UIText.COLUMN_NAME)].get().strip()
+                price = float(entries[translate(UIText.COLUMN_PRICE)].get()) if entries[translate(UIText.COLUMN_PRICE)].get() else 0
+                weight = float(entries[translate(UIText.COLUMN_WEIGHT)].get()) if entries[translate(UIText.COLUMN_WEIGHT)].get() else 0
                 dmg_amount = int(entries["Damage Dice Amount"].get()) if entries["Damage Dice Amount"].get() else 0
                 dmg_type = int(entries["Damage Dice Type"].get()) if entries["Damage Dice Type"].get() else 1
                 dmg_bonus = int(entries["Damage Bonus"].get()) if entries["Damage Bonus"].get() else 0
                 vers_amount = int(entries["Versatile Dice Amount"].get()) if entries["Versatile Dice Amount"].get() else 0
                 vers_type = int(entries["Versatile Dice Type"].get()) if entries["Versatile Dice Type"].get() else 1
                 vers_bonus = int(entries["Versatile Damage Bonus"].get()) if entries["Versatile Damage Bonus"].get() else 0
-                damage_type = dmg_type_var.get() or None
-                attributes = [at for at in attribute_types if attr_vars[at].get()]
-                ranges = {}
-                for at in ("Wurfwaffe", "Geschosse"):
+                damage_type = to_enum(DamageType, dmg_type_var.get()) if dmg_type_var.get() else None
+                attributes = [to_enum(AttributeType, at) for at in attribute_types if attr_vars[at].get()]
+                ranges: dict[AttributeType, tuple[int, int]] = {}
+                for at in (translate(AttributeType.THROWN), translate(AttributeType.AMMUNITION)):
                     if attr_vars.get(at) and attr_vars[at].get():
                         try:
                             low = int(range_entries[at][0].get())
                             high = int(range_entries[at][1].get())
                         except ValueError:
-                            messagebox.showerror("Error", f"Invalid range for {at}")
+                            messagebox.showerror(
+                                translate(MessageText.ERROR_TITLE),
+                                translate(MessageText.INVALID_RANGE).format(attr=at),
+                            )
                             return
-                        ranges[at] = (low, high)
+                        ranges[to_enum(AttributeType, at)] = (low, high)
             except ValueError as e:
-                messagebox.showerror("Error", f"Invalid value: {e}")
+                messagebox.showerror(
+                    translate(MessageText.ERROR_TITLE),
+                    translate(MessageText.INVALID_VALUE).format(error=e),
+                )
                 return
             if not _id or not name:
-                messagebox.showerror("Error", "ID and Name are required")
+                messagebox.showerror(
+                    translate(MessageText.ERROR_TITLE),
+                    translate(MessageText.ID_NAME_REQUIRED),
+                )
                 return
             new_item = Item(
                 _id=_id,
@@ -366,47 +404,53 @@ class InterfaceHandler:
                 damageDiceAmount=dmg_amount,
                 damageDiceType=dmg_type,
                 damageBonus=dmg_bonus,
-                damageType=damage_type,  # type: ignore
+                damageType=damage_type,
                 versatileDamage=(
                     Damage(
                         vers_amount,
                         vers_type,
                         vers_bonus,
-                        (dmg_type_var.get() if dmg_type_var.get() else damage_type)  # type: ignore
+                        (to_enum(DamageType, dmg_type_var.get()) if dmg_type_var.get() else damage_type)
                     )
-                    if (vers_amount or vers_bonus) and dmg_type_var.get()
+                    if (vers_amount or vers_bonus) and (dmg_type_var.get() or damage_type)
                     else None
                 ),
                 attributes=attributes,
                 ranges=ranges,
             )
             addItem(new_item)
-            messagebox.showinfo("Saved", "Item saved")
+            messagebox.showinfo(
+                translate(MessageText.SAVED_TITLE),
+                translate(MessageText.ITEM_SAVED),
+            )
             window.destroy()
 
-        ttk.Button(window, text="Save", command=submit).grid(row=row, column=0, columnspan=2, pady=10)
+        ttk.Button(window, text=translate(UIText.SAVE_BUTTON), command=submit).grid(row=row, column=0, columnspan=2, pady=10)
 
     def _open_add_item(self) -> None:
         window = tk.Toplevel(self.root)
-        window.title("Add Item")
+        window.title(translate(UIText.ADD_ITEM_TITLE))
         self._item_form(window, None)
 
     def _open_edit_item(self, item: Item) -> None:
         window = tk.Toplevel(self.root)
-        window.title(f"Edit Item: {item.name}")
+        window.title(f"{translate(UIText.EDIT_ITEM_TITLE)}: {item.name}")
         self._item_form(window, item)
 
     # ===== Print Items =====
     def _open_print_items(self) -> None:
         items = getItems()
         if not items:
-            messagebox.showinfo("No Items", "No items found")
+            messagebox.showinfo(
+                translate(MessageText.NO_ITEMS_TITLE),
+                translate(MessageText.NO_ITEMS_MESSAGE),
+            )
             return
 
         cache = loadItemCache()
         show_all = messagebox.askyesno(
-            "Preview Mode",
-            "Do you want to resize and rotate all items? (No = only new items)",
+            translate(MessageText.PREVIEW_MODE),
+            translate(MessageText.PREVIEW_QUESTION),
         )
         preview_items: List[Item] = []
         for item in items:
@@ -424,7 +468,10 @@ class InterfaceHandler:
         if preview_items:
             PreviewWindow(self.root, preview_items, self.image_handler, cache)
         else:
-            messagebox.showinfo("Done", "All items already processed")
+            messagebox.showinfo(
+                translate(MessageText.DONE_TITLE),
+                translate(MessageText.DONE_MESSAGE),
+            )
 
     def run(self) -> None:
         self.root.mainloop()
@@ -439,7 +486,7 @@ class PreviewWindow(tk.Toplevel):
         cache: dict,
     ) -> None:
         super().__init__(root)
-        self.title("Item Preview")
+        self.title(translate(UIText.ITEM_PREVIEW_TITLE))
         self.configure(bg=root["background"])
         self.items = items
         self.index = 0
@@ -455,9 +502,9 @@ class PreviewWindow(tk.Toplevel):
         ttk.Scale(btn_frame, from_=-180, to=180, orient="horizontal", variable=self.angle_var, command=self._update_angle, length=150).pack(side="left", padx=2)
         self.scale_var = tk.DoubleVar(value=1.0)
         ttk.Scale(btn_frame, from_=0.5, to=1.5, orient="horizontal", variable=self.scale_var, command=self._update_scale, length=150).pack(side="left", padx=2)
-        ttk.Button(btn_frame, text="Flip", command=self._toggle_flip).pack(side="left", padx=2)
-        ttk.Button(btn_frame, text="Skip", command=self._skip).pack(side="left", padx=2)
-        ttk.Button(btn_frame, text="Next", command=self._next).pack(side="left", padx=2)
+        ttk.Button(btn_frame, text=translate(UIText.BUTTON_FLIP), command=self._toggle_flip).pack(side="left", padx=2)
+        ttk.Button(btn_frame, text=translate(UIText.BUTTON_SKIP), command=self._skip).pack(side="left", padx=2)
+        ttk.Button(btn_frame, text=translate(UIText.BUTTON_NEXT), command=self._next).pack(side="left", padx=2)
         self.flip = False
         self.skip_flag = False
 
@@ -485,7 +532,10 @@ class PreviewWindow(tk.Toplevel):
                 scale=self.scale_var.get(),
             )
         except FileNotFoundError:
-            if messagebox.askretrycancel("Missing Image", f"Image for {item.id} not found. Rescan?"):
+            if messagebox.askretrycancel(
+                translate(MessageText.MISSING_IMAGE_TITLE),
+                translate(MessageText.MISSING_IMAGE_MESSAGE).format(id=item.id),
+            ):
                 return self._generate_image(item)
             else:
                 self.skip_flag = True

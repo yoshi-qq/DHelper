@@ -1,35 +1,41 @@
-from classes.types import RGB, JsonItem, Item, HexColor, RGBA, Damage
+from classes.types import RGB, JsonItem, Item, HexColor, RGBA, Damage, DamageType, AttributeType
+from helpers.translationHelper import to_enum
 def toItem(_id: str, jsonItem: JsonItem) -> Item:
     ranges = {
-        k: (int(v[0]), int(v[1])) if isinstance(v, (list, tuple)) and len(v) >= 2 else (0, 0)
+        to_enum(AttributeType, k): (int(v[0]), int(v[1])) if isinstance(v, (list, tuple)) and len(v) >= 2 else (0, 0)
         for k, v in jsonItem.get("ranges", {}).items()
     }
     damage = jsonItem.get("damage")
     versatile = jsonItem.get("versatileDamage")
-    primary_type = damage.get("damageType", "") if isinstance(damage, dict) else ""
+    primary_type_str = damage.get("damageType", "") if isinstance(damage, dict) else ""
+    primary_type = to_enum(DamageType, primary_type_str) if primary_type_str else None
     return Item(
         _id=_id,
         name=jsonItem.get("name", ""),
         price=jsonItem.get("price", 0),
         weight=jsonItem.get("weight", 0),
-        attributes=jsonItem.get("attributes") if isinstance(jsonItem.get("attributes"), list) else [],
+        attributes=[to_enum(AttributeType, a) for a in jsonItem.get("attributes")] if isinstance(jsonItem.get("attributes"), list) else [],
         ranges=ranges if ranges else None,
         **(
             {
                 "damageDiceAmount": damage.get("diceAmount", 0),
                 "damageDiceType": damage.get("diceType", ""),
                 "damageBonus": damage.get("bonus", 0),
-                "damageType": damage.get("damageType", ""),
+                "damageType": to_enum(DamageType, damage.get("damageType")) if damage.get("damageType") else None,
             }
             if damage
             else {}
         ),
         versatileDamage=(
-            Damage(
+            (lambda vt: Damage(
                 versatile.get("diceAmount", 0),
                 versatile.get("diceType", 1),
                 versatile.get("bonus", 0),
-                versatile.get("damageType", primary_type),
+                vt,
+            ) if vt else None)(
+                to_enum(DamageType, versatile.get("damageType", primary_type_str))
+                if versatile and (versatile.get("damageType") or primary_type_str)
+                else None
             )
             if versatile
             else None
