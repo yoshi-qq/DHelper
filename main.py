@@ -1,7 +1,7 @@
 from handlers.imageHandler import ImageHandler
 def main() -> None:
     I = ImageHandler()
-    I.createImages()
+    I.createItemImages()
 
 if __name__ == "__main__":
     main()
