@@ -136,33 +136,44 @@ class _LayoutElement:
 
 class _ItemConstants:
     def __init__(self) -> None:
-        self.TITLE: _LayoutElement = _LayoutElement(177, 55, 200, 55)     # Title text area
-        self.PRICE: _LayoutElement = _LayoutElement(292, 116, 70, 50)     # Price text area  
-        self.STATS: _LayoutElement = _LayoutElement(60, 386, 270, 70)     # Stats/description text area
-        self.IMAGE: _LayoutElement = _LayoutElement(180, 229, 313, 266)   # Item image area
+        self.TITLE: _LayoutElement = _LayoutElement(177, 55, 200, 55)
+        self.PRICE: _LayoutElement = _LayoutElement(292, 116, 70, 50)
+        self.STATS: _LayoutElement = _LayoutElement(60, 386, 270, 70)
+        self.IMAGE: _LayoutElement = _LayoutElement(180, 229, 313, 266)
+
+
+class _MaterialConstants:
+    def __init__(self) -> None:
+        self.SPOKEN: _LayoutElement = _LayoutElement(150, 380, 25, 25)
+        self.MATERIAL: _LayoutElement = _LayoutElement(185, 380, 25, 25)
+        self.GESTURAL: _LayoutElement = _LayoutElement(220, 380, 25, 25)
+        self.NAME: _LayoutElement = _LayoutElement(220, 400, 100, 18)
+        self.COST: _LayoutElement = _LayoutElement(220, 420, 75, 20)
+
+class _SpellConstants:
+    def __init__(self) -> None:
+        self.TITLE: _LayoutElement = _LayoutElement(200, 55, 135, 55)
+        self.LEVEL: _LayoutElement = _LayoutElement(109, 61, 56, 56)
+        self.CATEGORY: _LayoutElement = _LayoutElement(180, 104, 153, 26)
+        self.DURATION: _LayoutElement = _LayoutElement(60, 430, 36, 36)
+        self.DURATION_TEXT: _LayoutElement = _LayoutElement(60, 460, 36, 26)
+        self.COOLDOWN: _LayoutElement = _LayoutElement(100, 395, 36, 36)
+        self.COOLDOWN_TEXT: _LayoutElement = _LayoutElement(100, 425, 36, 26)
+        self.DAMAGE: _LayoutElement = _LayoutElement(260, 395, 36, 36)
+        self.DAMAGE_TEXT: _LayoutElement = _LayoutElement(260, 425, 36, 26)
+        self.RANGE: _LayoutElement = _LayoutElement(300, 430, 36, 36)
+        self.RANGE_TEXT: _LayoutElement = _LayoutElement(300, 460, 36, 26)
+        self.MATERIAL: _MaterialConstants = _MaterialConstants()
+        self.CONCENTRATION: _LayoutElement = _LayoutElement(150, 355, 25, 25)
+        self.CAST_TIME: _LayoutElement = _LayoutElement(185, 355, 25, 25)
+        self.RITUAL: _LayoutElement = _LayoutElement(220, 355, 25, 25)
+        self.SAVING_THROW: _LayoutElement = _LayoutElement(260, 365, 40, 18)
+        self.SUB_RANGE: _LayoutElement = _LayoutElement(300, 395, 50, 20)
+        self.TARGET: _LayoutElement = _LayoutElement(300, 370, 40, 40)
+        self.OVERLEVEL: _LayoutElement = _LayoutElement(320, 275, 30, 190) # for later use
 
 ITEM = _ItemConstants()
-
-# Backward compatibility constants (keeping old names for existing code)
-ITEM_RELATIVE_TITLE_POSITION: tuple[float, float] = ITEM.TITLE.POSITION.RELATIVE
-ITEM_RELATIVE_TITLE_SIZE: tuple[float, float] = ITEM.TITLE.SIZE.RELATIVE
-ITEM_ABSOLUTE_TITLE_POSITION: tuple[int, int] = ITEM.TITLE.POSITION.ABSOLUTE
-ITEM_ABSOLUTE_TITLE_SIZE: tuple[int, int] = ITEM.TITLE.SIZE.ABSOLUTE
-
-ITEM_RELATIVE_PRICE_POSITION: tuple[float, float] = ITEM.PRICE.POSITION.RELATIVE
-ITEM_RELATIVE_PRICE_SIZE: tuple[float, float] = ITEM.PRICE.SIZE.RELATIVE
-ITEM_ABSOLUTE_PRICE_POSITION: tuple[int, int] = ITEM.PRICE.POSITION.ABSOLUTE
-ITEM_ABSOLUTE_PRICE_SIZE: tuple[int, int] = ITEM.PRICE.SIZE.ABSOLUTE
-
-ITEM_RELATIVE_STATS_POSITION: tuple[float, float] = ITEM.STATS.POSITION.RELATIVE
-ITEM_RELATIVE_STATS_SIZE: tuple[float, float] = ITEM.STATS.SIZE.RELATIVE
-ITEM_ABSOLUTE_STATS_POSITION: tuple[int, int] = ITEM.STATS.POSITION.ABSOLUTE
-ITEM_ABSOLUTE_STATS_SIZE: tuple[int, int] = ITEM.STATS.SIZE.ABSOLUTE
-
-ITEM_RELATIVE_IMAGE_POSITION: tuple[float, float] = ITEM.IMAGE.POSITION.RELATIVE
-ITEM_RELATIVE_IMAGE_MAX_SIZE: tuple[float, float] = ITEM.IMAGE.SIZE.RELATIVE
-ITEM_ABSOLUTE_IMAGE_POSITION: tuple[int, int] = ITEM.IMAGE.POSITION.ABSOLUTE
-ITEM_ABSOLUTE_IMAGE_MAX_SIZE: tuple[int, int] = ITEM.IMAGE.SIZE.ABSOLUTE
+SPELL = _SpellConstants()
 
 # = Text Constants =
 from classes.textKeys import PrefixText
