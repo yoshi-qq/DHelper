@@ -116,12 +116,12 @@
     "CREATURE": "Creature",
     "OBJECT": "Object",
     "POINT": "Point",
-    "AREA": "Area",
     "CONE": "Cone",
     "LINE": "Line",
     "SPHERE": "Sphere",
     "CYLINDER": "Cylinder",
-    "CUBE": "Cube"
+    "CUBE": "Cube",
+    "RECTANGLE": "Rectangle"
   },
   "SavingThrowType": {
     "STRENGTH": "Strength",
@@ -130,13 +130,5 @@
     "INTELLIGENCE": "Intelligence",
     "WISDOM": "Wisdom",
     "CHARISMA": "Charisma"
-  },
-  "AreaOfEffectType": {
-    "CONE": "Cone",
-    "CUBE": "Cube",
-    "CYLINDER": "Cylinder",
-    "LINE": "Line",
-    "SPHERE": "Sphere",
-    "RECTANGLE": "Rectangle"
   }
 }

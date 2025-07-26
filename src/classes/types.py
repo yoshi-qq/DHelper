@@ -52,80 +52,69 @@ class AttributeType(Enum):
         return translate(self)
 
 class SpellType(Enum):
-    ABJURATION = "Bannmagie"
-    CONJURATION = "Beschwörungsmagie"
-    TRANSMUTATION = "Verwandlungsmagie"
-    EVOCATION = "Hervorrufungsmagie"
-    ILLUSION = "Illusionsmagie"
-    NECROMANCY = "Nekromantie"
-    ENCHANTMENT = "Verzauberungsmagie"
-    DIVINATION = "Erkenntnismagie"
+    ABJURATION = "ABJURATION"
+    CONJURATION = "CONJURATION"
+    TRANSMUTATION = "TRANSMUTATION"
+    EVOCATION = "EVOCATION"
+    ILLUSION = "ILLUSION"
+    NECROMANCY = "NECROMANCY"
+    ENCHANTMENT = "ENCHANTMENT"
+    DIVINATION = "DIVINATION"
 
     def __str__(self) -> str:  # pragma: no cover - simple delegation
         return translate(self)
 
 class CasterClassType(Enum):
-    BARD = "Barde"
-    CLERIC = "Kleriker"
-    DRUID = "Druide"
-    WARLOCK = "Hexenmeister"
-    WIZARD = "Magier"
-    PALADIN = "Paladin"
-    RANGER = "Waldläufer"
-    SORCERER = "Zauberer"
-    ARTIFICER = "Kunsthandwerker"
+    BARD = "BARD"
+    CLERIC = "CLERIC"
+    DRUID = "DRUID"
+    WARLOCK = "WARLOCK"
+    WIZARD = "WIZARD"
+    PALADIN = "PALADIN"
+    RANGER = "RANGER"
+    SORCERER = "SORCERER"
+    ARTIFICER = "ARTIFICER"
 
     def __str__(self) -> str:  # pragma: no cover - simple delegation
         return translate(self)
 
 class CastingTimeType(Enum):
-    ACTION = "Aktion"
-    BONUS_ACTION = "Bonusaktion"
-    REACTION = "Reaktion"
-    ONE_MINUTE = "1 Minute"
-    TEN_MINUTES = "10 Minuten"
-    ONE_HOUR = "1 Stunde"
-    EIGHT_HOURS = "8 Stunden"
-    TWENTY_FOUR_HOURS = "24 Stunden"
+    ACTION = "ACTION"
+    BONUS_ACTION = "BONUS_ACTION"
+    REACTION = "REACTION"
+    ONE_MINUTE = "ONE_MINUTE"
+    TEN_MINUTES = "TEN_MINUTES"
+    ONE_HOUR = "ONE_HOUR"
+    EIGHT_HOURS = "EIGHT_HOURS"
+    TWENTY_FOUR_HOURS = "TWENTY_FOUR_HOURS"
 
     def __str__(self) -> str:  # pragma: no cover - simple delegation
         return translate(self)
 
 class TargetType(Enum):
-    SELF = "Selbst"
-    CREATURE = "Kreatur"
-    OBJECT = "Objekt"
-    POINT = "Punkt"
-    AREA = "Bereich"
-    CONE = "Kegel"
-    LINE = "Linie"
-    SPHERE = "Kugel"
-    CYLINDER = "Zylinder"
-    CUBE = "Würfel"
+    SELF = "SELF"
+    CREATURE = "CREATURE"
+    OBJECT = "OBJECT"
+    POINT = "POINT"
+    CONE = "CONE"
+    LINE = "LINE"
+    SPHERE = "SPHERE"
+    CYLINDER = "CYLINDER"
+    CUBE = "CUBE"
+    RECTANGLE = "RECTANGLE"
 
-    def __str__(self) -> str:  # pragma: no cover - simple delegation
+    def __str__(self) -> str:
         return translate(self)
 
 class SavingThrowType(Enum):
-    STRENGTH = "Stärke"
-    DEXTERITY = "Geschicklichkeit"
-    CONSTITUTION = "Konstitution"
-    INTELLIGENCE = "Intelligenz"
-    WISDOM = "Weisheit"
-    CHARISMA = "Charisma"
+    STRENGTH = "STRENGTH"
+    DEXTERITY = "DEXTERITY"
+    CONSTITUTION = "CONSTITUTION"
+    INTELLIGENCE = "INTELLIGENCE"
+    WISDOM = "WISDOM"
+    CHARISMA = "CHARISMA"
 
-    def __str__(self) -> str:  # pragma: no cover - simple delegation
-        return translate(self)
-
-class AreaOfEffectType(Enum):
-    CONE = "Kegel"
-    CUBE = "Würfel"
-    CYLINDER = "Zylinder"
-    LINE = "Linie"
-    SPHERE = "Kugel"
-    RECTANGLE = "Rechteck"
-
-    def __str__(self) -> str:  # pragma: no cover - simple delegation
+    def __str__(self) -> str:
         return translate(self)
 
 
@@ -266,7 +255,7 @@ class Item:
         }  # type: ignore
 
 class Spell:
-    def __init__(self, id: str, name: str, level: int, type: SpellType, casterClass: CasterClassType, duration: timedelta, cooldown: timedelta, range: float, castingTime: CastingTimeType, ritual: bool, concentration: bool, target: TargetType, subRange: Optional[float] = None, damage: Optional[Damage] = None, components: Components = Components(False, False, None), levelBonus: str = "", savingThrow: Optional[SavingThrowType] = None, areaOfEffect: Optional[AreaOfEffectType] = None) -> None:
+    def __init__(self, id: str, name: str, level: int, type: SpellType, casterClass: CasterClassType, duration: timedelta, cooldown: timedelta, range: float, castingTime: CastingTimeType, ritual: bool, concentration: bool, target: TargetType, subRange: Optional[float] = None, damage: Optional[Damage] = None, components: Components = Components(False, False, None), levelBonus: str = "", savingThrow: Optional[SavingThrowType] = None, areaOfEffect: Optional[TargetType] = None) -> None:
         self.id: str = id
         self.name: str = name
         self.level: int = level
@@ -284,7 +273,7 @@ class Spell:
         self.concentration: bool = concentration
         self.target: TargetType = target
         self.savingThrow: Optional[SavingThrowType] = savingThrow
-        self.areaOfEffect: Optional[AreaOfEffectType] = areaOfEffect
+        self.areaOfEffect: Optional[TargetType] = areaOfEffect
 
     def toJsonSpell(self) -> JsonSpell:
         return {
