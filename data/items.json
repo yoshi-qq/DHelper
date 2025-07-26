@@ -7,7 +7,26 @@
             "diceAmount": 2,
             "diceType": 6,
             "bonus": 0,
-            "damageType": "Wucht"},
-        "attributes": ["schwer", "zweihändig"]
+            "damageType": "Wucht"
+        },
+        "attributes": [
+            "schwer",
+            "zweihändig"
+        ]
+    },
+    "dolch": {
+        "name": "Dolch",
+        "price": 2.0,
+        "weight": 0.5,
+        "damage": {
+            "diceAmount": 1,
+            "diceType": 4,
+            "bonus": 0,
+            "damageType": "Stich"
+        },
+        "attributes": [
+            "Leicht",
+            "Wurfwaffe"
+        ]
     }
 }
