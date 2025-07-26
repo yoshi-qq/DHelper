@@ -1,0 +1,13 @@
+{
+    "zweihandhammer": {
+        "name": "Zweihandhammer",
+        "cost": 10,
+        "weight": 5,
+        "damage": {
+            "diceAmount": 2,
+            "diceType": 6,
+            "bonus": 0,
+            "damageType": "Wucht"},
+        "attributes": ["schwer", "zweihändig"]
+    }
+}
