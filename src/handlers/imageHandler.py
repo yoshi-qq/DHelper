@@ -106,23 +106,32 @@ class ImageHandler:
             titleHeight = bbox[3] - bbox[1]
             draw.text((titleX-titleWidth/2, titleY-titleHeight/2), title, font=titleFont, fill=BLUE_INK_COLOR)
 
+        def format_damage(d: Damage, with_type: bool = False) -> str:
+            dice_str = f"{d.diceAmount}{DAMAGE_SPLIT}{d.diceType}" if d.diceAmount > 0 else ""
+            bonus_str = "" if d.bonus == 0 else str(d.bonus) if not dice_str else f" {'+' if d.bonus > 0 else ''}{d.bonus}"
+            result = f"{dice_str}{bonus_str}"
+            if with_type:
+                result = f"{result} {d.damageType}".strip()
+            return result
+
         def addStats(
             background: Image.Image,
             weight: float,
             damage: Optional[Damage],
+            versatile: Optional[Damage],
             attributes: list[AttributeType],
             ranges: dict[str, tuple[int, int]],
         ) -> None:
             fixedRows: list[str] = []
             fixedRows.append(f"{WEIGHT_PREFIX}{weight}{WEIGHT_SUFFIX}")
             if damage:
-                diceString = f"{damage.diceAmount}{DAMAGE_SPLIT}{damage.diceType}" if damage.diceAmount > 0 else ""
-                bonusString = "" if damage.bonus == 0 else str(damage.bonus) if not diceString else f" {'+' if damage.bonus > 0 else ""}{damage.bonus}"
-                fixedRows.append(f"{DAMAGE_PREFIX}{diceString}{bonusString} {damage.damageType}")
+                fixedRows.append(f"{DAMAGE_PREFIX}{format_damage(damage, True)}")
 
             attr_strings: list[str] = []
             for attr in attributes:
-                if attr in ranges:
+                if attr == "Vielseitig" and versatile:
+                    attr_strings.append(f"{attr} ({format_damage(versatile)})")
+                elif attr in ranges:
                     low, high = ranges[attr]
                     attr_strings.append(f"{attr} ({low}/{high})")
                 else:
@@ -152,7 +161,7 @@ class ImageHandler:
         addImage(cardImage, item.id, rotate, flip, scale)
         addPrice(cardImage, item.price, currency)
         addTitle(cardImage, item.name)
-        addStats(cardImage, item.weight, item.damage, item.attributes, item.ranges)
+        addStats(cardImage, item.weight, item.damage, item.versatileDamage, item.attributes, item.ranges)
 
         # Export
         cardImage.save(join(OUTPUT_PATH, f"{item.id}.png"))

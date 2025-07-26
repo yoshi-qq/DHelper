@@ -1,10 +1,12 @@
-from classes.types import RGB, JsonItem, Item, HexColor, RGBA
+from classes.types import RGB, JsonItem, Item, HexColor, RGBA, Damage
 def toItem(_id: str, jsonItem: JsonItem) -> Item:
     ranges = {
         k: (int(v[0]), int(v[1])) if isinstance(v, (list, tuple)) and len(v) >= 2 else (0, 0)
         for k, v in jsonItem.get("ranges", {}).items()
     }
     damage = jsonItem.get("damage")
+    versatile = jsonItem.get("versatileDamage")
+    primary_type = damage.get("damageType", "") if isinstance(damage, dict) else ""
     return Item(
         _id=_id,
         name=jsonItem.get("name", ""),
@@ -21,6 +23,16 @@ def toItem(_id: str, jsonItem: JsonItem) -> Item:
             }
             if damage
             else {}
+        ),
+        versatileDamage=(
+            Damage(
+                versatile.get("diceAmount", 0),
+                versatile.get("diceType", 1),
+                versatile.get("bonus", 0),
+                versatile.get("damageType", primary_type),
+            )
+            if versatile
+            else None
         ),
     )
 

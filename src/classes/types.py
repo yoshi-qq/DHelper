@@ -34,6 +34,7 @@ class JsonItem(TypedDict, total=False):
     price: int
     weight: float
     damage: JsonDamage | None
+    versatileDamage: JsonDamage | None
     attributes: list[AttributeType]
     ranges: dict[str, list[int]]
 
@@ -79,12 +80,14 @@ class Item:
         damageType: Optional[DamageType] = None,
         attributes: Optional[list[AttributeType]] = None,
         ranges: Optional[dict[str, tuple[int, int]]] = None,
+        versatileDamage: Optional[Damage] = None,
     ) -> None:
         self.id: str = _id
         self.name: str = name
         self.price: int = price
         self.weight: float = weight
         self.damage = Damage(damageDiceAmount, damageDiceType, damageBonus, damageType) if damageType is not None else None
+        self.versatileDamage: Optional[Damage] = versatileDamage
         self.attributes: list[AttributeType] = attributes if attributes else []
         self.ranges: dict[str, tuple[int, int]] = ranges if ranges else {}
     def toJsonItem(self) -> JsonItem:
@@ -93,6 +96,7 @@ class Item:
             "price": self.price,
             "weight": self.weight,
             "damage": self.damage.toJsonDamage() if self.damage else None,
+            "versatileDamage": self.versatileDamage.toJsonDamage() if self.versatileDamage else None,
             "attributes": self.attributes,
             **({"ranges": {k: [v[0], v[1]] for k, v in self.ranges.items()}} if self.ranges else {})
         }  # type: ignore
