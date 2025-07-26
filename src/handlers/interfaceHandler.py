@@ -6,7 +6,12 @@ from PIL import Image, ImageTk
 
 from classes.types import Item, DamageType, AttributeType
 from config.constants import OUTPUT_PATH
-from helpers.dataHelper import getItems, addItem
+from helpers.dataHelper import (
+    getItems,
+    addItem,
+    updateItemCache,
+    loadItemCache,
+)
 from handlers.imageHandler import ImageHandler
 
 
@@ -82,15 +87,37 @@ class InterfaceHandler:
         row += 1
 
         attribute_types = list(AttributeType.__args__)  # type: ignore
-        attr_vars: List[tk.BooleanVar] = []
+        attr_vars: dict[str, tk.BooleanVar] = {}
+        range_frames: dict[str, ttk.Frame] = {}
+        range_entries: dict[str, tuple[tk.Entry, tk.Entry]] = {}
         ttk.Label(window, text="Attributes").grid(row=row, column=0, sticky="ne", padx=5, pady=2)
         attr_frame = ttk.Frame(window)
         attr_frame.grid(row=row, column=1, sticky="w")
+
+        def toggle_range(at: str) -> None:
+            frame = range_frames.get(at)
+            if not frame:
+                return
+            if attr_vars[at].get():
+                frame.pack(anchor="w", padx=15)
+            else:
+                frame.pack_forget()
+
         for at in attribute_types:
             var = tk.BooleanVar(value=False)
-            chk = ttk.Checkbutton(attr_frame, text=at, variable=var)
+            chk = ttk.Checkbutton(attr_frame, text=at, variable=var, command=lambda a=at: toggle_range(a))
             chk.pack(anchor="w")
-            attr_vars.append(var)
+            attr_vars[at] = var
+            if at in ("Wurfwaffe", "Geschosse"):
+                r_frame = ttk.Frame(attr_frame)
+                ttk.Label(r_frame, text="min").pack(side="left")
+                e_min = ttk.Entry(r_frame, width=4)
+                e_min.pack(side="left")
+                ttk.Label(r_frame, text="/").pack(side="left")
+                e_max = ttk.Entry(r_frame, width=4)
+                e_max.pack(side="left")
+                range_frames[at] = r_frame
+                range_entries[at] = (e_min, e_max)
         row += 1
 
         def submit() -> None:
@@ -103,7 +130,17 @@ class InterfaceHandler:
                 dmg_type = int(entries["Damage Dice Type"].get()) if entries["Damage Dice Type"].get() else 1
                 dmg_bonus = int(entries["Damage Bonus"].get()) if entries["Damage Bonus"].get() else 0
                 damage_type = dmg_type_var.get() or None
-                attributes = [at for at, var in zip(attribute_types, attr_vars) if var.get()]
+                attributes = [at for at in attribute_types if attr_vars[at].get()]
+                ranges = {}
+                for at in ("Wurfwaffe", "Geschosse"):
+                    if attr_vars.get(at) and attr_vars[at].get():
+                        try:
+                            low = int(range_entries[at][0].get())
+                            high = int(range_entries[at][1].get())
+                        except ValueError:
+                            messagebox.showerror("Error", f"Invalid range for {at}")
+                            return
+                        ranges[at] = (low, high)
             except ValueError as e:
                 messagebox.showerror("Error", f"Invalid value: {e}")
                 return
@@ -120,6 +157,7 @@ class InterfaceHandler:
                 damageBonus=dmg_bonus,
                 damageType=damage_type,  # type: ignore
                 attributes=attributes,
+                ranges=ranges,
             )
             addItem(item)
             messagebox.showinfo("Saved", "Item saved")
@@ -133,20 +171,50 @@ class InterfaceHandler:
         if not items:
             messagebox.showinfo("No Items", "No items found")
             return
-        PreviewWindow(self.root, items, self.image_handler)
+
+        cache = loadItemCache()
+        show_all = messagebox.askyesno(
+            "Preview Mode",
+            "Do you want to resize and rotate all items? (No = only new items)",
+        )
+        preview_items: List[Item] = []
+        for item in items:
+            if show_all or item.id not in cache:
+                preview_items.append(item)
+            else:
+                t = cache[item.id]
+                self.image_handler.createItemCard(
+                    item,
+                    rotate=t.get("rotate", 0.0),
+                    flip=t.get("flip", False),
+                    scale=t.get("scale", 1.0),
+                )
+
+        if preview_items:
+            PreviewWindow(self.root, preview_items, self.image_handler, cache)
+        else:
+            messagebox.showinfo("Done", "All items already processed")
 
     def run(self) -> None:
         self.root.mainloop()
 
 
 class PreviewWindow(tk.Toplevel):
-    def __init__(self, root: tk.Tk, items: List[Item], image_handler: ImageHandler) -> None:
+    def __init__(
+        self,
+        root: tk.Tk,
+        items: List[Item],
+        image_handler: ImageHandler,
+        cache: dict,
+    ) -> None:
         super().__init__(root)
         self.title("Item Preview")
         self.configure(bg=root["background"])
         self.items = items
         self.index = 0
         self.image_handler = image_handler
+        self.cache = cache
+        self.skipped: set[str] = set()
         self.label = ttk.Label(self)
         self.label.pack(padx=10, pady=10)
 
@@ -154,9 +222,13 @@ class PreviewWindow(tk.Toplevel):
         btn_frame.pack()
         self.angle_var = tk.DoubleVar(value=0)
         ttk.Scale(btn_frame, from_=-180, to=180, orient="horizontal", variable=self.angle_var, command=self._update_angle, length=150).pack(side="left", padx=2)
+        self.scale_var = tk.DoubleVar(value=1.0)
+        ttk.Scale(btn_frame, from_=0.5, to=1.5, orient="horizontal", variable=self.scale_var, command=self._update_scale, length=150).pack(side="left", padx=2)
         ttk.Button(btn_frame, text="Flip", command=self._toggle_flip).pack(side="left", padx=2)
+        ttk.Button(btn_frame, text="Skip", command=self._skip).pack(side="left", padx=2)
         ttk.Button(btn_frame, text="Next", command=self._next).pack(side="left", padx=2)
         self.flip = False
+        self.skip_flag = False
 
         self.original: Image.Image | None = None
         self.display: Image.Image | None = None
@@ -165,19 +237,41 @@ class PreviewWindow(tk.Toplevel):
 
     def _load_current(self) -> None:
         item = self.items[self.index]
-        self.angle_var.set(0)
-        self.flip = False
-        self.image_handler.createItemCard(item)
+        t = self.cache.get(item.id, {"rotate": 0.0, "scale": 1.0, "flip": False})
+        self.angle_var.set(t.get("rotate", 0.0))
+        self.scale_var.set(t.get("scale", 1.0))
+        self.flip = t.get("flip", False)
+        if not self._generate_image(item):
+            return
+        self._update_image()
+
+    def _generate_image(self, item: Item) -> bool:
+        try:
+            self.image_handler.createItemCard(
+                item,
+                rotate=self.angle_var.get(),
+                flip=self.flip,
+                scale=self.scale_var.get(),
+            )
+        except FileNotFoundError:
+            if messagebox.askretrycancel("Missing Image", f"Image for {item.id} not found. Rescan?"):
+                return self._generate_image(item)
+            else:
+                self.skip_flag = True
+                return False
         path = join(OUTPUT_PATH, f"{item.id}.png")
         self.original = Image.open(path)
         self.display = self.original
-        self._update_image()
+        return True
 
     def _update_image(self) -> None:
         if self.display is None:
             return
         self.tk_img = ImageTk.PhotoImage(self.display)
         self.label.configure(image=self.tk_img)
+
+    def _update_scale(self, _value: str) -> None:
+        self._apply_transform()
 
     def _update_angle(self, _value: str) -> None:
         self._apply_transform()
@@ -188,15 +282,27 @@ class PreviewWindow(tk.Toplevel):
 
     def _apply_transform(self) -> None:
         item = self.items[self.index]
-        angle = self.angle_var.get()
-        self.image_handler.createItemCard(item, rotate=angle, flip=self.flip)
-        path = join(OUTPUT_PATH, f"{item.id}.png")
-        self.display = Image.open(path)
+        if not self._generate_image(item):
+            return
         self._update_image()
 
     def _next(self) -> None:
+        item = self.items[self.index]
+        if not self.skip_flag:
+            updateItemCache(
+                item.id,
+                self.angle_var.get(),
+                self.scale_var.get(),
+                self.flip,
+            )
+        self.skip_flag = False
         self.index += 1
         if self.index >= len(self.items):
             self.destroy()
             return
         self._load_current()
+
+    def _skip(self) -> None:
+        self.skip_flag = True
+        self._next()
+

@@ -49,6 +49,9 @@ SPELLS_LIST_PATH = join(DATA_PATH, "spells.json")
 
 # = Paths =
 OUTPUT_PATH = join(ROOT, "output")
+# Cache
+CACHE_PATH = join(ROOT, "cache")
+ITEM_CACHE_PATH = join(CACHE_PATH, "itemCache.json")
 
 
 

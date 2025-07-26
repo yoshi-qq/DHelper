@@ -1,7 +1,8 @@
 import json
 from json import load, dump
-from classes.types import Item, JsonItem
-from config.constants import ITEMS_LIST_PATH
+from classes.types import Item, JsonItem, JsonItemCache
+from config.constants import ITEMS_LIST_PATH, ITEM_CACHE_PATH, CACHE_PATH
+import os
 from helpers.conversionHelper import toItem
 
 
@@ -18,3 +19,25 @@ def addItem(item: Item) -> None:
     data[item.id] = item.toJsonItem()
     with open(ITEMS_LIST_PATH, "w", encoding="utf-8") as file:
         dump(data, file, ensure_ascii=False, indent=4)
+
+
+def loadItemCache() -> dict[str, JsonItemCache]:
+    if not os.path.exists(ITEM_CACHE_PATH):
+        os.makedirs(CACHE_PATH, exist_ok=True)
+        with open(ITEM_CACHE_PATH, "w", encoding="utf-8") as file:
+            dump({}, file)
+        return {}
+    with open(ITEM_CACHE_PATH, "r", encoding="utf-8") as file:
+        return json.load(file)
+
+
+def saveItemCache(cache: dict[str, JsonItemCache]) -> None:
+    os.makedirs(CACHE_PATH, exist_ok=True)
+    with open(ITEM_CACHE_PATH, "w", encoding="utf-8") as file:
+        dump(cache, file, ensure_ascii=False, indent=4)
+
+
+def updateItemCache(item_id: str, rotate: float, scale: float, flip: bool) -> None:
+    cache = loadItemCache()
+    cache[item_id] = {"rotate": rotate, "scale": scale, "flip": flip}
+    saveItemCache(cache)
