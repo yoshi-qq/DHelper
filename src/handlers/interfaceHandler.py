@@ -4,7 +4,7 @@ from typing import List
 from os.path import join
 from PIL import Image, ImageTk
 
-from classes.types import Item, DamageType, AttributeType, Damage
+from classes.types import Item, DamageType, AttributeType
 from config.constants import OUTPUT_PATH
 from helpers.dataHelper import (
     getItems,
@@ -73,7 +73,7 @@ class InterfaceHandler:
 
         entries: dict[str, tk.Entry] = {}
         row = 0
-        for label in ["ID", "Name", "Price", "Weight", "Damage Dice Amount", "Damage Dice Type", "Damage Bonus", "Versatile Dice Amount", "Versatile Dice Type", "Versatile Damage Bonus"]:
+        for label in ["ID", "Name", "Price", "Weight", "Damage Dice Amount", "Damage Dice Type", "Damage Bonus"]:
             ttk.Label(window, text=label).grid(row=row, column=0, sticky="e", padx=5, pady=2)
             entry = ttk.Entry(window)
             entry.grid(row=row, column=1, padx=5, pady=2)
@@ -129,9 +129,6 @@ class InterfaceHandler:
                 dmg_amount = int(entries["Damage Dice Amount"].get()) if entries["Damage Dice Amount"].get() else 0
                 dmg_type = int(entries["Damage Dice Type"].get()) if entries["Damage Dice Type"].get() else 1
                 dmg_bonus = int(entries["Damage Bonus"].get()) if entries["Damage Bonus"].get() else 0
-                vers_amount = int(entries["Versatile Dice Amount"].get()) if entries["Versatile Dice Amount"].get() else 0
-                vers_type = int(entries["Versatile Dice Type"].get()) if entries["Versatile Dice Type"].get() else 1
-                vers_bonus = int(entries["Versatile Damage Bonus"].get()) if entries["Versatile Damage Bonus"].get() else 0
                 damage_type = dmg_type_var.get() or None
                 attributes = [at for at in attribute_types if attr_vars[at].get()]
                 ranges = {}
@@ -159,7 +156,6 @@ class InterfaceHandler:
                 damageDiceType=dmg_type,
                 damageBonus=dmg_bonus,
                 damageType=damage_type,  # type: ignore
-                versatileDamage=Damage(vers_amount, vers_type, vers_bonus, damage_type) if vers_amount or vers_bonus else None,
                 attributes=attributes,
                 ranges=ranges,
             )
