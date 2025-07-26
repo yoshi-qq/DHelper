@@ -58,12 +58,47 @@ class _BackgroundImages:
         self.GOLD_ITEM: str = join(bg_path, "item_gold_template.png")
         self.SILVER_ITEM: str = join(bg_path, "item_silver_template.png")
         self.COPPER_ITEM: str = join(bg_path, "item_copper_template.png")
+        self.SPELL: str = join(bg_path, "spell_background.png")
+
+class _TargetIconPaths:
+    def __init__(self) -> None:
+        targets_path = join(SRC, "assets", "icons", "targets")
+        self.AREA: str = join(targets_path, "area.png")
+        self.CONE: str = join(targets_path, "cone.png")
+        self.CREATURE: str = join(targets_path, "creature.png")
+        self.CUBE: str = join(targets_path, "cube.png")
+        self.CYLINDER: str = join(targets_path, "cylinder.png")
+        self.LINE: str = join(targets_path, "line.png")
+        self.OBJECT: str = join(targets_path, "object.png")
+        self.POINT: str = join(targets_path, "point.png")
+        self.RECTANGLE: str = join(targets_path, "rectangle.png")
+        self.SELF: str = join(targets_path, "self.png")
+        self.SPHERE: str = join(targets_path, "sphere.png")
+
+class _IconPaths:
+    def __init__(self) -> None:
+        icons_path = join(SRC, "assets", "icons")
+        # Spell component and status icons
+        self.CONCENTRATION: str = join(icons_path, "concentration.png")
+        self.COOLDOWN: str = join(icons_path, "cooldown.png")
+        self.DAMAGE: str = join(icons_path, "damage.png")
+        self.DURATION: str = join(icons_path, "duration.png")
+        self.GESTURAL: str = join(icons_path, "gestural.png")
+        self.MATERIAL: str = join(icons_path, "material.png")
+        self.RANGE: str = join(icons_path, "range.png")
+        self.RITUAL: str = join(icons_path, "ritual.png")
+        self.SIGHT: str = join(icons_path, "sight.png")
+        self.SPOKEN: str = join(icons_path, "spoken.png")
+        self.STRIKE: str = join(icons_path, "strike.png")
+        # Target icons
+        self.TARGETS: _TargetIconPaths = _TargetIconPaths()
 
 class _ImageConstants:
     def __init__(self) -> None:
         self.FORMAT: str = "png"
         self.PATHS: _ImagePaths = _ImagePaths()
         self.BACKGROUNDS: _BackgroundImages = _BackgroundImages()
+        self.ICONS: _IconPaths = _IconPaths()
 
 IMAGE = _ImageConstants()
 
