@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Literal, Type, TypedDict, Annotated, Tuple
+from typing import Literal, Optional, Type, TypedDict, Annotated, Tuple
 import re
 
 HexColor = Annotated[
@@ -33,7 +33,7 @@ class JsonItem(TypedDict):
     name: str
     price: int
     weight: float
-    damage: JsonDamage
+    damage: JsonDamage | None
     attributes: list[AttributeType]
 
 
@@ -61,19 +61,19 @@ class Damage:
         }
 
 class Item:
-    def __init__(self, _id: str, name: str, price: int, weight: float, damageDiceAmount: int, damageDiceType: int, damageBonus: int, damageType: DamageType, attributes: list[AttributeType]) -> None:
+    def __init__(self, _id: str, name: str, price: int, weight: float, damageDiceAmount: int = 0, damageDiceType: int = 1, damageBonus: int = 0, damageType: Optional[DamageType] = None, attributes: Optional[list[AttributeType]] = None) -> None:
         self.id: str = _id
         self.name: str = name
         self.price: int = price
         self.weight: float = weight
-        self.damage = Damage(damageDiceAmount, damageDiceType, damageBonus, damageType)
-        self.attributes: list[AttributeType] = attributes
+        self.damage = Damage(damageDiceAmount, damageDiceType, damageBonus, damageType) if damageType is not None else None
+        self.attributes: list[AttributeType] = attributes if attributes else []
     def toJsonItem(self) -> JsonItem:
         return {
             "name": self.name,
             "price": self.price,
             "weight": self.weight,
-            "damage": self.damage.toJsonDamage(),
+            "damage": self.damage.toJsonDamage() if self.damage else None,
             "attributes": self.attributes
         }
 
