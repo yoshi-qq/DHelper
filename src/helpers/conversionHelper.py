@@ -5,11 +5,15 @@ def toItem(_id: str, jsonItem: JsonItem) -> Item:
         name = jsonItem['name'],
         price = jsonItem['price'],
         weight = jsonItem['weight'],
-        damageDiceAmount = jsonItem['damage']['diceAmount'],
-        damageDiceType = jsonItem['damage']['diceType'],
-        damageBonus = jsonItem['damage']['bonus'],
-        damageType = jsonItem['damage']['damageType'],
-        attributes = jsonItem['attributes']
+        attributes = jsonItem['attributes'],
+        **(
+            {
+                "damageDiceAmount": jsonItem['damage']['diceAmount'],
+                "damageDiceType": jsonItem['damage']['diceType'],
+                "damageBonus": jsonItem['damage']['bonus'],
+                "damageType": jsonItem['damage']['damageType']
+            } if jsonItem['damage'] else {}
+        )
     )
 
 def toRGBA(hex: HexColor) -> RGBA:
