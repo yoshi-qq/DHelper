@@ -5,7 +5,7 @@ from os.path import join
 from PIL import Image, ImageTk
 
 from classes.types import Item, DamageType, AttributeType
-from config.constants import ITEM_IMAGES_PATH, IMAGE_FORMAT, OUTPUT_PATH
+from config.constants import OUTPUT_PATH
 from helpers.dataHelper import getItems, addItem
 from handlers.imageHandler import ImageHandler
 
@@ -14,8 +14,25 @@ class InterfaceHandler:
     def __init__(self) -> None:
         self.root = tk.Tk()
         self.root.title("DHelper")
+        self._set_dark_theme()
         self.image_handler = ImageHandler()
         self._build_main_menu()
+
+    def _set_dark_theme(self) -> None:
+        style = ttk.Style(self.root)
+        try:
+            style.theme_use("clam")
+        except tk.TclError:
+            pass
+        dark_bg = "#2b2b2b"
+        fg = "#f0f0f0"
+        style.configure(".", background=dark_bg, foreground=fg)
+        style.configure("TFrame", background=dark_bg)
+        style.configure("TLabel", background=dark_bg, foreground=fg)
+        style.configure("TCheckbutton", background=dark_bg, foreground=fg)
+        style.configure("TButton", background="#444", foreground=fg)
+        style.map("TButton", background=[("active", "#555")])
+        self.root.configure(bg=dark_bg)
 
     def _clear_root(self) -> None:
         for child in self.root.winfo_children():
@@ -47,6 +64,7 @@ class InterfaceHandler:
     def _open_add_item(self) -> None:
         window = tk.Toplevel(self.root)
         window.title("Add Item")
+        window.configure(bg=self.root["background"])
 
         entries: dict[str, tk.Entry] = {}
         row = 0
@@ -125,6 +143,7 @@ class PreviewWindow(tk.Toplevel):
     def __init__(self, root: tk.Tk, items: List[Item], image_handler: ImageHandler) -> None:
         super().__init__(root)
         self.title("Item Preview")
+        self.configure(bg=root["background"])
         self.items = items
         self.index = 0
         self.image_handler = image_handler
@@ -133,9 +152,11 @@ class PreviewWindow(tk.Toplevel):
 
         btn_frame = ttk.Frame(self)
         btn_frame.pack()
-        ttk.Button(btn_frame, text="Rotate", command=self._rotate).pack(side="left", padx=2)
-        ttk.Button(btn_frame, text="Flip", command=self._flip).pack(side="left", padx=2)
+        self.angle_var = tk.DoubleVar(value=0)
+        ttk.Scale(btn_frame, from_=-180, to=180, orient="horizontal", variable=self.angle_var, command=self._update_angle, length=150).pack(side="left", padx=2)
+        ttk.Button(btn_frame, text="Flip", command=self._toggle_flip).pack(side="left", padx=2)
         ttk.Button(btn_frame, text="Next", command=self._next).pack(side="left", padx=2)
+        self.flip = False
 
         self.original: Image.Image | None = None
         self.display: Image.Image | None = None
@@ -144,6 +165,8 @@ class PreviewWindow(tk.Toplevel):
 
     def _load_current(self) -> None:
         item = self.items[self.index]
+        self.angle_var.set(0)
+        self.flip = False
         self.image_handler.createItemCard(item)
         path = join(OUTPUT_PATH, f"{item.id}.png")
         self.original = Image.open(path)
@@ -156,15 +179,20 @@ class PreviewWindow(tk.Toplevel):
         self.tk_img = ImageTk.PhotoImage(self.display)
         self.label.configure(image=self.tk_img)
 
-    def _rotate(self) -> None:
-        if self.display:
-            self.display = self.display.rotate(90, expand=True)
-            self._update_image()
+    def _update_angle(self, _value: str) -> None:
+        self._apply_transform()
 
-    def _flip(self) -> None:
-        if self.display:
-            self.display = self.display.transpose(Image.FLIP_LEFT_RIGHT)
-            self._update_image()
+    def _toggle_flip(self) -> None:
+        self.flip = not self.flip
+        self._apply_transform()
+
+    def _apply_transform(self) -> None:
+        item = self.items[self.index]
+        angle = self.angle_var.get()
+        self.image_handler.createItemCard(item, rotate=angle, flip=self.flip)
+        path = join(OUTPUT_PATH, f"{item.id}.png")
+        self.display = Image.open(path)
+        self._update_image()
 
     def _next(self) -> None:
         self.index += 1
@@ -172,4 +200,3 @@ class PreviewWindow(tk.Toplevel):
             self.destroy()
             return
         self._load_current()
-
