@@ -1,5 +1,30 @@
 from typing import Optional
-from config.constants import BLUE_INK_COLOR, DAMAGE_PREFIX, DAMAGE_SPLIT, GOLD_ITEM_BACKGROUND, IMAGE_FORMAT, ITEM_ABSOLUTE_IMAGE_MAX_SIZE, ITEM_ABSOLUTE_IMAGE_POSITION, ITEM_ABSOLUTE_PRICE_POSITION, ITEM_ABSOLUTE_STATS_POSITION, ITEM_ABSOLUTE_STATS_SIZE, ITEM_ABSOLUTE_TITLE_POSITION, ITEM_ABSOLUTE_TITLE_SIZE, OUTPUT_PATH, PRICE_FONT_SIZE, SILVER_ITEM_BACKGROUND, COPPER_ITEM_BACKGROUND, ITEM_IMAGES_PATH, STATS_FONT_PATH, STATS_FONT_SIZE, TITLE_FONT_PATH, PRICE_FONT_PATH, TITLE_FONT_SIZE, WEIGHT_PREFIX, WEIGHT_SUFFIX
+from config.constants import (
+    BLUE_INK_COLOR,
+    DAMAGE_PREFIX,
+    DAMAGE_SPLIT,
+    GOLD_ITEM_BACKGROUND,
+    IMAGE_FORMAT,
+    ITEM_ABSOLUTE_IMAGE_MAX_SIZE,
+    ITEM_ABSOLUTE_IMAGE_POSITION,
+    ITEM_ABSOLUTE_PRICE_POSITION,
+    ITEM_ABSOLUTE_STATS_POSITION,
+    ITEM_ABSOLUTE_STATS_SIZE,
+    ITEM_ABSOLUTE_TITLE_POSITION,
+    ITEM_ABSOLUTE_TITLE_SIZE,
+    OUTPUT_PATH,
+    PRICE_FONT_SIZE,
+    SILVER_ITEM_BACKGROUND,
+    COPPER_ITEM_BACKGROUND,
+    ITEM_IMAGES_PATH,
+    STATS_FONT_PATH,
+    STATS_FONT_SIZE,
+    TITLE_FONT_PATH,
+    PRICE_FONT_PATH,
+    TITLE_FONT_SIZE,
+    WEIGHT_PREFIX,
+    WEIGHT_SUFFIX,
+)
 from classes.types import AttributeType, Currency, Damage, Item
 from helpers.dataHelper import getItems
 from helpers.formattingHelper import getMaxFontSize, findOptimalAttributeLayout
@@ -12,7 +37,8 @@ from helpers.tupleHelper import twoDSub, twoDTruncate
 class ImageHandler:
     def __init__(self) -> None:
         pass
-    def createItemCard(self, item: Item) -> None:
+
+    def createItemCard(self, item: Item, rotate: float = 0, flip: bool = False) -> None:
         def getCurrency(price: float) -> Currency:
             if price % 1 == 0:
                 return Currency.GOLD
@@ -31,18 +57,24 @@ class ImageHandler:
                     backgroundPath = SILVER_ITEM_BACKGROUND
             return Image.open(backgroundPath).convert("RGBA")
 
-        def addImage(background: Image.Image, id: str) -> None:
-            imagePath = join(ITEM_IMAGES_PATH, id) # ! TODO: Error Handling
+        def addImage(background: Image.Image, id: str, rotate: float, flip: bool) -> None:
+            imagePath = join(ITEM_IMAGES_PATH, id)  # ! TODO: Error Handling
             image = Image.open(f"{imagePath}.{IMAGE_FORMAT}").convert("RGBA")
-            imageSize = image.size
+            if flip:
+                image = image.transpose(Image.FLIP_LEFT_RIGHT)
+            if rotate:
+                image = image.rotate(rotate, expand=True, resample=Resampling.BICUBIC)
+
             maxWidth, maxHeight = ITEM_ABSOLUTE_IMAGE_MAX_SIZE
             originWidth, originHeight = image.size
             ratio = min(maxWidth / originWidth, maxHeight / originHeight)
             width = int(originWidth * ratio)
             height = int(originHeight * ratio)
-            imageX, imageY = twoDSub(ITEM_ABSOLUTE_IMAGE_POSITION, twoDTruncate((width, height), (1/2, 1/2)))
-            resizedImage = image.resize((width, height), resample=Resampling.LANCZOS)
-            background.paste(resizedImage, (imageX, imageY), mask=resizedImage)
+            imageX, imageY = twoDSub(
+                ITEM_ABSOLUTE_IMAGE_POSITION, twoDTruncate((width, height), (1 / 2, 1 / 2))
+            )
+            resized = image.resize((width, height), resample=Resampling.LANCZOS)
+            background.paste(resized, (imageX, imageY), mask=resized)
 
         def addPrice(background: Image.Image, price: float, currency: Currency) -> None:
             draw = ImageDraw.Draw(background)
@@ -87,7 +119,7 @@ class ImageHandler:
 
         currency = getCurrency(item.price)
         cardImage = createBackground(currency)
-        addImage(cardImage, item.id)
+        addImage(cardImage, item.id, rotate, flip)
         addPrice(cardImage, item.price, currency)
         addTitle(cardImage, item.name)
         addStats(cardImage, item.weight, item.damage, item.attributes)
