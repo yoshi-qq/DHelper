@@ -7,7 +7,7 @@ from PIL import Image, ImageTk
 from classes.types import Item, DamageType, AttributeType, Damage
 from classes.textKeys import UIText, MessageText
 from helpers.translationHelper import translate, to_enum
-from config.constants import DICE_SIZES, OUTPUT_PATH
+from config.constants import GAME, PATHS
 from helpers.dataHelper import (
     getItems,
     addItem,
@@ -200,7 +200,7 @@ class InterfaceHandler:
                     flip=t.get("flip", False),
                     scale=t.get("scale", 1.0),
                 )
-                path = join(OUTPUT_PATH, f"{item.id}.png")
+                path = join(PATHS.OUTPUT, f"{item.id}.png")
                 img = Image.open(path)
                 top = tk.Toplevel(window)
                 top.title(f"{item.name} Card")
@@ -275,7 +275,7 @@ class InterfaceHandler:
         entries["Damage Dice Amount"] = ttk.Entry(dmg_frame, width=4)
         entries["Damage Dice Amount"].pack(side="left")
         ttk.Label(dmg_frame, text="d").pack(side="left")
-        dmg_dice_type = ttk.Combobox(dmg_frame, values=[str(d) for d in DICE_SIZES], width=4, state="readonly")
+        dmg_dice_type = ttk.Combobox(dmg_frame, values=[str(d) for d in GAME.DICE_SIZES], width=4, state="readonly")
         dmg_dice_type.pack(side="left", padx=2)
         entries["Damage Dice Type"] = dmg_dice_type
         entries["Damage Bonus"] = ttk.Entry(dmg_frame, width=4)
@@ -341,7 +341,7 @@ class InterfaceHandler:
         entries["Versatile Dice Amount"] = ttk.Entry(vers_inner, width=4)
         entries["Versatile Dice Amount"].pack(side="left")
         ttk.Label(vers_inner, text="d").pack(side="left")
-        vers_dice_type = ttk.Combobox(vers_inner, values=[str(d) for d in DICE_SIZES], width=4, state="readonly")
+        vers_dice_type = ttk.Combobox(vers_inner, values=[str(d) for d in GAME.DICE_SIZES], width=4, state="readonly")
         vers_dice_type.pack(side="left", padx=2)
         entries["Versatile Dice Type"] = vers_dice_type
         entries["Versatile Damage Bonus"] = ttk.Entry(vers_inner, width=4)
@@ -540,7 +540,7 @@ class PreviewWindow(tk.Toplevel):
             else:
                 self.skip_flag = True
                 return False
-        path = join(OUTPUT_PATH, f"{item.id}.png")
+        path = join(PATHS.OUTPUT, f"{item.id}.png")
         self.original = Image.open(path)
         self.display = self.original
         return True

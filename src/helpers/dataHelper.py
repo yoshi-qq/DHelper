@@ -1,39 +1,39 @@
 import json
 from json import load, dump
 from classes.types import Item, JsonItem, JsonItemCache
-from config.constants import ITEMS_LIST_PATH, ITEM_CACHE_PATH, CACHE_PATH
+from config.constants import DATA, PATHS
 import os
 from helpers.conversionHelper import toItem
 
 
 def getItems() -> list[Item]:
-    with open(ITEMS_LIST_PATH, "r", encoding="utf-8") as file:
+    with open(DATA.ITEMS, "r", encoding="utf-8") as file:
         jsonItems: dict[str, JsonItem] = load(file)
     items: list[Item] = [toItem(_id=key, jsonItem=item) for key, item in jsonItems.items()]
     return items
 
 
 def addItem(item: Item) -> None:
-    with open(ITEMS_LIST_PATH, "r", encoding="utf-8") as file:
+    with open(DATA.ITEMS, "r", encoding="utf-8") as file:
         data: dict[str, JsonItem] = load(file)
     data[item.id] = item.toJsonItem()
-    with open(ITEMS_LIST_PATH, "w", encoding="utf-8") as file:
+    with open(DATA.ITEMS, "w", encoding="utf-8") as file:
         dump(data, file, ensure_ascii=False, indent=4)
 
 
 def loadItemCache() -> dict[str, JsonItemCache]:
-    if not os.path.exists(ITEM_CACHE_PATH):
-        os.makedirs(CACHE_PATH, exist_ok=True)
-        with open(ITEM_CACHE_PATH, "w", encoding="utf-8") as file:
+    if not os.path.exists(PATHS.ITEM_CACHE):
+        os.makedirs(PATHS.CACHE, exist_ok=True)
+        with open(PATHS.ITEM_CACHE, "w", encoding="utf-8") as file:
             dump({}, file)
         return {}
-    with open(ITEM_CACHE_PATH, "r", encoding="utf-8") as file:
+    with open(PATHS.ITEM_CACHE, "r", encoding="utf-8") as file:
         return json.load(file)
 
 
 def saveItemCache(cache: dict[str, JsonItemCache]) -> None:
-    os.makedirs(CACHE_PATH, exist_ok=True)
-    with open(ITEM_CACHE_PATH, "w", encoding="utf-8") as file:
+    os.makedirs(PATHS.CACHE, exist_ok=True)
+    with open(PATHS.ITEM_CACHE, "w", encoding="utf-8") as file:
         dump(cache, file, ensure_ascii=False, indent=4)
 
 
