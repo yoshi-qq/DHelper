@@ -1,3 +1,7 @@
 /.vscode
+.vscode/
 /output
 /plan.excalidraw
+__pycache__/
+*.py[cod]
+desktop.ini
