@@ -1,4 +1,3 @@
-import __main__
 from os.path import join, dirname
 from helpers.tupleHelper import twoDTruncate
 from helpers.conversionHelper import toRGBA
@@ -7,7 +6,7 @@ from helpers.conversionHelper import toRGBA
 # =============
 # = CONSTANT
 # =============
-SRC = dirname(getattr(__main__, '__file__', ""))
+SRC = dirname(dirname(__file__))
 ROOT = dirname(SRC)
 
 # = Card =
