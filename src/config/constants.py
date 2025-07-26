@@ -75,6 +75,19 @@ class _TargetIconPaths:
         self.SELF: str = join(targets_path, "self.png")
         self.SPHERE: str = join(targets_path, "sphere.png")
 
+class _LevelIconPaths:
+    def __init__(self) -> None:
+        levels_path = join(SRC, "assets", "icons", "levels")
+        self.LEVEL_1: str = join(levels_path, "1seal.png")
+        self.LEVEL_2: str = join(levels_path, "2nature_seal.png")
+        self.LEVEL_3: str = join(levels_path, "3blue_seal.png")
+        self.LEVEL_4: str = join(levels_path, "4bronze_seal.png")
+        self.LEVEL_5: str = join(levels_path, "5silver_seal.png")
+        self.LEVEL_6: str = join(levels_path, "6gold_seal.png")
+        self.LEVEL_7: str = join(levels_path, "7dark_seal.png")
+        self.LEVEL_8: str = join(levels_path, "8enchanted_seal.png")
+        self.LEVEL_9: str = join(levels_path, "9molten_seal.png")
+
 class _IconPaths:
     def __init__(self) -> None:
         icons_path = join(SRC, "assets", "icons")
@@ -92,6 +105,8 @@ class _IconPaths:
         self.STRIKE: str = join(icons_path, "strike.png")
         # Target icons
         self.TARGETS: _TargetIconPaths = _TargetIconPaths()
+        # Level icons
+        self.LEVELS: _LevelIconPaths = _LevelIconPaths()
 
 class _ImageConstants:
     def __init__(self) -> None:
