@@ -50,7 +50,8 @@ class InterfaceHandler:
             foreground=fg,
             selectbackground="#555",
         )
-        style.map("TButton", background=[("active", "#555")])
+        style.map("TButton", background=[("active", "#3a3a3a")])
+        style.map("TCheckbutton", background=[("active", "#3a3a3a")])
         self.root.configure(bg=dark_bg)
 
     def _clear_root(self) -> None:
