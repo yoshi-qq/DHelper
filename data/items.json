@@ -25,8 +25,14 @@
             "damageType": "Stich"
         },
         "attributes": [
-            "Leicht",
+            "leicht",
             "Wurfwaffe"
-        ]
+        ],
+        "ranges": {
+            "Wurfwaffe": [
+                6,
+                18
+            ]
+        }
     }
 }

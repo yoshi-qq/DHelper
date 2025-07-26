@@ -1,21 +1,25 @@
 from classes.types import RGB, JsonItem, Item, HexColor, RGBA
 def toItem(_id: str, jsonItem: JsonItem) -> Item:
-    ranges = {k: tuple(v) for k, v in jsonItem.get("ranges", {}).items()}
+    ranges = {
+        k: (int(v[0]), int(v[1])) if isinstance(v, (list, tuple)) and len(v) >= 2 else (0, 0)
+        for k, v in jsonItem.get("ranges", {}).items()
+    }
+    damage = jsonItem.get("damage")
     return Item(
         _id=_id,
-        name=jsonItem["name"],
-        price=jsonItem["price"],
-        weight=jsonItem["weight"],
-        attributes=jsonItem["attributes"],
-        ranges=ranges,
+        name=jsonItem.get("name", ""),
+        price=jsonItem.get("price", 0),
+        weight=jsonItem.get("weight", 0),
+        attributes=jsonItem.get("attributes") if isinstance(jsonItem.get("attributes"), list) else [],
+        ranges=ranges if ranges else None,
         **(
             {
-                "damageDiceAmount": jsonItem["damage"]["diceAmount"],
-                "damageDiceType": jsonItem["damage"]["diceType"],
-                "damageBonus": jsonItem["damage"]["bonus"],
-                "damageType": jsonItem["damage"]["damageType"],
+                "damageDiceAmount": damage.get("diceAmount", 0),
+                "damageDiceType": damage.get("diceType", ""),
+                "damageBonus": damage.get("bonus", 0),
+                "damageType": damage.get("damageType", ""),
             }
-            if jsonItem["damage"]
+            if damage
             else {}
         ),
     )

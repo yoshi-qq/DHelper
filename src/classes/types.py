@@ -95,5 +95,5 @@ class Item:
             "damage": self.damage.toJsonDamage() if self.damage else None,
             "attributes": self.attributes,
             **({"ranges": {k: [v[0], v[1]] for k, v in self.ranges.items()}} if self.ranges else {})
-        }
+        }  # type: ignore
 
