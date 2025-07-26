@@ -200,4 +200,3 @@ class PreviewWindow(tk.Toplevel):
             self.destroy()
             return
         self._load_current()
-
