@@ -52,6 +52,9 @@ class InterfaceHandler:
         )
         style.map("TButton", background=[("active", "#3a3a3a")])
         style.map("TCheckbutton", background=[("active", "#3a3a3a")])
+        style.configure("Treeview", background="#444", foreground=fg, fieldbackground="#444")
+        style.configure("Treeview.Heading", background="#555", foreground=fg)
+        style.map("Treeview", background=[("selected", "#555")])
         self.root.configure(bg=dark_bg)
 
     def _clear_root(self) -> None:
@@ -171,14 +174,21 @@ class InterfaceHandler:
                 messagebox.showwarning("No selection", "Select an item first")
                 return
             try:
-                self.image_handler.createItemCard(item)
+                cache = loadItemCache()
+                t = cache.get(item.id, {"rotate": 0.0, "scale": 1.0, "flip": False})
+                self.image_handler.createItemCard(
+                    item,
+                    rotate=t.get("rotate", 0.0),
+                    flip=t.get("flip", False),
+                    scale=t.get("scale", 1.0),
+                )
                 path = join(OUTPUT_PATH, f"{item.id}.png")
                 img = Image.open(path)
                 top = tk.Toplevel(window)
                 top.title(f"{item.name} Card")
                 tk_img = ImageTk.PhotoImage(img)
                 lbl = ttk.Label(top, image=tk_img)
-                lbl.image = tk_img
+                lbl.image = tk_img # type: ignore (anti garbage collection)
                 lbl.pack()
             except Exception as e:
                 messagebox.showerror("Error", str(e))
