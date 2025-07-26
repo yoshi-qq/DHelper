@@ -70,6 +70,7 @@ class InterfaceHandler:
         frame = ttk.Frame(self.root, padding=20)
         frame.pack(fill="both", expand=True)
         ttk.Button(frame, text="Add Item", command=self._open_add_item).pack(pady=5, fill="x")
+        ttk.Button(frame, text="Manage Items", command=self._open_manage_items).pack(pady=5, fill="x")
         ttk.Button(frame, text="Print Items", command=self._open_print_items).pack(pady=5, fill="x")
         ttk.Button(frame, text="Back", command=self._build_main_menu).pack(pady=10)
 
@@ -80,10 +81,133 @@ class InterfaceHandler:
         ttk.Label(frame, text="Spells functionality not implemented yet").pack(pady=10)
         ttk.Button(frame, text="Back", command=self._build_main_menu).pack(pady=10)
 
-    # ===== Add Item =====
-    def _open_add_item(self) -> None:
+    # ===== Manage Items =====
+    def _open_manage_items(self) -> None:
         window = tk.Toplevel(self.root)
-        window.title("Add Item")
+        window.title("Manage Items")
+        window.configure(bg=self.root["background"])
+
+        items = getItems()
+
+        search_var = tk.StringVar()
+        sort_var = tk.StringVar(value="ID")
+
+        ttk.Label(window, text="Search").grid(row=0, column=0, sticky="e", padx=5, pady=2)
+        search_entry = ttk.Entry(window, textvariable=search_var)
+        search_entry.grid(row=0, column=1, sticky="ew", padx=5, pady=2)
+
+        ttk.Label(window, text="Sort by").grid(row=1, column=0, sticky="e", padx=5, pady=2)
+        sort_cb = ttk.Combobox(window, textvariable=sort_var, values=["ID", "Name", "Price", "Weight"], state="readonly")
+        sort_cb.grid(row=1, column=1, sticky="ew", padx=5, pady=2)
+
+        attribute_types = list(AttributeType.__args__)  # type: ignore
+        attr_vars: dict[str, tk.BooleanVar] = {}
+        attr_frame = ttk.Frame(window)
+        attr_frame.grid(row=2, column=0, columnspan=2, sticky="w", padx=5)
+        for at in attribute_types:
+            var = tk.BooleanVar(value=False)
+            chk = ttk.Checkbutton(attr_frame, text=at, variable=var, command=lambda: update_list())
+            chk.pack(side="left")
+            attr_vars[at] = var
+
+        columns = ("id", "name", "price", "weight")
+        tree = ttk.Treeview(window, columns=columns, show="headings", selectmode="browse")
+        for col in columns:
+            tree.heading(col, text=col.capitalize())
+            tree.column(col, width=100, anchor="center")
+        tree.grid(row=3, column=0, columnspan=2, sticky="nsew", padx=5, pady=5)
+        window.grid_rowconfigure(3, weight=1)
+        window.grid_columnconfigure(1, weight=1)
+
+        btn_frame = ttk.Frame(window)
+        btn_frame.grid(row=4, column=0, columnspan=2, pady=5)
+        ttk.Button(btn_frame, text="View Card", command=lambda: view_card()).pack(side="left", padx=2)
+        ttk.Button(btn_frame, text="Edit Data", command=lambda: edit_selected()).pack(side="left", padx=2)
+        ttk.Button(btn_frame, text="Edit Card", command=lambda: edit_card()).pack(side="left", padx=2)
+        ttk.Button(btn_frame, text="Close", command=window.destroy).pack(side="left", padx=2)
+
+        def filter_items() -> List[Item]:
+            search = search_var.get().lower()
+            selected = [a for a, v in attr_vars.items() if v.get()]
+            filtered = []
+            for it in items:
+                if search not in it.name.lower() and search not in it.id.lower():
+                    continue
+                if selected and not all(a in it.attributes for a in selected):
+                    continue
+                filtered.append(it)
+            return filtered
+
+        def update_list(*_args: object) -> None:
+            tree.delete(*tree.get_children())
+            data = filter_items()
+            key = sort_var.get().lower()
+            if key == "id":
+                sort_key = lambda i: i.id
+            elif key == "name":
+                sort_key = lambda i: i.name
+            elif key == "price":
+                sort_key = lambda i: i.price
+            elif key == "weight":
+                sort_key = lambda i: i.weight
+            else:
+                sort_key = lambda i: i.name
+            for it in sorted(data, key=sort_key):
+                tree.insert("", "end", values=(it.id, it.name, it.price, it.weight))
+
+        def get_selected_item() -> Item | None:
+            sel = tree.selection()
+            if not sel:
+                return None
+            item_id = tree.item(sel[0], "values")[0]
+            for it in items:
+                if it.id == item_id:
+                    return it
+            return None
+
+        def view_card() -> None:
+            item = get_selected_item()
+            if not item:
+                messagebox.showwarning("No selection", "Select an item first")
+                return
+            try:
+                self.image_handler.createItemCard(item)
+                path = join(OUTPUT_PATH, f"{item.id}.png")
+                img = Image.open(path)
+                top = tk.Toplevel(window)
+                top.title(f"{item.name} Card")
+                tk_img = ImageTk.PhotoImage(img)
+                lbl = ttk.Label(top, image=tk_img)
+                lbl.image = tk_img
+                lbl.pack()
+            except Exception as e:
+                messagebox.showerror("Error", str(e))
+
+        def edit_selected() -> None:
+            item = get_selected_item()
+            if not item:
+                messagebox.showwarning("No selection", "Select an item first")
+                return
+            self._open_edit_item(item)
+            items.clear()
+            items.extend(getItems())
+            update_list()
+
+        def edit_card() -> None:
+            item = get_selected_item()
+            if not item:
+                messagebox.showwarning("No selection", "Select an item first")
+                return
+            cache = loadItemCache()
+            PreviewWindow(self.root, [item], self.image_handler, cache)
+
+        search_var.trace_add("write", update_list)
+        sort_cb.bind("<<ComboboxSelected>>", update_list)
+        update_list()
+
+
+    # ===== Add Item =====
+    def _item_form(self, window: tk.Toplevel, item: Item | None) -> None:
         window.configure(bg=self.root["background"])
 
         entries: dict[str, tk.Entry] = {}
@@ -92,10 +216,19 @@ class InterfaceHandler:
             ttk.Label(window, text=label).grid(row=row, column=0, sticky="e", padx=5, pady=2)
             entry = ttk.Entry(window)
             entry.grid(row=row, column=1, padx=5, pady=2)
+            if item:
+                match label:
+                    case "ID":
+                        entry.insert(0, item.id)
+                    case "Name":
+                        entry.insert(0, item.name)
+                    case "Price":
+                        entry.insert(0, str(item.price))
+                    case "Weight":
+                        entry.insert(0, str(item.weight))
             entries[label] = entry
             row += 1
 
-        # === Damage Row ===
         damage_types = list(DamageType.__args__)  # type: ignore
         ttk.Label(window, text="Damage").grid(row=row, column=0, sticky="e", padx=5, pady=2)
         dmg_frame = ttk.Frame(window)
@@ -111,6 +244,11 @@ class InterfaceHandler:
         dmg_type_var = tk.StringVar(value="")
         dmg_type_cb = ttk.Combobox(dmg_frame, textvariable=dmg_type_var, values=[""] + damage_types, state="readonly", width=10)
         dmg_type_cb.pack(side="left", padx=2)
+        if item and item.damage:
+            entries["Damage Dice Amount"].insert(0, str(item.damage.diceAmount))
+            dmg_dice_type.set(str(item.damage.diceType))
+            entries["Damage Bonus"].insert(0, str(item.damage.bonus))
+            dmg_type_var.set(item.damage.damageType)
         row += 1
 
         attribute_types = list(AttributeType.__args__)  # type: ignore
@@ -135,7 +273,7 @@ class InterfaceHandler:
                     vers_frame.grid_remove()
 
         for at in attribute_types:
-            var = tk.BooleanVar(value=False)
+            var = tk.BooleanVar(value=item is not None and at in item.attributes)
             chk = ttk.Checkbutton(attr_frame, text=at, variable=var, command=lambda a=at: toggle_range(a))
             chk.pack(anchor="w")
             attr_vars[at] = var
@@ -147,11 +285,16 @@ class InterfaceHandler:
                 ttk.Label(r_frame, text="/").pack(side="left")
                 e_max = ttk.Entry(r_frame, width=4)
                 e_max.pack(side="left")
+                if item and at in item.ranges:
+                    low, high = item.ranges[at]
+                    e_min.insert(0, str(low))
+                    e_max.insert(0, str(high))
                 range_frames[at] = r_frame
                 range_entries[at] = (e_min, e_max)
+                if var.get():
+                    r_frame.pack(anchor="w", padx=15)
         row += 1
 
-        # === Versatile Damage (hidden by default) ===
         vers_frame = ttk.Frame(window)
         ttk.Label(vers_frame, text="Vielseitig").grid(row=0, column=0, sticky="e", padx=5, pady=2)
         vers_inner = ttk.Frame(vers_frame)
@@ -165,7 +308,14 @@ class InterfaceHandler:
         entries["Versatile Damage Bonus"] = ttk.Entry(vers_inner, width=4)
         entries["Versatile Damage Bonus"].pack(side="left", padx=2)
         vers_frame.grid(row=row, column=0, columnspan=2, sticky="w")
-        vers_frame.grid_remove()
+        if item and item.versatileDamage:
+            entries["Versatile Dice Amount"].insert(0, str(item.versatileDamage.diceAmount))
+            vers_dice_type.set(str(item.versatileDamage.diceType))
+            entries["Versatile Damage Bonus"].insert(0, str(item.versatileDamage.bonus))
+        if item and "Vielseitig" in item.attributes:
+            vers_frame.grid()
+        else:
+            vers_frame.grid_remove()
         row += 1
 
         def submit() -> None:
@@ -198,7 +348,7 @@ class InterfaceHandler:
             if not _id or not name:
                 messagebox.showerror("Error", "ID and Name are required")
                 return
-            item = Item(
+            new_item = Item(
                 _id=_id,
                 name=name,
                 price=price,
@@ -220,11 +370,21 @@ class InterfaceHandler:
                 attributes=attributes,
                 ranges=ranges,
             )
-            addItem(item)
+            addItem(new_item)
             messagebox.showinfo("Saved", "Item saved")
             window.destroy()
 
-        ttk.Button(window, text="Add", command=submit).grid(row=row, column=0, columnspan=2, pady=10)
+        ttk.Button(window, text="Save", command=submit).grid(row=row, column=0, columnspan=2, pady=10)
+
+    def _open_add_item(self) -> None:
+        window = tk.Toplevel(self.root)
+        window.title("Add Item")
+        self._item_form(window, None)
+
+    def _open_edit_item(self, item: Item) -> None:
+        window = tk.Toplevel(self.root)
+        window.title(f"Edit Item: {item.name}")
+        self._item_form(window, item)
 
     # ===== Print Items =====
     def _open_print_items(self) -> None:
