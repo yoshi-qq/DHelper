@@ -81,10 +81,18 @@ class InterfaceHandler:
 
     def _open_spells_menu(self) -> None:
         self._clear_root()
-        frame = ttk.Frame(self.root, padding=20)
-        frame.pack(fill="both", expand=True)
-        ttk.Label(frame, text=translate(UIText.SPELLS_NOT_IMPLEMENTED)).pack(pady=10)
-        ttk.Button(frame, text=translate(UIText.BUTTON_BACK), command=self._build_main_menu).pack(pady=10)
+        try:
+            self.image_handler.createSpellCards()
+            messagebox.showinfo(
+                translate(MessageText.DONE_TITLE),
+                translate(MessageText.DONE_MESSAGE),
+            )
+        except Exception as e:
+            messagebox.showerror(
+                translate(MessageText.ERROR_TITLE),
+                str(e),
+            )
+        self._build_main_menu()
 
     # ===== Manage Items =====
     def _open_manage_items(self) -> None:
