@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
-from typing import List
+from typing import List, Sequence, Union
 from datetime import timedelta
 import os
 from os.path import join
@@ -728,7 +728,19 @@ class InterfaceHandler:
                 attributes=attributes,
                 ranges=ranges,
             )
-            addWeapon(new_item)
+            addWeapon(Weapon(
+                _id=new_item.id,
+                name=new_item.name,
+                price=new_item.price,
+                weight=new_item.weight,
+                damageDiceAmount=dmg_amount,
+                damageDiceType=dmg_type,
+                damageBonus=dmg_bonus,
+                damageType=damage_type,
+                versatileDamage=new_item.versatileDamage,
+                attributes=new_item.attributes,
+                ranges=new_item.ranges,
+            ))
             messagebox.showinfo(
                 translate(MessageText.SAVED_TITLE),
                 translate(MessageText.ITEM_SAVED),
@@ -1450,7 +1462,7 @@ class PreviewWindow(tk.Toplevel):
     def __init__(
         self,
         root: tk.Tk,
-        items: List[Item],
+        items: Sequence[Union[Item, SimpleItem, Armor]],
         image_handler: ImageHandler,
         cache: dict,
     ) -> None:
@@ -1503,7 +1515,7 @@ class PreviewWindow(tk.Toplevel):
             return
         self._update_image()
 
-    def _generate_image(self, item: Item) -> bool:
+    def _generate_image(self, item: Union[Item, SimpleItem, Armor]) -> bool:
         try:
             self.image_handler.createItemCard(
                 item,

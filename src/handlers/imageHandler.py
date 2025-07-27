@@ -201,7 +201,7 @@ class ImageHandler:
 
     def createItemCard(
         self,
-        item: Item,
+        item: Item | SimpleItem | Armor,
         rotate: float = 0,
         flip: bool = False,
         scale: float = 1.0,
@@ -269,7 +269,7 @@ class ImageHandler:
         self._createCard(cardImage, instructions, join(PATHS.ITEM_OUTPUT, f"{item.id}.png"))
 
     def createItemCards(self) -> None:
-        items: list[Item] = getWeapons()
+        items = getWeapons()  # Let type inference handle this
         for item in items:
             self.createItemCard(item)
 

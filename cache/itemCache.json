@@ -2,11 +2,15 @@
     "zweihandhammer": {
         "rotate": 15.254237288135585,
         "scale": 1.1610169491525424,
-        "flip": false
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
     },
     "dolch": {
         "rotate": 3.0508474576271,
         "scale": 0.8728813559322034,
-        "flip": true
+        "flip": true,
+        "offset_x": 0.0,
+        "offset_y": 0.0
     }
 }
