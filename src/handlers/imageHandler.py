@@ -29,6 +29,8 @@ class ImageHandler:
         rotate: float = 0,
         flip: bool = False,
         scale: float = 1.0,
+        offset_x: float = 0.0,
+        offset_y: float = 0.0,
     ) -> None:
         def getCurrency(price: float) -> Currency:
             if price % 1 == 0:
@@ -48,7 +50,15 @@ class ImageHandler:
                     backgroundPath = IMAGE.BACKGROUNDS.SILVER_ITEM
             return Image.open(backgroundPath).convert("RGBA")
 
-        def addImage(background: Image.Image, id: str, rotate: float, flip: bool, scale: float) -> None:
+        def addImage(
+            background: Image.Image,
+            id: str,
+            rotate: float,
+            flip: bool,
+            scale: float,
+            offset_x: float,
+            offset_y: float,
+        ) -> None:
             imagePath = join(IMAGE.PATHS.ITEMS, id)
             if not os.path.exists(f"{imagePath}.{IMAGE.FORMAT}"):
                 raise FileNotFoundError(imagePath)
@@ -66,6 +76,8 @@ class ImageHandler:
             imageX, imageY = twoDSub(
                 ITEM.IMAGE.POSITION.ABSOLUTE, twoDTruncate((width, height), (1 / 2, 1 / 2))
             )
+            imageX += int(offset_x)
+            imageY += int(offset_y)
             resized = image.resize((width, height), resample=Resampling.LANCZOS)
             background.paste(resized, (imageX, imageY), mask=resized)
 
@@ -138,7 +150,7 @@ class ImageHandler:
 
         currency = getCurrency(item.price)
         cardImage = createBackground(currency)
-        addImage(cardImage, item.id, rotate, flip, scale)
+        addImage(cardImage, item.id, rotate, flip, scale, offset_x, offset_y)
         addPrice(cardImage, item.price, currency)
         addTitle(cardImage, item.name)
         addStats(cardImage, item.weight, item.damage, item.versatileDamage, item.attributes, item.ranges)
@@ -158,6 +170,8 @@ class ImageHandler:
         rotate: float = 0.0,
         flip: bool = False,
         scale: float = 1.0,
+        offset_x: float = 0.0,
+        offset_y: float = 0.0,
     ) -> None:
         def addIcon(background: Image.Image, path: str, layout, center: bool = True) -> None:
             icon = Image.open(path).convert("RGBA")
@@ -187,7 +201,15 @@ class ImageHandler:
 
         card = Image.open(IMAGE.BACKGROUNDS.SPELL).convert("RGBA")
 
-        def addImage(background: Image.Image, id: str, rotate: float, flip: bool, scale: float) -> None:
+        def addImage(
+            background: Image.Image,
+            id: str,
+            rotate: float,
+            flip: bool,
+            scale: float,
+            offset_x: float,
+            offset_y: float,
+        ) -> None:
             imagePath = join(IMAGE.PATHS.SPELLS, id)
             if not os.path.exists(f"{imagePath}.{IMAGE.FORMAT}"):
                 raise FileNotFoundError(imagePath)
@@ -204,6 +226,8 @@ class ImageHandler:
             imageX, imageY = twoDSub(
                 SPELL.IMAGE.POSITION.ABSOLUTE, twoDTruncate((width, height), (1 / 2, 1 / 2))
             )
+            imageX += int(offset_x)
+            imageY += int(offset_y)
             resized = image.resize((width, height), resample=Resampling.LANCZOS)
             background.paste(resized, (imageX, imageY), mask=resized)
 
@@ -223,7 +247,7 @@ class ImageHandler:
 
         addText(card, spell.name, SPELL.TITLE, FONT.TITLE_PATH, FONT_STYLE.SIZES.TITLE)
         addText(card, str(spell.type), SPELL.CATEGORY, FONT.TITLE_PATH, FONT_STYLE.SIZES.TITLE)
-        addImage(card, spell.id, rotate, flip, scale)
+        addImage(card, spell.id, rotate, flip, scale, offset_x, offset_y)
 
         addIcon(card, IMAGE.ICONS.DURATION, SPELL.DURATION)
         addText(

@@ -51,6 +51,8 @@ class _ImagePaths:
         self.ITEMS: str = join(assets, "items")
         self.SPELLS: str = join(assets, "spells")
         self.BACKGROUND: str = join(assets, "background")
+        # icon used for application windows
+        self.APP_ICON: str = join(self.SPELLS, "feuerball.png")
 
 class _BackgroundImages:
     def __init__(self) -> None:

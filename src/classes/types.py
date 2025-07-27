@@ -170,6 +170,8 @@ class JsonItemCache(TypedDict):
     rotate: float
     scale: float
     flip: bool
+    offset_x: float
+    offset_y: float
 
 
 # ==========
