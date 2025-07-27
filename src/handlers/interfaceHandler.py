@@ -31,10 +31,6 @@ from helpers.translationHelper import (
 )
 from config.constants import GAME, PATHS, IMAGE
 from helpers.dataHelper import (
-    getWeapons,
-    addWeapon,
-    getArmors,
-    addArmor,
     getItems,
     addItem,
     updateItemCache,
@@ -151,15 +147,15 @@ class InterfaceHandler:
         self._clear_root()
         frame = ttk.Frame(self.root, padding=20)
         frame.pack(fill="both", expand=True)
-        ttk.Button(frame, text=translate(UIText.BUTTON_ITEMS), command=self._open_weapons_menu, width=30).pack(pady=10)
+        ttk.Button(frame, text=translate(UIText.BUTTON_ITEMS), command=self._open_items_menu, width=30).pack(pady=10)
         ttk.Button(frame, text=translate(UIText.BUTTON_SPELLS), command=self._open_spells_menu, width=30).pack(pady=10)
         ttk.Button(frame, text=translate(UIText.BUTTON_SETTINGS), command=self._open_settings_menu, width=30).pack(pady=10)
 
-    def _open_weapons_menu(self) -> None:
+    def _open_items_menu(self) -> None:
         self._clear_root()
         frame = ttk.Frame(self.root, padding=20)
         frame.pack(fill="both", expand=True)
-        ttk.Button(frame, text=translate(UIText.BUTTON_ADD_ITEM), command=self._open_add_weapon).pack(pady=5, fill="x")
+        ttk.Button(frame, text=translate(UIText.BUTTON_ADD_ITEM), command=self._open_add_item).pack(pady=5, fill="x")
         ttk.Button(frame, text=translate(UIText.BUTTON_MANAGE_ITEMS), command=self._open_manage_items).pack(pady=5, fill="x")
         ttk.Button(frame, text=translate(UIText.BUTTON_PRINT_ITEMS), command=self._open_print_items).pack(pady=5, fill="x")
         ttk.Button(frame, text=translate(UIText.BUTTON_BACK), command=self._build_main_menu).pack(pady=10)
@@ -204,7 +200,7 @@ class InterfaceHandler:
         window.title(translate(UIText.MANAGE_ITEMS_TITLE))
         window.configure(bg=self.root["background"])
 
-        items = getWeapons()
+        items = getItems()
 
         search_var = tk.StringVar()
         sort_var = tk.StringVar(value=translate(UIText.COLUMN_ID))
@@ -337,9 +333,9 @@ class InterfaceHandler:
                     translate(MessageText.NO_SELECTION_TEXT),
                 )
                 return
-            self._open_edit_weapon(item)
+            self._open_edit_item(item)
             items.clear()
-            items.extend(getWeapons())
+            items.extend(getItems())
             update_list()
 
         def edit_card() -> None:
@@ -534,7 +530,7 @@ class InterfaceHandler:
                 attributes=attributes,
                 ranges=ranges,
             )
-            addWeapon(new_item)
+            addItem(new_item)
             messagebox.showinfo(
                 translate(MessageText.SAVED_TITLE),
                 translate(MessageText.ITEM_SAVED),
@@ -772,13 +768,13 @@ class InterfaceHandler:
 
         ttk.Button(window, text=translate(UIText.SAVE_BUTTON), command=submit).grid(row=row, column=0, columnspan=2, pady=10)
 
-    def _open_add_weapon(self) -> None:
+    def _open_add_item(self) -> None:
         window = tk.Toplevel(self.root)
         self._set_icon(window)
         window.title(translate(UIText.ADD_ITEM_TITLE))
         self._item_form(window, None)
 
-    def _open_edit_weapon(self, item: Item) -> None:
+    def _open_edit_item(self, item: Item) -> None:
         window = tk.Toplevel(self.root)
         self._set_icon(window)
         window.title(f"{translate(UIText.EDIT_ITEM_TITLE)}: {item.name}")
@@ -944,7 +940,7 @@ class InterfaceHandler:
 
     # ===== Print Items =====
     def _open_print_items(self) -> None:
-        items = getWeapons()
+        items = getItems()
         if not items:
             messagebox.showinfo(
                 translate(MessageText.NO_ITEMS_TITLE),
