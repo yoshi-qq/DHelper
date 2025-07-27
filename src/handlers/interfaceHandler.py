@@ -2,7 +2,6 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 from typing import List
 from datetime import timedelta
-import os
 from os.path import join
 from PIL import Image, ImageTk
 
@@ -20,15 +19,7 @@ from classes.types import (
     Components,
 )
 from classes.textKeys import UIText, MessageText
-from helpers.translationHelper import (
-    translate,
-    to_enum,
-    get_language,
-    set_language,
-    get_theme,
-    set_theme,
-    LANG_DIR,
-)
+from helpers.translationHelper import translate, to_enum
 from config.constants import GAME, PATHS, IMAGE
 from helpers.dataHelper import (
     getItems,
@@ -48,7 +39,7 @@ class InterfaceHandler:
         self.root = tk.Tk()
         self.root.title(translate(UIText.APP_TITLE))
         self._set_icon(self.root)
-        self._apply_theme()
+        self._set_modern_theme()
         self.image_handler = ImageHandler()
         self._build_main_menu()
 
@@ -96,49 +87,6 @@ class InterfaceHandler:
         style.map("Treeview", background=[("selected", "#cccccc")])
         self.root.configure(bg=bg)
 
-    def _set_dark_theme(self) -> None:
-        style = ttk.Style(self.root)
-        try:
-            style.theme_use("clam")
-        except tk.TclError:
-            pass
-        bg = "#333333"
-        fg = "#f5f5f5"
-        style.configure(".", background=bg, foreground=fg)
-        style.configure("TFrame", background=bg)
-        style.configure("TLabel", background=bg, foreground=fg)
-        style.configure("TCheckbutton", background=bg, foreground=fg)
-        style.configure("TButton", background="#444444", foreground=fg)
-        style.configure(
-            "TEntry",
-            fieldbackground="#555555",
-            background="#555555",
-            foreground=fg,
-            insertcolor=fg,
-        )
-        style.configure(
-            "TCombobox",
-            fieldbackground="#555555",
-            background="#555555",
-            foreground=fg,
-            selectbackground="#666666",
-        )
-        self.root.option_add("*TCombobox*Listbox.background", "#555555")
-        self.root.option_add("*TCombobox*Listbox.foreground", fg)
-        self.root.option_add("*TCombobox*Listbox.selectBackground", "#777777")
-        style.map("TButton", background=[("active", "#666666")])
-        style.map("TCheckbutton", background=[("active", "#666666")])
-        style.configure("Treeview", background="#555555", foreground=fg, fieldbackground="#555555")
-        style.configure("Treeview.Heading", background="#444444", foreground=fg)
-        style.map("Treeview", background=[("selected", "#666666")])
-        self.root.configure(bg=bg)
-
-    def _apply_theme(self) -> None:
-        if get_theme() == "dark":
-            self._set_dark_theme()
-        else:
-            self._set_modern_theme()
-
     def _clear_root(self) -> None:
         for child in self.root.winfo_children():
             child.destroy()
@@ -149,7 +97,6 @@ class InterfaceHandler:
         frame.pack(fill="both", expand=True)
         ttk.Button(frame, text=translate(UIText.BUTTON_ITEMS), command=self._open_items_menu, width=30).pack(pady=10)
         ttk.Button(frame, text=translate(UIText.BUTTON_SPELLS), command=self._open_spells_menu, width=30).pack(pady=10)
-        ttk.Button(frame, text=translate(UIText.BUTTON_SETTINGS), command=self._open_settings_menu, width=30).pack(pady=10)
 
     def _open_items_menu(self) -> None:
         self._clear_root()
@@ -168,30 +115,6 @@ class InterfaceHandler:
         ttk.Button(frame, text=translate(UIText.BUTTON_MANAGE_SPELLS), command=self._open_manage_spells).pack(pady=5, fill="x")
         ttk.Button(frame, text=translate(UIText.BUTTON_PRINT_SPELLS), command=self._open_print_spells).pack(pady=5, fill="x")
         ttk.Button(frame, text=translate(UIText.BUTTON_BACK), command=self._build_main_menu).pack(pady=10)
-
-    def _open_settings_menu(self) -> None:
-        self._clear_root()
-        frame = ttk.Frame(self.root, padding=20)
-        frame.pack(fill="both", expand=True)
-
-        ttk.Label(frame, text=translate(UIText.LANGUAGE_LABEL)).grid(row=0, column=0, sticky="e", padx=5, pady=2)
-        languages = [f[:-5] for f in os.listdir(LANG_DIR) if f.endswith(".json")]
-        lang_var = tk.StringVar(value=get_language())
-        ttk.Combobox(frame, textvariable=lang_var, values=languages, state="readonly").grid(row=0, column=1, padx=5, pady=2)
-
-        ttk.Label(frame, text=translate(UIText.THEME_LABEL)).grid(row=1, column=0, sticky="e", padx=5, pady=2)
-        theme_map = {"light": UIText.LIGHT_OPTION, "dark": UIText.DARK_OPTION}
-        theme_var = tk.StringVar(value=translate(theme_map[get_theme()]))
-        ttk.Combobox(frame, textvariable=theme_var, values=[translate(v) for v in theme_map.values()], state="readonly").grid(row=1, column=1, padx=5, pady=2)
-
-        def apply() -> None:
-            set_language(lang_var.get())
-            reverse = {translate(v): k for k, v in theme_map.items()}
-            set_theme(reverse.get(theme_var.get(), "light"))
-            self._apply_theme()
-            self._build_main_menu()
-
-        ttk.Button(frame, text=translate(UIText.SAVE_BUTTON), command=apply).grid(row=2, column=0, columnspan=2, pady=10)
 
     # ===== Manage Items =====
     def _open_manage_items(self) -> None:
