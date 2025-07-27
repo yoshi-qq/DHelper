@@ -4,11 +4,13 @@
         "name": "Feuerball",
         "level": 3,
         "type": "EVOCATION",
-        "casterClasses": ["WIZARD"],
+        "casterClasses": [
+            "WIZARD"
+        ],
         "duration": 1.0,
         "cooldown": 0.0,
         "range": 45.0,
-        "subRange": null,
+        "subRange": 5.0,
         "damage": {
             "diceAmount": 8,
             "diceType": 6,
@@ -16,11 +18,14 @@
             "damageType": "Fire"
         },
         "components": {
-            "verbal": false,
-            "gestural": false,
-            "material": null
+            "verbal": true,
+            "gestural": true,
+            "material": {
+                "name": "Schwefel",
+                "cost": null
+            }
         },
-        "levelBonus": "",
+        "levelBonus": "1D6",
         "castingTime": "ACTION",
         "ritual": false,
         "concentration": false,

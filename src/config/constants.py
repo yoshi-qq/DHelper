@@ -193,32 +193,37 @@ class _ItemConstants:
 
 class _MaterialConstants:
     def __init__(self) -> None:
-        self.SPOKEN: _LayoutElement = _LayoutElement(150, 380, 25, 25)
-        self.MATERIAL: _LayoutElement = _LayoutElement(185, 380, 25, 25)
-        self.GESTURAL: _LayoutElement = _LayoutElement(220, 380, 25, 25)
-        self.NAME: _LayoutElement = _LayoutElement(220, 400, 100, 18)
-        self.COST: _LayoutElement = _LayoutElement(220, 420, 75, 20)
+        sY = _SpellConstants.SMALLS_Y_OFFSET
+        self.SPOKEN: _LayoutElement = _LayoutElement(150, 380+sY, 25, 25)
+        self.MATERIAL: _LayoutElement = _LayoutElement(185, 380+sY, 25, 25)
+        self.GESTURAL: _LayoutElement = _LayoutElement(220, 380+sY, 25, 25)
+        self.NAME: _LayoutElement = _LayoutElement(185, 400+sY, 100, 18)
+        self.COST: _LayoutElement = _LayoutElement(185, 420+sY, 75, 20)
 
 class _SpellConstants:
+    SMALLS_Y_OFFSET: int = 60
+    MID_Y_OFFSET: int = -15
     def __init__(self) -> None:
+        sY = _SpellConstants.SMALLS_Y_OFFSET
+        mY = _SpellConstants.MID_Y_OFFSET
         self.TITLE: _LayoutElement = _LayoutElement(200, 55, 135, 55)
         self.LEVEL: _LayoutElement = _LayoutElement(109, 61, 56, 56)
         self.CATEGORY: _LayoutElement = _LayoutElement(180, 104, 153, 26)
         self.DURATION: _LayoutElement = _LayoutElement(60, 430, 36, 36)
         self.DURATION_TEXT: _LayoutElement = _LayoutElement(60, 460, 36, 26)
-        self.COOLDOWN: _LayoutElement = _LayoutElement(100, 395, 36, 36)
-        self.COOLDOWN_TEXT: _LayoutElement = _LayoutElement(100, 425, 36, 26)
-        self.DAMAGE: _LayoutElement = _LayoutElement(260, 395, 36, 36)
-        self.DAMAGE_TEXT: _LayoutElement = _LayoutElement(260, 425, 36, 26)
+        self.COOLDOWN: _LayoutElement = _LayoutElement(105, 395+mY, 36, 36)
+        self.COOLDOWN_TEXT: _LayoutElement = _LayoutElement(105, 425+mY, 36, 26)
+        self.DAMAGE: _LayoutElement = _LayoutElement(255, 395+mY, 36, 36)
+        self.DAMAGE_TEXT: _LayoutElement = _LayoutElement(255, 425+mY, 36, 26)
         self.RANGE: _LayoutElement = _LayoutElement(300, 430, 36, 36)
         self.RANGE_TEXT: _LayoutElement = _LayoutElement(300, 460, 36, 26)
         self.MATERIAL: _MaterialConstants = _MaterialConstants()
-        self.CONCENTRATION: _LayoutElement = _LayoutElement(150, 355, 25, 25)
-        self.CAST_TIME: _LayoutElement = _LayoutElement(185, 355, 25, 25)
-        self.RITUAL: _LayoutElement = _LayoutElement(220, 355, 25, 25)
+        self.CONCENTRATION: _LayoutElement = _LayoutElement(150, 355+sY, 25, 25)
+        self.CAST_TIME: _LayoutElement = _LayoutElement(185, 355+sY, 25, 25)
+        self.RITUAL: _LayoutElement = _LayoutElement(220, 355+sY, 25, 25)
         self.SAVING_THROW: _LayoutElement = _LayoutElement(260, 365, 40, 18)
-        self.SUB_RANGE: _LayoutElement = _LayoutElement(300, 395, 50, 20)
-        self.TARGET: _LayoutElement = _LayoutElement(300, 370, 40, 40)
+        self.SUB_RANGE: _LayoutElement = _LayoutElement(185, 385, 50, 20)
+        self.TARGET: _LayoutElement = _LayoutElement(185, 360, 40, 40)
         self.OVERLEVEL: _LayoutElement = _LayoutElement(320, 275, 30, 190) # for later use
 
 ITEM = _ItemConstants()

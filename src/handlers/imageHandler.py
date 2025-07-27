@@ -153,7 +153,7 @@ class ImageHandler:
             self.createItemCard(item)
 
     def createSpellCard(self, spell: Spell) -> None:
-        def addIcon(background: Image.Image, path: str, layout, center: bool = False) -> None:
+        def addIcon(background: Image.Image, path: str, layout, center: bool = True) -> None:
             icon = Image.open(path).convert("RGBA")
             icon = icon.resize(layout.SIZE.ABSOLUTE, Resampling.LANCZOS)
             pos = layout.POSITION.ABSOLUTE
