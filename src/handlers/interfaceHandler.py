@@ -28,6 +28,8 @@ from helpers.dataHelper import (
     loadItemCache,
     getSpells,
     addSpell,
+    loadSpellCache,
+    updateSpellCache,
 )
 from handlers.imageHandler import ImageHandler
 
@@ -67,6 +69,9 @@ class InterfaceHandler:
             foreground=fg,
             selectbackground="#555",
         )
+        self.root.option_add("*TCombobox*Listbox.background", "#444")
+        self.root.option_add("*TCombobox*Listbox.foreground", fg)
+        self.root.option_add("*TCombobox*Listbox.selectBackground", "#555")
         style.map("TButton", background=[("active", "#3a3a3a")])
         style.map("TCheckbutton", background=[("active", "#3a3a3a")])
         style.configure("Treeview", background="#444", foreground=fg, fieldbackground="#444")
@@ -217,7 +222,7 @@ class InterfaceHandler:
                     flip=t.get("flip", False),
                     scale=t.get("scale", 1.0),
                 )
-                path = join(PATHS.OUTPUT, f"{item.id}.png")
+                path = join(PATHS.ITEM_OUTPUT, f"{item.id}.png")
                 img = Image.open(path)
                 top = tk.Toplevel(window)
                 top.title(f"{item.name} Card")
@@ -749,8 +754,15 @@ class InterfaceHandler:
                 )
                 return
             try:
-                self.image_handler.createSpellCard(sp)
-                path = join(PATHS.OUTPUT, f"{sp.id}.png")
+                cache = loadSpellCache()
+                t = cache.get(sp.id, {"rotate": 0.0, "scale": 1.0, "flip": False})
+                self.image_handler.createSpellCard(
+                    sp,
+                    rotate=t.get("rotate", 0.0),
+                    flip=t.get("flip", False),
+                    scale=t.get("scale", 1.0),
+                )
+                path = join(PATHS.SPELL_OUTPUT, f"level{sp.level}", f"{sp.id}.png")
                 img = Image.open(path)
                 top = tk.Toplevel(window)
                 top.title(sp.name)
@@ -785,17 +797,8 @@ class InterfaceHandler:
                     translate(MessageText.NO_SELECTION_TEXT),
                 )
                 return
-            try:
-                self.image_handler.createSpellCard(sp)
-                messagebox.showinfo(
-                    translate(MessageText.DONE_TITLE),
-                    translate(MessageText.DONE_MESSAGE),
-                )
-            except Exception as e:
-                messagebox.showerror(
-                    translate(MessageText.ERROR_TITLE),
-                    str(e),
-                )
+            cache = loadSpellCache()
+            SpellPreviewWindow(self.root, [sp], self.image_handler, cache)
 
         search_var.trace_add("write", update_list)
         update_list()
@@ -808,19 +811,31 @@ class InterfaceHandler:
                 translate(MessageText.NO_ITEMS_MESSAGE),
             )
             return
-        for sp in spells:
-            try:
-                self.image_handler.createSpellCard(sp)
-            except Exception as e:
-                messagebox.showerror(
-                    translate(MessageText.ERROR_TITLE),
-                    str(e),
-                )
-                return
-        messagebox.showinfo(
-            translate(MessageText.DONE_TITLE),
-            translate(MessageText.DONE_MESSAGE),
+        cache = loadSpellCache()
+        show_all = messagebox.askyesno(
+            translate(MessageText.PREVIEW_MODE),
+            translate(MessageText.PREVIEW_QUESTION),
         )
+        preview_spells: List[Spell] = []
+        for sp in spells:
+            if show_all or sp.id not in cache:
+                preview_spells.append(sp)
+            else:
+                t = cache[sp.id]
+                self.image_handler.createSpellCard(
+                    sp,
+                    rotate=t.get("rotate", 0.0),
+                    flip=t.get("flip", False),
+                    scale=t.get("scale", 1.0),
+                )
+
+        if preview_spells:
+            SpellPreviewWindow(self.root, preview_spells, self.image_handler, cache)
+        else:
+            messagebox.showinfo(
+                translate(MessageText.DONE_TITLE),
+                translate(MessageText.DONE_MESSAGE),
+            )
 
     # ===== Print Items =====
     def _open_print_items(self) -> None:
@@ -925,7 +940,7 @@ class PreviewWindow(tk.Toplevel):
             else:
                 self.skip_flag = True
                 return False
-        path = join(PATHS.OUTPUT, f"{item.id}.png")
+        path = join(PATHS.ITEM_OUTPUT, f"{item.id}.png")
         self.original = Image.open(path)
         self.display = self.original
         return True
@@ -972,3 +987,130 @@ class PreviewWindow(tk.Toplevel):
         self.skip_flag = True
         self._next()
 
+
+class SpellPreviewWindow(tk.Toplevel):
+    def __init__(
+        self,
+        root: tk.Tk,
+        spells: List[Spell],
+        image_handler: ImageHandler,
+        cache: dict,
+    ) -> None:
+        super().__init__(root)
+        self.title(translate(UIText.SPELL_PREVIEW_TITLE))
+        self.configure(bg=root["background"])
+        self.spells = spells
+        self.index = 0
+        self.image_handler = image_handler
+        self.cache = cache
+        self.skipped: set[str] = set()
+        self.label = ttk.Label(self)
+        self.label.pack(padx=10, pady=10)
+
+        btn_frame = ttk.Frame(self)
+        btn_frame.pack()
+        self.angle_var = tk.DoubleVar(value=0)
+        ttk.Scale(
+            btn_frame,
+            from_=-180,
+            to=180,
+            orient="horizontal",
+            variable=self.angle_var,
+            command=self._update_angle,
+            length=150,
+        ).pack(side="left", padx=2)
+        self.scale_var = tk.DoubleVar(value=1.0)
+        ttk.Scale(
+            btn_frame,
+            from_=0.5,
+            to=1.5,
+            orient="horizontal",
+            variable=self.scale_var,
+            command=self._update_scale,
+            length=150,
+        ).pack(side="left", padx=2)
+        ttk.Button(btn_frame, text=translate(UIText.BUTTON_FLIP), command=self._toggle_flip).pack(side="left", padx=2)
+        ttk.Button(btn_frame, text=translate(UIText.BUTTON_SKIP), command=self._skip).pack(side="left", padx=2)
+        ttk.Button(btn_frame, text=translate(UIText.BUTTON_NEXT), command=self._next).pack(side="left", padx=2)
+        self.flip = False
+        self.skip_flag = False
+
+        self.original: Image.Image | None = None
+        self.display: Image.Image | None = None
+        self.tk_img: ImageTk.PhotoImage | None = None
+        self._load_current()
+
+    def _load_current(self) -> None:
+        sp = self.spells[self.index]
+        t = self.cache.get(sp.id, {"rotate": 0.0, "scale": 1.0, "flip": False})
+        self.angle_var.set(t.get("rotate", 0.0))
+        self.scale_var.set(t.get("scale", 1.0))
+        self.flip = t.get("flip", False)
+        if not self._generate_image(sp):
+            return
+        self._update_image()
+
+    def _generate_image(self, spell: Spell) -> bool:
+        try:
+            self.image_handler.createSpellCard(
+                spell,
+                rotate=self.angle_var.get(),
+                flip=self.flip,
+                scale=self.scale_var.get(),
+            )
+        except FileNotFoundError:
+            if messagebox.askretrycancel(
+                translate(MessageText.MISSING_IMAGE_TITLE),
+                translate(MessageText.MISSING_IMAGE_MESSAGE).format(id=spell.id),
+            ):
+                return self._generate_image(spell)
+            else:
+                self.skip_flag = True
+                return False
+        level_dir = join(PATHS.SPELL_OUTPUT, f"level{spell.level}")
+        path = join(level_dir, f"{spell.id}.png")
+        self.original = Image.open(path)
+        self.display = self.original
+        return True
+
+    def _update_image(self) -> None:
+        if self.display is None:
+            return
+        self.tk_img = ImageTk.PhotoImage(self.display)
+        self.label.configure(image=self.tk_img)
+
+    def _update_scale(self, _value: str) -> None:
+        self._apply_transform()
+
+    def _update_angle(self, _value: str) -> None:
+        self._apply_transform()
+
+    def _toggle_flip(self) -> None:
+        self.flip = not self.flip
+        self._apply_transform()
+
+    def _apply_transform(self) -> None:
+        sp = self.spells[self.index]
+        if not self._generate_image(sp):
+            return
+        self._update_image()
+
+    def _next(self) -> None:
+        sp = self.spells[self.index]
+        if not self.skip_flag:
+            updateSpellCache(
+                sp.id,
+                self.angle_var.get(),
+                self.scale_var.get(),
+                self.flip,
+            )
+        self.skip_flag = False
+        self.index += 1
+        if self.index >= len(self.spells):
+            self.destroy()
+            return
+        self._load_current()
+
+    def _skip(self) -> None:
+        self.skip_flag = True
+        self._next()
