@@ -2,19 +2,12 @@ from datetime import timedelta
 from classes.types import (
     RGB,
     JsonItem,
-    JsonWeapon,
-    JsonArmor,
-    JsonSimpleItem,
     Item,
-    Weapon,
-    Armor,
-    SimpleItem,
     HexColor,
     RGBA,
     Damage,
     DamageType,
     AttributeType,
-    ArmorCategory,
     Spell,
     JsonSpell,
     SpellType,
@@ -66,35 +59,6 @@ def toItem(_id: str, jsonItem: JsonItem) -> Item:
             if versatile
             else None
         ),
-    )
-
-
-def toWeapon(_id: str, jsonItem: JsonWeapon) -> Weapon:
-    return Weapon(**toItem(_id, jsonItem).__dict__)
-
-
-def toArmor(_id: str, jsonArmor: JsonArmor) -> Armor:
-    return Armor(
-        _id=_id,
-        name=jsonArmor.get("name", ""),
-        price=jsonArmor.get("price", 0),
-        weight=jsonArmor.get("weight", 0),
-        armorClass=int(jsonArmor.get("armorClass", 0)),
-        dexBonus=bool(jsonArmor.get("dexBonus", True)),
-        dexBonusMax=jsonArmor.get("dexBonusMax"),
-        strengthRequirement=jsonArmor.get("strengthRequirement"),
-        stealthDisadvantage=bool(jsonArmor.get("stealthDisadvantage", False)),
-        category=to_enum(ArmorCategory, jsonArmor.get("category", "LIGHT")),
-    )
-
-
-def toSimpleItem(_id: str, jsonItem: JsonSimpleItem) -> SimpleItem:
-    return SimpleItem(
-        _id=_id,
-        name=jsonItem.get("name", ""),
-        price=jsonItem.get("price", 0),
-        weight=jsonItem.get("weight", 0),
-        description=jsonItem.get("description", ""),
     )
 
 def toSpell(_id: str, jsonSpell: JsonSpell) -> Spell:
