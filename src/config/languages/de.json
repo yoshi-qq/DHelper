@@ -156,5 +156,11 @@
     "INTELLIGENCE": "Intelligenz",
     "WISDOM": "Weisheit",
     "CHARISMA": "Charisma"
+  },
+  "ArmorCategory": {
+    "LIGHT": "Leicht",
+    "MEDIUM": "Mittel",
+    "HEAVY": "Schwer",
+    "SHIELD": "Schild"
   }
 }

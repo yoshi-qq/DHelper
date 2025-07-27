@@ -4,9 +4,19 @@ from config.constants import (
     # New hierarchical constants
     FONT_STYLE, IMAGE, ITEM, PATHS, SPELL, TEXT, FONT
 )
-from classes.types import AttributeType, Currency, Damage, Item, Spell, TargetType
+from classes.types import (
+    AttributeType,
+    Currency,
+    Damage,
+    Weapon,
+    Armor,
+    SimpleItem,
+    Item,
+    Spell,
+    TargetType,
+)
 from helpers.translationHelper import translate
-from helpers.dataHelper import getItems, getSpells
+from helpers.dataHelper import getWeapons, getItems, getSpells, getArmors
 from helpers.formattingHelper import (
     getMaxFontSize,
     findOptimalAttributeLayout,
@@ -137,6 +147,27 @@ class ImageHandler:
 
         return op
 
+    def _simpleStatsOp(self, weight: float, description: str) -> Callable[[Image.Image], None]:
+        def op(background: Image.Image) -> None:
+            text = f"{translate(TEXT.WEIGHT_PREFIX)}{weight}{translate(TEXT.WEIGHT_SUFFIX)}\n{description}".strip()
+            draw = ImageDraw.Draw(background)
+            size = getMaxFontSize(
+                text,
+                FONT.STATS_PATH,
+                FONT_STYLE.SIZES.STATS,
+                ITEM.STATS.SIZE.ABSOLUTE[0],
+                ITEM.STATS.SIZE.ABSOLUTE[1],
+            )
+            font = ImageFont.truetype(FONT.STATS_PATH, size)
+            draw.multiline_text(
+                ITEM.STATS.POSITION.ABSOLUTE,
+                text,
+                font=font,
+                fill=FONT_STYLE.COLORS.STATS,
+            )
+
+        return op
+
     def _createCard(
         self, background: Image.Image, instructions: List[Callable[[Image.Image], None]], outputPath: str
     ) -> None:
@@ -197,19 +228,23 @@ class ImageHandler:
                 FONT.TITLE_PATH,
                 FONT_STYLE.SIZES.TITLE,
             ),
-            self._statsOp(
-                item.weight,
-                item.damage,
-                item.versatileDamage,
-                item.attributes,
-                item.ranges,
+            (
+                self._simpleStatsOp(item.weight, item.description)
+                if isinstance(item, SimpleItem)
+                else self._statsOp(
+                    item.weight,
+                    getattr(item, "damage", None),
+                    getattr(item, "versatileDamage", None),
+                    getattr(item, "attributes", []),
+                    getattr(item, "ranges", {}),
+                )
             ),
         ]
 
         self._createCard(cardImage, instructions, join(PATHS.ITEM_OUTPUT, f"{item.id}.png"))
 
     def createItemCards(self) -> None:
-        items: list[Item] = getItems()
+        items: list[Item] = getWeapons()
         for item in items:
             self.createItemCard(item)
 
