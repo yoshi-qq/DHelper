@@ -7,6 +7,8 @@ class PrefixText(Enum):
 
 class UIText(Enum):
     APP_TITLE = "AppTitle"
+    BUTTON_WEAPONS = "WeaponsButton"
+    BUTTON_ARMOR = "ArmorButton"
     BUTTON_ITEMS = "ItemsButton"
     BUTTON_SPELLS = "SpellsButton"
     BUTTON_ADD_SPELL = "AddSpellButton"

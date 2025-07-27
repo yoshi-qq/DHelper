@@ -123,6 +123,9 @@ class _DataPaths:
     def __init__(self) -> None:
         data = join(ROOT, "data")
         self.DIRECTORY: str = data
+        # new separated item files
+        self.WEAPONS: str = join(data, "weapons.json")
+        self.ARMOR: str = join(data, "armor.json")
         self.ITEMS: str = join(data, "items.json")
         self.SPELLS: str = join(data, "spells.json")
 

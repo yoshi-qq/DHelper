@@ -34,6 +34,8 @@
   },
   "UIText": {
     "APP_TITLE": "DHelper",
+    "BUTTON_WEAPONS": "Waffen",
+    "BUTTON_ARMOR": "Rüstungen",
     "BUTTON_ITEMS": "Gegenstände",
     "BUTTON_SPELLS": "Zauber",
     "BUTTON_ADD_SPELL": "Zauber hinzufügen",
@@ -156,5 +158,11 @@
     "INTELLIGENCE": "Intelligenz",
     "WISDOM": "Weisheit",
     "CHARISMA": "Charisma"
+  },
+  "ArmorCategory": {
+    "LIGHT": "Leicht",
+    "MEDIUM": "Mittel",
+    "HEAVY": "Schwer",
+    "SHIELD": "Schild"
   }
 }
