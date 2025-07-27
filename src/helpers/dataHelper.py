@@ -2,70 +2,29 @@ import json
 from json import load, dump
 from classes.types import (
     Item,
-    Weapon,
-    Armor,
-    SimpleItem,
     JsonItem,
-    JsonWeapon,
-    JsonArmor,
-    JsonSimpleItem,
     JsonItemCache,
     Spell,
     JsonSpell,
 )
 from config.constants import DATA, PATHS
 import os
-from helpers.conversionHelper import (
-    toItem,
-    toWeapon,
-    toArmor,
-    toSimpleItem,
-    toSpell,
-)
+from helpers.conversionHelper import toItem, toSpell
 
 
-def getWeapons() -> list[Weapon]:
-    with open(DATA.WEAPONS, "r", encoding="utf-8") as file:
-        jsonItems: dict[str, JsonWeapon] = load(file)
-    return [toWeapon(key, item) for key, item in jsonItems.items()]
-
-
-def addWeapon(weapon: Weapon) -> None:
-    with open(DATA.WEAPONS, "r", encoding="utf-8") as file:
-        data: dict[str, JsonWeapon] = load(file)
-    data[weapon.id] = weapon.toJsonWeapon()
-    with open(DATA.WEAPONS, "w", encoding="utf-8") as file:
-        dump(data, file, ensure_ascii=False, indent=4)
-
-
-def getArmors() -> list[Armor]:
-    with open(DATA.ARMOR, "r", encoding="utf-8") as file:
-        jsonItems: dict[str, JsonArmor] = load(file)
-    return [toArmor(key, item) for key, item in jsonItems.items()]
-
-
-def addArmor(armor: Armor) -> None:
-    with open(DATA.ARMOR, "r", encoding="utf-8") as file:
-        data: dict[str, JsonArmor] = load(file)
-    data[armor.id] = armor.toJsonArmor()
-    with open(DATA.ARMOR, "w", encoding="utf-8") as file:
-        dump(data, file, ensure_ascii=False, indent=4)
-
-
-def getItems() -> list[SimpleItem]:
+def getItems() -> list[Item]:
     with open(DATA.ITEMS, "r", encoding="utf-8") as file:
-        jsonItems: dict[str, JsonSimpleItem] = load(file)
-    return [toSimpleItem(key, item) for key, item in jsonItems.items()]
+        jsonItems: dict[str, JsonItem] = load(file)
+    items: list[Item] = [toItem(_id=key, jsonItem=item) for key, item in jsonItems.items()]
+    return items
 
 
-def addItem(item: SimpleItem) -> None:
+def addItem(item: Item) -> None:
     with open(DATA.ITEMS, "r", encoding="utf-8") as file:
-        data: dict[str, JsonSimpleItem] = load(file)
-    data[item.id] = item.toJsonSimpleItem()
+        data: dict[str, JsonItem] = load(file)
+    data[item.id] = item.toJsonItem()
     with open(DATA.ITEMS, "w", encoding="utf-8") as file:
         dump(data, file, ensure_ascii=False, indent=4)
-
-
 
 
 def loadItemCache() -> dict[str, JsonItemCache]:

@@ -8,10 +8,6 @@ from PIL import Image, ImageTk
 
 from classes.types import (
     Item,
-    Weapon,
-    Armor,
-    SimpleItem,
-    ArmorCategory,
     DamageType,
     AttributeType,
     Damage,
@@ -35,10 +31,6 @@ from helpers.translationHelper import (
 )
 from config.constants import GAME, PATHS, IMAGE
 from helpers.dataHelper import (
-    getWeapons,
-    addWeapon,
-    getArmors,
-    addArmor,
     getItems,
     addItem,
     updateItemCache,
@@ -155,29 +147,9 @@ class InterfaceHandler:
         self._clear_root()
         frame = ttk.Frame(self.root, padding=20)
         frame.pack(fill="both", expand=True)
-        ttk.Button(frame, text=translate(UIText.BUTTON_WEAPONS), command=self._open_weapons_menu, width=30).pack(pady=10)
-        ttk.Button(frame, text=translate(UIText.BUTTON_ARMOR), command=self._open_armors_menu, width=30).pack(pady=10)
         ttk.Button(frame, text=translate(UIText.BUTTON_ITEMS), command=self._open_items_menu, width=30).pack(pady=10)
         ttk.Button(frame, text=translate(UIText.BUTTON_SPELLS), command=self._open_spells_menu, width=30).pack(pady=10)
         ttk.Button(frame, text=translate(UIText.BUTTON_SETTINGS), command=self._open_settings_menu, width=30).pack(pady=10)
-
-    def _open_weapons_menu(self) -> None:
-        self._clear_root()
-        frame = ttk.Frame(self.root, padding=20)
-        frame.pack(fill="both", expand=True)
-        ttk.Button(frame, text=translate(UIText.BUTTON_ADD_ITEM), command=self._open_add_weapon).pack(pady=5, fill="x")
-        ttk.Button(frame, text=translate(UIText.BUTTON_MANAGE_ITEMS), command=self._open_manage_weapons).pack(pady=5, fill="x")
-        ttk.Button(frame, text=translate(UIText.BUTTON_PRINT_ITEMS), command=self._open_print_weapons).pack(pady=5, fill="x")
-        ttk.Button(frame, text=translate(UIText.BUTTON_BACK), command=self._build_main_menu).pack(pady=10)
-
-    def _open_armors_menu(self) -> None:
-        self._clear_root()
-        frame = ttk.Frame(self.root, padding=20)
-        frame.pack(fill="both", expand=True)
-        ttk.Button(frame, text=translate(UIText.BUTTON_ADD_ITEM), command=self._open_add_armor).pack(pady=5, fill="x")
-        ttk.Button(frame, text=translate(UIText.BUTTON_MANAGE_ITEMS), command=self._open_manage_armors).pack(pady=5, fill="x")
-        ttk.Button(frame, text=translate(UIText.BUTTON_PRINT_ITEMS), command=self._open_print_armors).pack(pady=5, fill="x")
-        ttk.Button(frame, text=translate(UIText.BUTTON_BACK), command=self._build_main_menu).pack(pady=10)
 
     def _open_items_menu(self) -> None:
         self._clear_root()
@@ -221,14 +193,14 @@ class InterfaceHandler:
 
         ttk.Button(frame, text=translate(UIText.SAVE_BUTTON), command=apply).grid(row=2, column=0, columnspan=2, pady=10)
 
-    # ===== Manage Weapons =====
-    def _open_manage_weapons(self) -> None:
+    # ===== Manage Items =====
+    def _open_manage_items(self) -> None:
         window = tk.Toplevel(self.root)
         self._set_icon(window)
         window.title(translate(UIText.MANAGE_ITEMS_TITLE))
         window.configure(bg=self.root["background"])
 
-        items = getWeapons()
+        items = getItems()
 
         search_var = tk.StringVar()
         sort_var = tk.StringVar(value=translate(UIText.COLUMN_ID))
@@ -361,92 +333,6 @@ class InterfaceHandler:
                     translate(MessageText.NO_SELECTION_TEXT),
                 )
                 return
-            self._open_edit_weapon(item)
-            items.clear()
-            items.extend(getWeapons())
-            update_list()
-
-        def edit_card() -> None:
-            item = get_selected_item()
-            if not item:
-                messagebox.showwarning(
-                    translate(MessageText.NO_SELECTION_TITLE),
-                    translate(MessageText.NO_SELECTION_TEXT),
-                )
-                return
-            cache = loadItemCache()
-            PreviewWindow(self.root, [item], self.image_handler, cache)
-
-        search_var.trace_add("write", update_list)
-        sort_cb.bind("<<ComboboxSelected>>", update_list)
-        update_list()
-
-
-    def _open_manage_items(self) -> None:
-        window = tk.Toplevel(self.root)
-        self._set_icon(window)
-        window.title(translate(UIText.MANAGE_ITEMS_TITLE))
-        window.configure(bg=self.root["background"])
-
-        items = getItems()
-
-        search_var = tk.StringVar()
-        ttk.Label(window, text=translate(UIText.SEARCH_LABEL)).grid(row=0, column=0, sticky="e", padx=5, pady=2)
-        ttk.Entry(window, textvariable=search_var).grid(row=0, column=1, sticky="ew", padx=5, pady=2)
-
-        tree = ttk.Treeview(window, columns=("id", "name", "price", "weight"), show="headings", selectmode="browse")
-        for col, key in zip(("id", "name", "price", "weight"), [UIText.COLUMN_ID, UIText.COLUMN_NAME, UIText.COLUMN_PRICE, UIText.COLUMN_WEIGHT]):
-            tree.heading(col, text=translate(key))
-            tree.column(col, width=100, anchor="center")
-        tree.grid(row=1, column=0, columnspan=2, sticky="nsew", padx=5, pady=5)
-        window.grid_rowconfigure(1, weight=1)
-        window.grid_columnconfigure(1, weight=1)
-
-        btn_frame = ttk.Frame(window)
-        btn_frame.grid(row=2, column=0, columnspan=2, pady=5)
-        ttk.Button(btn_frame, text=translate(UIText.BUTTON_VIEW_CARD), command=lambda: view_card()).pack(side="left", padx=2)
-        ttk.Button(btn_frame, text=translate(UIText.BUTTON_EDIT_DATA), command=lambda: edit_selected()).pack(side="left", padx=2)
-        ttk.Button(btn_frame, text=translate(UIText.BUTTON_EDIT_CARD), command=lambda: edit_card()).pack(side="left", padx=2)
-        ttk.Button(btn_frame, text=translate(UIText.BUTTON_CLOSE), command=window.destroy).pack(side="left", padx=2)
-
-        def filter_items() -> List[SimpleItem]:
-            search = search_var.get().lower()
-            return [it for it in items if search in it.id.lower() or search in it.name.lower()]
-
-        def update_list(*_args: object) -> None:
-            tree.delete(*tree.get_children())
-            for it in filter_items():
-                tree.insert("", "end", values=(it.id, it.name, it.price, it.weight))
-
-        def get_selected_item() -> SimpleItem | None:
-            sel = tree.selection()
-            if not sel:
-                return None
-            item_id = tree.item(sel[0], "values")[0]
-            for it in items:
-                if it.id == item_id:
-                    return it
-            return None
-
-        def view_card() -> None:
-            item = get_selected_item()
-            if not item:
-                messagebox.showwarning(
-                    translate(MessageText.NO_SELECTION_TITLE),
-                    translate(MessageText.NO_SELECTION_TEXT),
-                )
-                return
-            cache = loadItemCache()
-            PreviewWindow(self.root, [item], self.image_handler, cache)
-
-        def edit_selected() -> None:
-            item = get_selected_item()
-            if not item:
-                messagebox.showwarning(
-                    translate(MessageText.NO_SELECTION_TITLE),
-                    translate(MessageText.NO_SELECTION_TEXT),
-                )
-                return
             self._open_edit_item(item)
             items.clear()
             items.extend(getItems())
@@ -464,93 +350,9 @@ class InterfaceHandler:
             PreviewWindow(self.root, [item], self.image_handler, cache)
 
         search_var.trace_add("write", update_list)
+        sort_cb.bind("<<ComboboxSelected>>", update_list)
         update_list()
 
-    def _open_manage_armors(self) -> None:
-        window = tk.Toplevel(self.root)
-        self._set_icon(window)
-        window.title(translate(UIText.MANAGE_ITEMS_TITLE))
-        window.configure(bg=self.root["background"])
-
-        items = getArmors()
-
-        search_var = tk.StringVar()
-        ttk.Label(window, text=translate(UIText.SEARCH_LABEL)).grid(row=0, column=0, sticky="e", padx=5, pady=2)
-        ttk.Entry(window, textvariable=search_var).grid(row=0, column=1, sticky="ew", padx=5, pady=2)
-
-        tree = ttk.Treeview(window, columns=("id", "name", "ac"), show="headings", selectmode="browse")
-        tree.heading("id", text=translate(UIText.COLUMN_ID))
-        tree.heading("name", text=translate(UIText.COLUMN_NAME))
-        tree.heading("ac", text="AC")
-        for col in ("id", "name", "ac"):
-            tree.column(col, width=100, anchor="center")
-        tree.grid(row=1, column=0, columnspan=2, sticky="nsew", padx=5, pady=5)
-        window.grid_rowconfigure(1, weight=1)
-        window.grid_columnconfigure(1, weight=1)
-
-        btn_frame = ttk.Frame(window)
-        btn_frame.grid(row=2, column=0, columnspan=2, pady=5)
-        ttk.Button(btn_frame, text=translate(UIText.BUTTON_VIEW_CARD), command=lambda: view_card()).pack(side="left", padx=2)
-        ttk.Button(btn_frame, text=translate(UIText.BUTTON_EDIT_DATA), command=lambda: edit_selected()).pack(side="left", padx=2)
-        ttk.Button(btn_frame, text=translate(UIText.BUTTON_EDIT_CARD), command=lambda: edit_card()).pack(side="left", padx=2)
-        ttk.Button(btn_frame, text=translate(UIText.BUTTON_CLOSE), command=window.destroy).pack(side="left", padx=2)
-
-        def filter_items() -> List[Armor]:
-            search = search_var.get().lower()
-            return [it for it in items if search in it.id.lower() or search in it.name.lower()]
-
-        def update_list(*_args: object) -> None:
-            tree.delete(*tree.get_children())
-            for it in filter_items():
-                tree.insert("", "end", values=(it.id, it.name, it.armorClass))
-
-        def get_selected_item() -> Armor | None:
-            sel = tree.selection()
-            if not sel:
-                return None
-            item_id = tree.item(sel[0], "values")[0]
-            for it in items:
-                if it.id == item_id:
-                    return it
-            return None
-
-        def view_card() -> None:
-            item = get_selected_item()
-            if not item:
-                messagebox.showwarning(
-                    translate(MessageText.NO_SELECTION_TITLE),
-                    translate(MessageText.NO_SELECTION_TEXT),
-                )
-                return
-            cache = loadItemCache()
-            PreviewWindow(self.root, [item], self.image_handler, cache)
-
-        def edit_selected() -> None:
-            item = get_selected_item()
-            if not item:
-                messagebox.showwarning(
-                    translate(MessageText.NO_SELECTION_TITLE),
-                    translate(MessageText.NO_SELECTION_TEXT),
-                )
-                return
-            self._open_edit_armor(item)
-            items.clear()
-            items.extend(getArmors())
-            update_list()
-
-        def edit_card() -> None:
-            item = get_selected_item()
-            if not item:
-                messagebox.showwarning(
-                    translate(MessageText.NO_SELECTION_TITLE),
-                    translate(MessageText.NO_SELECTION_TEXT),
-                )
-                return
-            cache = loadItemCache()
-            PreviewWindow(self.root, [item], self.image_handler, cache)
-
-        search_var.trace_add("write", update_list)
-        update_list()
 
     # ===== Add Item =====
     def _item_form(self, window: tk.Toplevel, item: Item | None) -> None:
@@ -728,183 +530,7 @@ class InterfaceHandler:
                 attributes=attributes,
                 ranges=ranges,
             )
-            addWeapon(new_item)
-            messagebox.showinfo(
-                translate(MessageText.SAVED_TITLE),
-                translate(MessageText.ITEM_SAVED),
-            )
-            window.destroy()
-
-        ttk.Button(window, text=translate(UIText.SAVE_BUTTON), command=submit).grid(row=row, column=0, columnspan=2, pady=10)
-
-    def _simple_item_form(self, window: tk.Toplevel, item: SimpleItem | None) -> None:
-        self._set_icon(window)
-        window.configure(bg=self.root["background"])
-
-        entries: dict[str, tk.Entry] = {}
-        row = 0
-        labels = [UIText.COLUMN_ID, UIText.COLUMN_NAME, UIText.COLUMN_PRICE, UIText.COLUMN_WEIGHT]
-        for label in labels:
-            text = translate(label)
-            ttk.Label(window, text=text).grid(row=row, column=0, sticky="e", padx=5, pady=2)
-            entry = ttk.Entry(window)
-            entry.grid(row=row, column=1, padx=5, pady=2)
-            if item:
-                match label:
-                    case UIText.COLUMN_ID:
-                        entry.insert(0, item.id)
-                    case UIText.COLUMN_NAME:
-                        entry.insert(0, item.name)
-                    case UIText.COLUMN_PRICE:
-                        entry.insert(0, str(item.price))
-                    case UIText.COLUMN_WEIGHT:
-                        entry.insert(0, str(item.weight))
-            entries[text] = entry
-            row += 1
-
-        ttk.Label(window, text="Description").grid(row=row, column=0, sticky="ne", padx=5, pady=2)
-        desc = tk.Text(window, width=30, height=4)
-        desc.grid(row=row, column=1, padx=5, pady=2)
-        if item:
-            desc.insert("1.0", item.description)
-        row += 1
-
-        def submit() -> None:
-            try:
-                _id = entries[translate(UIText.COLUMN_ID)].get().strip()
-                name = entries[translate(UIText.COLUMN_NAME)].get().strip()
-                price = float(entries[translate(UIText.COLUMN_PRICE)].get() or 0)
-                weight = float(entries[translate(UIText.COLUMN_WEIGHT)].get() or 0)
-                description = desc.get("1.0", "end").strip()
-            except ValueError as e:
-                messagebox.showerror(
-                    translate(MessageText.ERROR_TITLE),
-                    translate(MessageText.INVALID_VALUE).format(error=e),
-                )
-                return
-
-            if not _id or not name:
-                messagebox.showerror(
-                    translate(MessageText.ERROR_TITLE),
-                    translate(MessageText.ID_NAME_REQUIRED),
-                )
-                return
-
-            new_item = SimpleItem(_id, name, price, weight, description)
             addItem(new_item)
-            messagebox.showinfo(
-                translate(MessageText.SAVED_TITLE),
-                translate(MessageText.ITEM_SAVED),
-            )
-            window.destroy()
-
-        ttk.Button(window, text=translate(UIText.SAVE_BUTTON), command=submit).grid(row=row, column=0, columnspan=2, pady=10)
-
-    def _armor_form(self, window: tk.Toplevel, armor: Armor | None) -> None:
-        self._set_icon(window)
-        window.configure(bg=self.root["background"])
-
-        entries: dict[str, tk.Entry] = {}
-        row = 0
-        labels = [UIText.COLUMN_ID, UIText.COLUMN_NAME, UIText.COLUMN_PRICE, UIText.COLUMN_WEIGHT]
-        for label in labels:
-            text = translate(label)
-            ttk.Label(window, text=text).grid(row=row, column=0, sticky="e", padx=5, pady=2)
-            entry = ttk.Entry(window)
-            entry.grid(row=row, column=1, padx=5, pady=2)
-            if armor:
-                match label:
-                    case UIText.COLUMN_ID:
-                        entry.insert(0, armor.id)
-                    case UIText.COLUMN_NAME:
-                        entry.insert(0, armor.name)
-                    case UIText.COLUMN_PRICE:
-                        entry.insert(0, str(armor.price))
-                    case UIText.COLUMN_WEIGHT:
-                        entry.insert(0, str(armor.weight))
-            entries[text] = entry
-            row += 1
-
-        ttk.Label(window, text="AC").grid(row=row, column=0, sticky="e", padx=5, pady=2)
-        ac_entry = ttk.Entry(window, width=4)
-        ac_entry.grid(row=row, column=1, sticky="w", padx=5, pady=2)
-        if armor:
-            ac_entry.insert(0, str(armor.armorClass))
-        row += 1
-
-        dex_var = tk.BooleanVar(value=armor.dexBonus if armor else True)
-        ttk.Checkbutton(window, text="Dex Bonus", variable=dex_var).grid(row=row, column=1, sticky="w", padx=5, pady=2)
-        row += 1
-
-        ttk.Label(window, text="Dex Bonus Max").grid(row=row, column=0, sticky="e", padx=5, pady=2)
-        dex_max = ttk.Entry(window, width=4)
-        dex_max.grid(row=row, column=1, sticky="w", padx=5, pady=2)
-        if armor and armor.dexBonusMax is not None:
-            dex_max.insert(0, str(armor.dexBonusMax))
-        row += 1
-
-        ttk.Label(window, text="Strength Req").grid(row=row, column=0, sticky="e", padx=5, pady=2)
-        str_req = ttk.Entry(window, width=4)
-        str_req.grid(row=row, column=1, sticky="w", padx=5, pady=2)
-        if armor and armor.strengthRequirement is not None:
-            str_req.insert(0, str(armor.strengthRequirement))
-        row += 1
-
-        stealth_var = tk.BooleanVar(value=armor.stealthDisadvantage if armor else False)
-        ttk.Checkbutton(window, text="Stealth Disadvantage", variable=stealth_var).grid(row=row, column=1, sticky="w", padx=5, pady=2)
-        row += 1
-
-        ttk.Label(window, text="Category").grid(row=row, column=0, sticky="e", padx=5, pady=2)
-        cat_var = tk.StringVar()
-        cat_cb = ttk.Combobox(window, textvariable=cat_var, values=[c.value for c in ArmorCategory], state="readonly")
-        cat_cb.grid(row=row, column=1, padx=5, pady=2)
-        if armor:
-            cat_var.set(armor.category.value)
-        else:
-            cat_var.set(ArmorCategory.LIGHT.value)
-        row += 1
-
-        def submit() -> None:
-            try:
-                _id = entries[translate(UIText.COLUMN_ID)].get().strip()
-                name = entries[translate(UIText.COLUMN_NAME)].get().strip()
-                price = float(entries[translate(UIText.COLUMN_PRICE)].get() or 0)
-                weight = float(entries[translate(UIText.COLUMN_WEIGHT)].get() or 0)
-                ac = int(ac_entry.get() or 0)
-                dex_bonus = dex_var.get()
-                dex_max_val = dex_max.get()
-                dex_max_i = int(dex_max_val) if dex_max_val else None
-                str_req_val = str_req.get()
-                str_req_i = int(str_req_val) if str_req_val else None
-                stealth = stealth_var.get()
-                category = to_enum(ArmorCategory, cat_var.get())
-            except ValueError as e:
-                messagebox.showerror(
-                    translate(MessageText.ERROR_TITLE),
-                    translate(MessageText.INVALID_VALUE).format(error=e),
-                )
-                return
-
-            if not _id or not name:
-                messagebox.showerror(
-                    translate(MessageText.ERROR_TITLE),
-                    translate(MessageText.ID_NAME_REQUIRED),
-                )
-                return
-
-            new_armor = Armor(
-                _id=_id,
-                name=name,
-                price=price,
-                weight=weight,
-                armorClass=ac,
-                dexBonus=dex_bonus,
-                dexBonusMax=dex_max_i,
-                strengthRequirement=str_req_i,
-                stealthDisadvantage=stealth,
-                category=category,
-            )
-            addArmor(new_armor)
             messagebox.showinfo(
                 translate(MessageText.SAVED_TITLE),
                 translate(MessageText.ITEM_SAVED),
@@ -1142,41 +768,17 @@ class InterfaceHandler:
 
         ttk.Button(window, text=translate(UIText.SAVE_BUTTON), command=submit).grid(row=row, column=0, columnspan=2, pady=10)
 
-    def _open_add_weapon(self) -> None:
+    def _open_add_item(self) -> None:
         window = tk.Toplevel(self.root)
         self._set_icon(window)
         window.title(translate(UIText.ADD_ITEM_TITLE))
         self._item_form(window, None)
 
-    def _open_edit_weapon(self, item: Item) -> None:
+    def _open_edit_item(self, item: Item) -> None:
         window = tk.Toplevel(self.root)
         self._set_icon(window)
         window.title(f"{translate(UIText.EDIT_ITEM_TITLE)}: {item.name}")
         self._item_form(window, item)
-
-    def _open_add_item(self) -> None:
-        window = tk.Toplevel(self.root)
-        self._set_icon(window)
-        window.title(translate(UIText.ADD_ITEM_TITLE))
-        self._simple_item_form(window, None)
-
-    def _open_edit_item(self, item: SimpleItem) -> None:
-        window = tk.Toplevel(self.root)
-        self._set_icon(window)
-        window.title(f"{translate(UIText.EDIT_ITEM_TITLE)}: {item.name}")
-        self._simple_item_form(window, item)
-
-    def _open_add_armor(self) -> None:
-        window = tk.Toplevel(self.root)
-        self._set_icon(window)
-        window.title(translate(UIText.ADD_ITEM_TITLE))
-        self._armor_form(window, None)
-
-    def _open_edit_armor(self, armor: Armor) -> None:
-        window = tk.Toplevel(self.root)
-        self._set_icon(window)
-        window.title(f"{translate(UIText.EDIT_ITEM_TITLE)}: {armor.name}")
-        self._armor_form(window, armor)
 
     # ===== Spells =====
     def _open_add_spell(self) -> None:
@@ -1336,42 +938,7 @@ class InterfaceHandler:
                 translate(MessageText.DONE_MESSAGE),
             )
 
-    # ===== Print Weapons =====
-    def _open_print_weapons(self) -> None:
-        items = getWeapons()
-        if not items:
-            messagebox.showinfo(
-                translate(MessageText.NO_ITEMS_TITLE),
-                translate(MessageText.NO_ITEMS_MESSAGE),
-            )
-            return
-
-        cache = loadItemCache()
-        show_all = messagebox.askyesno(
-            translate(MessageText.PREVIEW_MODE),
-            translate(MessageText.PREVIEW_QUESTION),
-        )
-        preview_items: List[Item] = []
-        for item in items:
-            if show_all or item.id not in cache:
-                preview_items.append(item)
-            else:
-                t = cache[item.id]
-                self.image_handler.createItemCard(
-                    item,
-                    rotate=t.get("rotate", 0.0),
-                    flip=t.get("flip", False),
-                    scale=t.get("scale", 1.0),
-                )
-
-        if preview_items:
-            PreviewWindow(self.root, preview_items, self.image_handler, cache)
-        else:
-            messagebox.showinfo(
-                translate(MessageText.DONE_TITLE),
-                translate(MessageText.DONE_MESSAGE),
-            )
-
+    # ===== Print Items =====
     def _open_print_items(self) -> None:
         items = getItems()
         if not items:
@@ -1386,42 +953,7 @@ class InterfaceHandler:
             translate(MessageText.PREVIEW_MODE),
             translate(MessageText.PREVIEW_QUESTION),
         )
-        preview_items: List[SimpleItem] = []
-        for item in items:
-            if show_all or item.id not in cache:
-                preview_items.append(item)
-            else:
-                t = cache[item.id]
-                self.image_handler.createItemCard(
-                    item,
-                    rotate=t.get("rotate", 0.0),
-                    flip=t.get("flip", False),
-                    scale=t.get("scale", 1.0),
-                )
-
-        if preview_items:
-            PreviewWindow(self.root, preview_items, self.image_handler, cache)
-        else:
-            messagebox.showinfo(
-                translate(MessageText.DONE_TITLE),
-                translate(MessageText.DONE_MESSAGE),
-            )
-
-    def _open_print_armors(self) -> None:
-        items = getArmors()
-        if not items:
-            messagebox.showinfo(
-                translate(MessageText.NO_ITEMS_TITLE),
-                translate(MessageText.NO_ITEMS_MESSAGE),
-            )
-            return
-
-        cache = loadItemCache()
-        show_all = messagebox.askyesno(
-            translate(MessageText.PREVIEW_MODE),
-            translate(MessageText.PREVIEW_QUESTION),
-        )
-        preview_items: List[Armor] = []
+        preview_items: List[Item] = []
         for item in items:
             if show_all or item.id not in cache:
                 preview_items.append(item)
