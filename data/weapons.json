@@ -206,5 +206,93 @@
         "attributes": [
             "Two-Handed"
         ]
+    },
+    "armbrust_leicht": {
+        "name": "leichte Armbrust",
+        "price": 25.0,
+        "weight": 2.5,
+        "damage": {
+            "diceAmount": 1,
+            "diceType": 8,
+            "bonus": 0,
+            "damageType": "Piercing"
+        },
+        "versatileDamage": null,
+        "attributes": [
+            "Ammunition",
+            "Loading",
+            "Two-Handed"
+        ],
+        "ranges": {
+            "Ammunition": [
+                24,
+                96
+            ]
+        }
+    },
+    "kurzbogen": {
+        "name": "Kurzbogen",
+        "price": 25.0,
+        "weight": 1.0,
+        "damage": {
+            "diceAmount": 1,
+            "diceType": 6,
+            "bonus": 0,
+            "damageType": "Piercing"
+        },
+        "versatileDamage": null,
+        "attributes": [
+            "Ammunition",
+            "Two-Handed"
+        ],
+        "ranges": {
+            "Ammunition": [
+                24,
+                96
+            ]
+        }
+    },
+    "schleuder": {
+        "name": "Schleuder",
+        "price": 0.1,
+        "weight": 0.5,
+        "damage": {
+            "diceAmount": 1,
+            "diceType": 4,
+            "bonus": 0,
+            "damageType": "Bludgeoning"
+        },
+        "versatileDamage": null,
+        "attributes": [
+            "Ammunition"
+        ],
+        "ranges": {
+            "Ammunition": [
+                9,
+                36
+            ]
+        }
+    },
+    "wurfpfeil": {
+        "name": "Wurfpfeil",
+        "price": 0.05,
+        "weight": 0.125,
+        "damage": {
+            "diceAmount": 1,
+            "diceType": 4,
+            "bonus": 0,
+            "damageType": "Piercing"
+        },
+        "versatileDamage": null,
+        "attributes": [
+            "Finesse",
+            "Thrown"
+        ],
+        "ranges": {
+            "Thrown": [
+                6,
+                18
+            ]
+        }
     }
 }

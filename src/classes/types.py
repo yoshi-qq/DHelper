@@ -224,7 +224,7 @@ class Material:
     def __init__(self, name: str, cost: Optional[float]) -> None:
         self.name: str = name
         self.cost: Optional[float] = cost
-    
+
     def toJsonMaterial(self) -> JsonMaterial:
         return {
             "name": self.name,

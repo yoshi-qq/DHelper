@@ -211,7 +211,7 @@ class ImageHandler:
         def getCurrency(price: float) -> Currency:
             if price % 1 == 0:
                 return Currency.GOLD
-            elif price % 10 == 1:
+            elif price % 0.1 == 0:
                 return Currency.SILVER
             else:
                 return Currency.COPPER
@@ -223,7 +223,7 @@ class ImageHandler:
                 case Currency.SILVER:
                     backgroundPath = IMAGE.BACKGROUNDS.SILVER_ITEM
                 case Currency.COPPER:
-                    backgroundPath = IMAGE.BACKGROUNDS.SILVER_ITEM
+                    backgroundPath = IMAGE.BACKGROUNDS.COPPER_ITEM
             return Image.open(backgroundPath).convert("RGBA")
 
         currency = getCurrency(item.price)

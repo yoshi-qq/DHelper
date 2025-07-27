@@ -75,5 +75,33 @@
         "flip": false,
         "offset_x": 0.0,
         "offset_y": 22.058823529411768
+    },
+    "armbrust_leicht": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 20.588235294117652
+    },
+    "kurzbogen": {
+        "rotate": 0.0,
+        "scale": 0.9152542372881356,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "schleuder": {
+        "rotate": 12.203389830508485,
+        "scale": 1.0,
+        "flip": true,
+        "offset_x": -14.705882352941174,
+        "offset_y": 0.0
+    },
+    "wurfpfeil": {
+        "rotate": -39.661016949152526,
+        "scale": 1.059322033898305,
+        "flip": true,
+        "offset_x": -32.35294117647059,
+        "offset_y": 25.0
     }
 }
