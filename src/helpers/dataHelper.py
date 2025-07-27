@@ -53,3 +53,11 @@ def getSpells() -> list[Spell]:
     with open(DATA.SPELLS, "r", encoding="utf-8") as file:
         jsonSpells: dict[str, JsonSpell] = load(file)
     return [toSpell(key, value) for key, value in jsonSpells.items()]
+
+
+def addSpell(spell: Spell) -> None:
+    with open(DATA.SPELLS, "r", encoding="utf-8") as file:
+        data: dict[str, JsonSpell] = load(file)
+    data[spell.id] = spell.toJsonSpell()
+    with open(DATA.SPELLS, "w", encoding="utf-8") as file:
+        dump(data, file, ensure_ascii=False, indent=4)
