@@ -36,5 +36,175 @@
                 18
             ]
         }
+    },
+    "beil": {
+        "name": "Beil",
+        "price": 5.0,
+        "weight": 1.0,
+        "damage": {
+            "diceAmount": 1,
+            "diceType": 6,
+            "bonus": 0,
+            "damageType": "Slashing"
+        },
+        "versatileDamage": null,
+        "attributes": [
+            "Light",
+            "Thrown"
+        ],
+        "ranges": {
+            "Thrown": [
+                6,
+                18
+            ]
+        }
+    },
+    "hammer": {
+        "name": "Hammer",
+        "price": 2.0,
+        "weight": 1.0,
+        "damage": {
+            "diceAmount": 1,
+            "diceType": 4,
+            "bonus": 0,
+            "damageType": "Bludgeoning"
+        },
+        "versatileDamage": null,
+        "attributes": [
+            "Light",
+            "Thrown"
+        ],
+        "ranges": {
+            "Thrown": [
+                6,
+                18
+            ]
+        }
+    },
+    "kampfstab": {
+        "name": "Kampfstab",
+        "price": 0.2,
+        "weight": 2.0,
+        "damage": {
+            "diceAmount": 1,
+            "diceType": 6,
+            "bonus": 0,
+            "damageType": "Bludgeoning"
+        },
+        "versatileDamage": {
+            "diceAmount": 1,
+            "diceType": 8,
+            "bonus": 0,
+            "damageType": "Bludgeoning"
+        },
+        "attributes": [
+            "Versatile"
+        ]
+    },
+    "knueppel": {
+        "name": "Knüppel",
+        "price": 0.1,
+        "weight": 1.0,
+        "damage": {
+            "diceAmount": 1,
+            "diceType": 4,
+            "bonus": 0,
+            "damageType": "Bludgeoning"
+        },
+        "versatileDamage": null,
+        "attributes": [
+            "Light"
+        ]
+    },
+    "sichel": {
+        "name": "Sichel",
+        "price": 1.0,
+        "weight": 1.0,
+        "damage": {
+            "diceAmount": 1,
+            "diceType": 4,
+            "bonus": 0,
+            "damageType": "Slashing"
+        },
+        "versatileDamage": null,
+        "attributes": [
+            "Light"
+        ]
+    },
+    "speer": {
+        "name": "Speer",
+        "price": 1.0,
+        "weight": 1.5,
+        "damage": {
+            "diceAmount": 1,
+            "diceType": 6,
+            "bonus": 0,
+            "damageType": "Piercing"
+        },
+        "versatileDamage": {
+            "diceAmount": 1,
+            "diceType": 8,
+            "bonus": 0,
+            "damageType": "Piercing"
+        },
+        "attributes": [
+            "Versatile",
+            "Thrown"
+        ],
+        "ranges": {
+            "Thrown": [
+                6,
+                18
+            ]
+        }
+    },
+    "streitkolben": {
+        "name": "Streitkolben",
+        "price": 5.0,
+        "weight": 2.0,
+        "damage": {
+            "diceAmount": 1,
+            "diceType": 6,
+            "bonus": 0,
+            "damageType": "Bludgeoning"
+        },
+        "versatileDamage": null,
+        "attributes": []
+    },
+    "wurfspeer": {
+        "name": "Wurfspeer",
+        "price": 0.5,
+        "weight": 1.0,
+        "damage": {
+            "diceAmount": 1,
+            "diceType": 6,
+            "bonus": 0,
+            "damageType": "Piercing"
+        },
+        "versatileDamage": null,
+        "attributes": [
+            "Thrown"
+        ],
+        "ranges": {
+            "Thrown": [
+                9,
+                36
+            ]
+        }
+    },
+    "zweihandknueppel": {
+        "name": "Zweihandknüppel",
+        "price": 0.2,
+        "weight": 5.0,
+        "damage": {
+            "diceAmount": 1,
+            "diceType": 8,
+            "bonus": 0,
+            "damageType": "Bludgeoning"
+        },
+        "versatileDamage": null,
+        "attributes": [
+            "Two-Handed"
+        ]
     }
 }

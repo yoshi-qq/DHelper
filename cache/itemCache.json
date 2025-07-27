@@ -12,5 +12,68 @@
         "flip": true,
         "offset_x": 0.0,
         "offset_y": 0.0
+    },
+    "beil": {
+        "rotate": 21.355932203389813,
+        "scale": 1.5,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "hammer": {
+        "rotate": -9.152542372881356,
+        "scale": 0.771186440677966,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "kampfstab": {
+        "rotate": 82.37288135593218,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "knueppel": {
+        "rotate": 0.0,
+        "scale": 0.7457627118644068,
+        "flip": true,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "sichel": {
+        "rotate": 42.711864406779654,
+        "scale": 1.0084745762711864,
+        "flip": true,
+        "offset_x": -5.882352941176471,
+        "offset_y": 22.058823529411768
+    },
+    "speer": {
+        "rotate": 3.0508474576271,
+        "scale": 1.0,
+        "flip": true,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "streitkolben": {
+        "rotate": 3.0508474576271,
+        "scale": 1.0,
+        "flip": true,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "wurfspeer": {
+        "rotate": -3.0508474576271,
+        "scale": 0.8898305084745763,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "zweihandknueppel": {
+        "rotate": 0.0,
+        "scale": 1.0677966101694916,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 22.058823529411768
     }
 }
