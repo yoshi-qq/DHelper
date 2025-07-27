@@ -4,10 +4,15 @@ from config.constants import (
     # New hierarchical constants
     FONT_STYLE, IMAGE, ITEM, PATHS, TEXT, FONT
 )
-from classes.types import AttributeType, Currency, Damage, Item
+from classes.types import AttributeType, Currency, Damage, Item, Spell, TargetType
 from helpers.translationHelper import translate
-from helpers.dataHelper import getItems
-from helpers.formattingHelper import getMaxFontSize, findOptimalAttributeLayout
+from helpers.dataHelper import getItems, getSpells
+from helpers.formattingHelper import (
+    getMaxFontSize,
+    findOptimalAttributeLayout,
+    formatDamage,
+    formatTimedelta,
+)
 from os.path import join
 from PIL import Image, ImageDraw, ImageFont
 from PIL.Image import Resampling, Transpose
@@ -85,13 +90,6 @@ class ImageHandler:
             titleHeight = bbox[3] - bbox[1]
             draw.text((titleX-titleWidth/2, titleY-titleHeight/2), title, font=titleFont, fill=FONT_STYLE.COLORS.TITLE)
 
-        def format_damage(d: Damage, with_type: bool = False) -> str:
-            dice_str = f"{d.diceAmount}{TEXT.DAMAGE_SPLIT}{d.diceType}" if d.diceAmount > 0 else ""
-            bonus_str = "" if d.bonus == 0 else str(d.bonus) if not dice_str else f" {'+' if d.bonus > 0 else ''}{d.bonus}"
-            result = f"{dice_str}{bonus_str}"
-            if with_type:
-                result = f"{result} {d.damageType}".strip()
-            return result
 
         def addStats(
             background: Image.Image,
@@ -104,13 +102,15 @@ class ImageHandler:
             fixedRows: list[str] = []
             fixedRows.append(f"{translate(TEXT.WEIGHT_PREFIX)}{weight}{translate(TEXT.WEIGHT_SUFFIX)}")
             if damage:
-                fixedRows.append(f"{translate(TEXT.DAMAGE_PREFIX)}{format_damage(damage, True)}")
+                fixedRows.append(
+                    f"{translate(TEXT.DAMAGE_PREFIX)}{formatDamage(damage, True)}"
+                )
 
             attr_strings: list[str] = []
             for attr in attributes:
                 name = str(attr)
                 if attr == AttributeType.VERSATILE and versatile:
-                    attr_strings.append(f"{name} ({format_damage(versatile)})")
+                    attr_strings.append(f"{name} ({formatDamage(versatile)})")
                 elif attr in ranges:
                     low, high = ranges[attr]
                     attr_strings.append(f"{name} ({low}/{high})")
@@ -144,9 +144,126 @@ class ImageHandler:
         addStats(cardImage, item.weight, item.damage, item.versatileDamage, item.attributes, item.ranges)
 
         # Export
+        os.makedirs(PATHS.OUTPUT, exist_ok=True)
         cardImage.save(join(PATHS.OUTPUT, f"{item.id}.png"))
 
     def createItemCards(self) -> None:
         items: list[Item] = getItems()
         for item in items:
             self.createItemCard(item)
+
+    def createSpellCard(self, spell: Spell) -> None:
+        def addIcon(background: Image.Image, path: str, layout) -> None:
+            icon = Image.open(path).convert("RGBA")
+            icon = icon.resize(layout.SIZE.ABSOLUTE, Resampling.LANCZOS)
+            background.paste(icon, layout.POSITION.ABSOLUTE, mask=icon)
+
+        def addText(background: Image.Image, text: str, layout, fontPath: str, maxSize: int) -> None:
+            draw = ImageDraw.Draw(background)
+            fontSize = getMaxFontSize(text, fontPath, maxSize, layout.SIZE.ABSOLUTE[0])
+            font = ImageFont.truetype(fontPath, fontSize)
+            bbox = draw.textbbox((0, 0), text, font=font)
+            w = bbox[2] - bbox[0]
+            h = bbox[3] - bbox[1]
+            draw.text(
+                (layout.POSITION.ABSOLUTE[0] - w / 2, layout.POSITION.ABSOLUTE[1] - h / 2),
+                text,
+                font=font,
+                fill=FONT_STYLE.COLORS.STATS,
+            )
+
+
+        card = Image.open(IMAGE.BACKGROUNDS.SPELL).convert("RGBA")
+
+        levelIcons = {
+            1: IMAGE.ICONS.LEVELS.LEVEL_1,
+            2: IMAGE.ICONS.LEVELS.LEVEL_2,
+            3: IMAGE.ICONS.LEVELS.LEVEL_3,
+            4: IMAGE.ICONS.LEVELS.LEVEL_4,
+            5: IMAGE.ICONS.LEVELS.LEVEL_5,
+            6: IMAGE.ICONS.LEVELS.LEVEL_6,
+            7: IMAGE.ICONS.LEVELS.LEVEL_7,
+            8: IMAGE.ICONS.LEVELS.LEVEL_8,
+            9: IMAGE.ICONS.LEVELS.LEVEL_9,
+        }
+        levelIcon = levelIcons.get(spell.level, IMAGE.ICONS.LEVELS.LEVEL_1)
+        addIcon(card, levelIcon, SPELL.LEVEL)
+
+        addText(card, spell.name, SPELL.TITLE, FONT.TITLE_PATH, FONT_STYLE.SIZES.TITLE)
+        addText(card, str(spell.type), SPELL.CATEGORY, FONT.TITLE_PATH, FONT_STYLE.SIZES.TITLE)
+
+        addIcon(card, IMAGE.ICONS.DURATION, SPELL.DURATION)
+        addText(
+            card,
+            formatTimedelta(spell.duration),
+            SPELL.DURATION_TEXT,
+            FONT.STATS_PATH,
+            FONT_STYLE.SIZES.STATS,
+        )
+        addIcon(card, IMAGE.ICONS.COOLDOWN, SPELL.COOLDOWN)
+        addText(
+            card,
+            formatTimedelta(spell.cooldown),
+            SPELL.COOLDOWN_TEXT,
+            FONT.STATS_PATH,
+            FONT_STYLE.SIZES.STATS,
+        )
+        addIcon(card, IMAGE.ICONS.DAMAGE, SPELL.DAMAGE)
+        if spell.damage:
+            dmg_text = formatDamage(spell.damage, True)
+            addText(card, dmg_text, SPELL.DAMAGE_TEXT, FONT.STATS_PATH, FONT_STYLE.SIZES.STATS)
+        addIcon(card, IMAGE.ICONS.RANGE, SPELL.RANGE)
+        addText(card, str(int(spell.range)), SPELL.RANGE_TEXT, FONT.STATS_PATH, FONT_STYLE.SIZES.STATS)
+
+        # Components
+        addIcon(card, IMAGE.ICONS.SPOKEN, SPELL.MATERIAL.SPOKEN)
+        if not spell.components.verbal:
+            addIcon(card, IMAGE.ICONS.STRIKE, SPELL.MATERIAL.SPOKEN)
+        addIcon(card, IMAGE.ICONS.MATERIAL, SPELL.MATERIAL.MATERIAL)
+        if not spell.components.material:
+            addIcon(card, IMAGE.ICONS.STRIKE, SPELL.MATERIAL.MATERIAL)
+        addIcon(card, IMAGE.ICONS.GESTURAL, SPELL.MATERIAL.GESTURAL)
+        if not spell.components.gestural:
+            addIcon(card, IMAGE.ICONS.STRIKE, SPELL.MATERIAL.GESTURAL)
+        if spell.components.material:
+            if spell.components.material.name:
+                addText(card, spell.components.material.name, SPELL.MATERIAL.NAME, FONT.STATS_PATH, FONT_STYLE.SIZES.STATS)
+            if spell.components.material.cost is not None:
+                addText(card, str(spell.components.material.cost), SPELL.MATERIAL.COST, FONT.STATS_PATH, FONT_STYLE.SIZES.STATS)
+
+        addIcon(card, IMAGE.ICONS.CONCENTRATION, SPELL.CONCENTRATION)
+        if not spell.concentration:
+            addIcon(card, IMAGE.ICONS.STRIKE, SPELL.CONCENTRATION)
+        addIcon(card, IMAGE.ICONS.RITUAL, SPELL.RITUAL)
+        if not spell.ritual:
+            addIcon(card, IMAGE.ICONS.STRIKE, SPELL.RITUAL)
+
+        addText(card, str(spell.castingTime), SPELL.CAST_TIME, FONT.STATS_PATH, FONT_STYLE.SIZES.STATS)
+
+        if spell.savingThrow:
+            addText(card, str(spell.savingThrow)[:3].upper(), SPELL.SAVING_THROW, FONT.STATS_PATH, FONT_STYLE.SIZES.STATS)
+
+        if spell.subRange is not None:
+            addText(card, str(int(spell.subRange)), SPELL.SUB_RANGE, FONT.STATS_PATH, FONT_STYLE.SIZES.STATS)
+        targetIcons = {
+            TargetType.AREA: IMAGE.ICONS.TARGETS.AREA,
+            TargetType.CONE: IMAGE.ICONS.TARGETS.CONE,
+            TargetType.CREATURE: IMAGE.ICONS.TARGETS.CREATURE,
+            TargetType.CUBE: IMAGE.ICONS.TARGETS.CUBE,
+            TargetType.CYLINDER: IMAGE.ICONS.TARGETS.CYLINDER,
+            TargetType.LINE: IMAGE.ICONS.TARGETS.LINE,
+            TargetType.OBJECT: IMAGE.ICONS.TARGETS.OBJECT,
+            TargetType.POINT: IMAGE.ICONS.TARGETS.POINT,
+            TargetType.RECTANGLE: IMAGE.ICONS.TARGETS.RECTANGLE,
+            TargetType.SELF: IMAGE.ICONS.TARGETS.SELF,
+            TargetType.SPHERE: IMAGE.ICONS.TARGETS.SPHERE,
+        }
+        addIcon(card, targetIcons.get(spell.target, IMAGE.ICONS.TARGETS.SELF), SPELL.TARGET)
+
+        os.makedirs(PATHS.OUTPUT, exist_ok=True)
+        card.save(join(PATHS.OUTPUT, f"{spell.id}.png"))
+
+    def createSpellCards(self) -> None:
+        spells: list[Spell] = getSpells()
+        for spell in spells:
+            self.createSpellCard(spell)

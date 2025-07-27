@@ -1,4 +1,23 @@
-from classes.types import RGB, JsonItem, Item, HexColor, RGBA, Damage, DamageType, AttributeType
+from datetime import timedelta
+from classes.types import (
+    RGB,
+    JsonItem,
+    Item,
+    HexColor,
+    RGBA,
+    Damage,
+    DamageType,
+    AttributeType,
+    Spell,
+    JsonSpell,
+    SpellType,
+    CasterClassType,
+    Components,
+    Material,
+    CastingTimeType,
+    TargetType,
+    SavingThrowType,
+)
 from helpers.translationHelper import to_enum
 def toItem(_id: str, jsonItem: JsonItem) -> Item:
     ranges = {
@@ -40,6 +59,49 @@ def toItem(_id: str, jsonItem: JsonItem) -> Item:
             if versatile
             else None
         ),
+    )
+
+def toSpell(_id: str, jsonSpell: JsonSpell) -> Spell:
+    comps = jsonSpell.get("components", {})
+    mat = comps.get("material")
+    material = None
+    if isinstance(mat, dict):
+        material = Material(mat.get("name", ""), mat.get("cost"))
+    components = Components(
+        comps.get("verbal", False),
+        comps.get("gestural", False),
+        material,
+    )
+    dmg = jsonSpell.get("damage")
+    damage = (
+        Damage(
+            dmg.get("diceAmount", 0),
+            dmg.get("diceType", 1),
+            dmg.get("bonus", 0),
+            to_enum(DamageType, dmg.get("damageType")) if dmg.get("damageType") else DamageType.SLASHING,
+        )
+        if isinstance(dmg, dict)
+        else None
+    )
+    return Spell(
+        id=_id,
+        name=jsonSpell.get("name", ""),
+        level=int(jsonSpell.get("level", 1)),
+        type=to_enum(SpellType, jsonSpell.get("type", "")),
+        casterClass=to_enum(CasterClassType, jsonSpell.get("casterClass", "")),
+        duration=timedelta(seconds=float(jsonSpell.get("duration", 0))),
+        cooldown=timedelta(seconds=float(jsonSpell.get("cooldown", 0))),
+        range=float(jsonSpell.get("range", 0)),
+        subRange=jsonSpell.get("subRange"),
+        damage=damage,
+        components=components,
+        levelBonus=jsonSpell.get("levelBonus", ""),
+        castingTime=to_enum(CastingTimeType, jsonSpell.get("castingTime", "ACTION")),
+        ritual=bool(jsonSpell.get("ritual", False)),
+        concentration=bool(jsonSpell.get("concentration", False)),
+        target=to_enum(TargetType, jsonSpell.get("target", "SELF")),
+        savingThrow=to_enum(SavingThrowType, jsonSpell.get("savingThrow")) if jsonSpell.get("savingThrow") else None,
+        areaOfEffect=to_enum(TargetType, jsonSpell.get("areaOfEffect")) if jsonSpell.get("areaOfEffect") else None,
     )
 
 def toRGBA(hex: HexColor) -> RGBA:

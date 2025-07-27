@@ -1,4 +1,7 @@
+from datetime import timedelta
 from PIL import ImageFont, ImageDraw, Image
+from classes.types import Damage
+
 
 def getMaxFontSize(text: str, fontPath: str, maxSize: int, maxWidth: float, maxHeight: float = float("inf")) -> int:
     size = maxSize
@@ -12,6 +15,7 @@ def getMaxFontSize(text: str, fontPath: str, maxSize: int, maxWidth: float, maxH
         if testWidth < maxWidth and testHeight < maxHeight:
             break
     return size
+
 
 def findOptimalAttributeLayout(attributes: list[str], fixedRows: list[str], fontPath: str, maxFontSize: int, maxWidth: float, maxHeight: float) -> tuple[list[str], int]:
     if not attributes:
@@ -65,3 +69,26 @@ def findOptimalAttributeLayout(attributes: list[str], fixedRows: list[str], font
                     bestLayout = testRows
 
     return bestLayout, bestFontSize
+
+
+def formatDamage(d: Damage, withType: bool = False) -> str:
+    """Return a formatted damage string."""
+    diceStr = f"{d.diceAmount}D{d.diceType}" if d.diceAmount > 0 else ""
+    bonusStr = "" if d.bonus == 0 else str(d.bonus) if not diceStr else f" {'+' if d.bonus > 0 else ''}{d.bonus}"
+    result = f"{diceStr}{bonusStr}"
+    if withType:
+        result = f"{result} {d.damageType}".strip()
+    return result
+
+
+def formatTimedelta(delta: timedelta) -> str:
+    """Return a human readable representation of a timedelta."""
+    total = int(delta.total_seconds())
+    hours = total // 3600
+    minutes = (total % 3600) // 60
+    seconds = total % 60
+    if hours:
+        return f"{hours}:{minutes:02d}:{seconds:02d}"
+    if minutes:
+        return f"{minutes}:{seconds:02d}"
+    return f"{seconds}s"

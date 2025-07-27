@@ -1,9 +1,15 @@
 import json
 from json import load, dump
-from classes.types import Item, JsonItem, JsonItemCache
+from classes.types import (
+    Item,
+    JsonItem,
+    JsonItemCache,
+    Spell,
+    JsonSpell,
+)
 from config.constants import DATA, PATHS
 import os
-from helpers.conversionHelper import toItem
+from helpers.conversionHelper import toItem, toSpell
 
 
 def getItems() -> list[Item]:
@@ -41,3 +47,9 @@ def updateItemCache(item_id: str, rotate: float, scale: float, flip: bool) -> No
     cache = loadItemCache()
     cache[item_id] = {"rotate": rotate, "scale": scale, "flip": flip}
     saveItemCache(cache)
+
+
+def getSpells() -> list[Spell]:
+    with open(DATA.SPELLS, "r", encoding="utf-8") as file:
+        jsonSpells: dict[str, JsonSpell] = load(file)
+    return [toSpell(key, value) for key, value in jsonSpells.items()]
