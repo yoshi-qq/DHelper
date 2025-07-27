@@ -7,27 +7,22 @@ from typing import Type, TypeVar
 LANG_DIR = join(dirname(dirname(__file__)), "config", "languages")
 SETTINGS_PATH = join(dirname(dirname(__file__)), "config", "settings.json")
 _current_lang = "en"
-_current_theme = "light"
 _translations: dict[str, dict] = {}
 
 
-def _load_settings() -> None:
-    global _current_lang, _current_theme
+def _load_settings() -> str:
     if not os.path.exists(SETTINGS_PATH):
         with open(SETTINGS_PATH, "w", encoding="utf-8") as f:
-            json.dump({"language": "en", "theme": "light"}, f, ensure_ascii=False, indent=2)
-        _current_lang = "en"
-        _current_theme = "light"
-        return
+            json.dump({"language": "en"}, f)
+        return "en"
     with open(SETTINGS_PATH, "r", encoding="utf-8") as f:
         data = json.load(f)
-    _current_lang = data.get("language", "en")
-    _current_theme = data.get("theme", "light")
+    return data.get("language", "en")
 
 
-def _save_settings() -> None:
+def _save_settings(lang: str) -> None:
     with open(SETTINGS_PATH, "w", encoding="utf-8") as f:
-        json.dump({"language": _current_lang, "theme": _current_theme}, f, ensure_ascii=False, indent=2)
+        json.dump({"language": lang}, f, ensure_ascii=False, indent=2)
 
 
 def load_language(lang: str) -> None:
@@ -36,7 +31,7 @@ def load_language(lang: str) -> None:
     with open(path, "r", encoding="utf-8") as f:
         _translations = json.load(f)
     _current_lang = lang
-    _save_settings()
+    _save_settings(lang)
 
 
 def get_language() -> str:
@@ -45,16 +40,6 @@ def get_language() -> str:
 
 def set_language(lang: str) -> None:
     load_language(lang)
-
-
-def get_theme() -> str:
-    return _current_theme
-
-
-def set_theme(theme: str) -> None:
-    global _current_theme
-    _current_theme = theme
-    _save_settings()
 
 
 def translate(key: Enum) -> str:
@@ -77,5 +62,4 @@ def to_enum(enum: Type[E], value: str | Enum | None) -> E:
 
 
 # initialize with language from settings
-_load_settings()
-load_language(_current_lang)
+load_language(_load_settings())

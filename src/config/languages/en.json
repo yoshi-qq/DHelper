@@ -42,7 +42,6 @@
     "BUTTON_ADD_ITEM": "Add Item",
     "BUTTON_MANAGE_ITEMS": "Manage Items",
     "BUTTON_PRINT_ITEMS": "Print Items",
-    "BUTTON_SETTINGS": "Settings",
     "BUTTON_BACK": "Back",
     "SPELLS_NOT_IMPLEMENTED": "Spells functionality not implemented yet",
     "MANAGE_SPELLS_TITLE": "Manage Spells",
@@ -68,12 +67,7 @@
     "ITEM_PREVIEW_TITLE": "Item Preview",
     "BUTTON_FLIP": "Flip",
     "BUTTON_SKIP": "Skip",
-    "BUTTON_NEXT": "Next",
-    "SETTINGS_TITLE": "Settings",
-    "LANGUAGE_LABEL": "Language",
-    "THEME_LABEL": "Theme",
-    "LIGHT_OPTION": "Light",
-    "DARK_OPTION": "Dark"
+    "BUTTON_NEXT": "Next"
   },
   "MessageText": {
     "NO_SELECTION_TITLE": "No selection",
