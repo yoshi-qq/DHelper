@@ -42,6 +42,7 @@
     "BUTTON_ADD_ITEM": "Gegenstand hinzufügen",
     "BUTTON_MANAGE_ITEMS": "Gegenstände verwalten",
     "BUTTON_PRINT_ITEMS": "Gegenstände drucken",
+    "BUTTON_SETTINGS": "Einstellungen",
     "BUTTON_BACK": "Zurück",
     "SPELLS_NOT_IMPLEMENTED": "Zauberfunktion noch nicht implementiert",
     "MANAGE_SPELLS_TITLE": "Zauber verwalten",
@@ -82,7 +83,12 @@
     "BUTTON_CANCEL": "Abbrechen",
     "SUCCESS_ITEM_ADDED": "Gegenstand erfolgreich hinzugefügt",
     "ERROR_ITEM_EXISTS": "Ein Gegenstand mit dieser ID existiert bereits",
-    "ERROR_INVALID_INPUT": "Ungültige Eingabe. Bitte überprüfen Sie alle Felder."
+    "ERROR_INVALID_INPUT": "Ungültige Eingabe. Bitte überprüfen Sie alle Felder.",
+    "SETTINGS_TITLE": "Einstellungen",
+    "LANGUAGE_LABEL": "Sprache",
+    "THEME_LABEL": "Thema",
+    "LIGHT_OPTION": "Hell",
+    "DARK_OPTION": "Dunkel"
   },
   "ValidationMessages": {
     "INVALID_VALUE": "Ungültiger Wert: {error}",
