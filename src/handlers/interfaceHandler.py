@@ -81,18 +81,12 @@ class InterfaceHandler:
 
     def _open_spells_menu(self) -> None:
         self._clear_root()
-        try:
-            self.image_handler.createSpellCards()
-            messagebox.showinfo(
-                translate(MessageText.DONE_TITLE),
-                translate(MessageText.DONE_MESSAGE),
-            )
-        except Exception as e:
-            messagebox.showerror(
-                translate(MessageText.ERROR_TITLE),
-                str(e),
-            )
-        self._build_main_menu()
+        frame = ttk.Frame(self.root, padding=20)
+        frame.pack(fill="both", expand=True)
+        ttk.Button(frame, text=translate(UIText.BUTTON_ADD_SPELL), command=self._open_add_spell).pack(pady=5, fill="x")
+        ttk.Button(frame, text=translate(UIText.BUTTON_MANAGE_SPELLS), command=self._open_manage_spells).pack(pady=5, fill="x")
+        ttk.Button(frame, text=translate(UIText.BUTTON_PRINT_SPELLS), command=self._open_print_spells).pack(pady=5, fill="x")
+        ttk.Button(frame, text=translate(UIText.BUTTON_BACK), command=self._build_main_menu).pack(pady=10)
 
     # ===== Manage Items =====
     def _open_manage_items(self) -> None:
@@ -444,6 +438,25 @@ class InterfaceHandler:
         window = tk.Toplevel(self.root)
         window.title(f"{translate(UIText.EDIT_ITEM_TITLE)}: {item.name}")
         self._item_form(window, item)
+
+    # ===== Spells Placeholders =====
+    def _open_add_spell(self) -> None:
+        messagebox.showinfo(
+            translate(MessageText.DONE_TITLE),
+            translate(UIText.SPELLS_NOT_IMPLEMENTED),
+        )
+
+    def _open_manage_spells(self) -> None:
+        messagebox.showinfo(
+            translate(MessageText.DONE_TITLE),
+            translate(UIText.SPELLS_NOT_IMPLEMENTED),
+        )
+
+    def _open_print_spells(self) -> None:
+        messagebox.showinfo(
+            translate(MessageText.DONE_TITLE),
+            translate(UIText.SPELLS_NOT_IMPLEMENTED),
+        )
 
     # ===== Print Items =====
     def _open_print_items(self) -> None:
