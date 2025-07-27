@@ -63,7 +63,6 @@ class _BackgroundImages:
 class _TargetIconPaths:
     def __init__(self) -> None:
         targets_path = join(SRC, "assets", "icons", "targets")
-        self.AREA: str = join(targets_path, "area.png")
         self.CONE: str = join(targets_path, "cone.png")
         self.CREATURE: str = join(targets_path, "creature.png")
         self.CUBE: str = join(targets_path, "cube.png")

@@ -2,7 +2,7 @@ from typing import Optional
 import os
 from config.constants import (
     # New hierarchical constants
-    FONT_STYLE, IMAGE, ITEM, PATHS, TEXT, FONT
+    FONT_STYLE, IMAGE, ITEM, PATHS, SPELL, TEXT, FONT
 )
 from classes.types import AttributeType, Currency, Damage, Item, Spell, TargetType
 from helpers.translationHelper import translate
@@ -246,7 +246,6 @@ class ImageHandler:
         if spell.subRange is not None:
             addText(card, str(int(spell.subRange)), SPELL.SUB_RANGE, FONT.STATS_PATH, FONT_STYLE.SIZES.STATS)
         targetIcons = {
-            TargetType.AREA: IMAGE.ICONS.TARGETS.AREA,
             TargetType.CONE: IMAGE.ICONS.TARGETS.CONE,
             TargetType.CREATURE: IMAGE.ICONS.TARGETS.CREATURE,
             TargetType.CUBE: IMAGE.ICONS.TARGETS.CUBE,

@@ -1,2 +1,31 @@
 {
+    "feuerball": {
+        "id": "feuerball",
+        "name": "Feuerball",
+        "level": 3,
+        "type": "EVOCATION",
+        "casterClass": "WIZARD",
+        "duration": 1.0,
+        "cooldown": 0.0,
+        "range": 45.0,
+        "subRange": null,
+        "damage": {
+            "diceAmount": 8,
+            "diceType": 6,
+            "bonus": 0,
+            "damageType": "Fire"
+        },
+        "components": {
+            "verbal": false,
+            "gestural": false,
+            "material": null
+        },
+        "levelBonus": "",
+        "castingTime": "ACTION",
+        "ritual": false,
+        "concentration": false,
+        "target": "POINT",
+        "savingThrow": null,
+        "areaOfEffect": null
+    }
 }
