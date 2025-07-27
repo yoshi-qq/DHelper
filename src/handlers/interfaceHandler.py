@@ -20,7 +20,7 @@ from classes.types import (
 )
 from classes.textKeys import UIText, MessageText
 from helpers.translationHelper import translate, to_enum
-from config.constants import GAME, PATHS
+from config.constants import GAME, PATHS, IMAGE
 from helpers.dataHelper import (
     getItems,
     addItem,
@@ -38,46 +38,54 @@ class InterfaceHandler:
     def __init__(self) -> None:
         self.root = tk.Tk()
         self.root.title(translate(UIText.APP_TITLE))
-        self._set_dark_theme()
+        self._set_icon(self.root)
+        self._set_modern_theme()
         self.image_handler = ImageHandler()
         self._build_main_menu()
 
-    def _set_dark_theme(self) -> None:
+    def _set_icon(self, window: tk.Toplevel | tk.Tk) -> None:
+        try:
+            icon = tk.PhotoImage(file=IMAGE.PATHS.APP_ICON)
+            window.iconphoto(True, icon)
+        except Exception:
+            pass
+
+    def _set_modern_theme(self) -> None:
         style = ttk.Style(self.root)
         try:
             style.theme_use("clam")
         except tk.TclError:
             pass
-        dark_bg = "#2b2b2b"
-        fg = "#f0f0f0"
-        style.configure(".", background=dark_bg, foreground=fg)
-        style.configure("TFrame", background=dark_bg)
-        style.configure("TLabel", background=dark_bg, foreground=fg)
-        style.configure("TCheckbutton", background=dark_bg, foreground=fg)
-        style.configure("TButton", background="#444", foreground=fg)
+        bg = "#f5f5f5"
+        fg = "#333333"
+        style.configure(".", background=bg, foreground=fg)
+        style.configure("TFrame", background=bg)
+        style.configure("TLabel", background=bg, foreground=fg)
+        style.configure("TCheckbutton", background=bg, foreground=fg)
+        style.configure("TButton", background="#e0e0e0", foreground=fg)
         style.configure(
             "TEntry",
-            fieldbackground="#444",
-            background="#444",
+            fieldbackground="#ffffff",
+            background="#ffffff",
             foreground=fg,
             insertcolor=fg,
         )
         style.configure(
             "TCombobox",
-            fieldbackground="#444",
-            background="#444",
+            fieldbackground="#ffffff",
+            background="#ffffff",
             foreground=fg,
-            selectbackground="#555",
+            selectbackground="#dddddd",
         )
-        self.root.option_add("*TCombobox*Listbox.background", "#444")
+        self.root.option_add("*TCombobox*Listbox.background", "#ffffff")
         self.root.option_add("*TCombobox*Listbox.foreground", fg)
-        self.root.option_add("*TCombobox*Listbox.selectBackground", "#555")
-        style.map("TButton", background=[("active", "#3a3a3a")])
-        style.map("TCheckbutton", background=[("active", "#3a3a3a")])
-        style.configure("Treeview", background="#444", foreground=fg, fieldbackground="#444")
-        style.configure("Treeview.Heading", background="#555", foreground=fg)
-        style.map("Treeview", background=[("selected", "#555")])
-        self.root.configure(bg=dark_bg)
+        self.root.option_add("*TCombobox*Listbox.selectBackground", "#dddddd")
+        style.map("TButton", background=[("active", "#cccccc")])
+        style.map("TCheckbutton", background=[("active", "#cccccc")])
+        style.configure("Treeview", background="#ffffff", foreground=fg, fieldbackground="#ffffff")
+        style.configure("Treeview.Heading", background="#e0e0e0", foreground=fg)
+        style.map("Treeview", background=[("selected", "#cccccc")])
+        self.root.configure(bg=bg)
 
     def _clear_root(self) -> None:
         for child in self.root.winfo_children():
@@ -111,6 +119,7 @@ class InterfaceHandler:
     # ===== Manage Items =====
     def _open_manage_items(self) -> None:
         window = tk.Toplevel(self.root)
+        self._set_icon(window)
         window.title(translate(UIText.MANAGE_ITEMS_TITLE))
         window.configure(bg=self.root["background"])
 
@@ -221,10 +230,13 @@ class InterfaceHandler:
                     rotate=t.get("rotate", 0.0),
                     flip=t.get("flip", False),
                     scale=t.get("scale", 1.0),
+                    offset_x=t.get("offset_x", 0.0),
+                    offset_y=t.get("offset_y", 0.0),
                 )
                 path = join(PATHS.ITEM_OUTPUT, f"{item.id}.png")
                 img = Image.open(path)
                 top = tk.Toplevel(window)
+                self._set_icon(top)
                 top.title(f"{item.name} Card")
                 tk_img = ImageTk.PhotoImage(img)
                 lbl = ttk.Label(top, image=tk_img)
@@ -267,6 +279,7 @@ class InterfaceHandler:
 
     # ===== Add Item =====
     def _item_form(self, window: tk.Toplevel, item: Item | None) -> None:
+        self._set_icon(window)
         window.configure(bg=self.root["background"])
 
         entries: dict[str, tk.Entry] = {}
@@ -450,6 +463,7 @@ class InterfaceHandler:
         ttk.Button(window, text=translate(UIText.SAVE_BUTTON), command=submit).grid(row=row, column=0, columnspan=2, pady=10)
 
     def _spell_form(self, window: tk.Toplevel, spell: Spell | None) -> None:
+        self._set_icon(window)
         window.configure(bg=self.root["background"])
 
         row = 0
@@ -679,27 +693,32 @@ class InterfaceHandler:
 
     def _open_add_item(self) -> None:
         window = tk.Toplevel(self.root)
+        self._set_icon(window)
         window.title(translate(UIText.ADD_ITEM_TITLE))
         self._item_form(window, None)
 
     def _open_edit_item(self, item: Item) -> None:
         window = tk.Toplevel(self.root)
+        self._set_icon(window)
         window.title(f"{translate(UIText.EDIT_ITEM_TITLE)}: {item.name}")
         self._item_form(window, item)
 
     # ===== Spells =====
     def _open_add_spell(self) -> None:
         window = tk.Toplevel(self.root)
+        self._set_icon(window)
         window.title(translate(UIText.ADD_SPELL_TITLE))
         self._spell_form(window, None)
 
     def _open_edit_spell(self, spell: Spell) -> None:
         window = tk.Toplevel(self.root)
+        self._set_icon(window)
         window.title(f"{translate(UIText.EDIT_SPELL_TITLE)}: {spell.name}")
         self._spell_form(window, spell)
 
     def _open_manage_spells(self) -> None:
         window = tk.Toplevel(self.root)
+        self._set_icon(window)
         window.title(translate(UIText.MANAGE_SPELLS_TITLE))
         window.configure(bg=self.root["background"])
 
@@ -761,10 +780,13 @@ class InterfaceHandler:
                     rotate=t.get("rotate", 0.0),
                     flip=t.get("flip", False),
                     scale=t.get("scale", 1.0),
+                    offset_x=t.get("offset_x", 0.0),
+                    offset_y=t.get("offset_y", 0.0),
                 )
                 path = join(PATHS.SPELL_OUTPUT, f"level{sp.level}", f"{sp.id}.png")
                 img = Image.open(path)
                 top = tk.Toplevel(window)
+                self._set_icon(top)
                 top.title(sp.name)
                 tk_img = ImageTk.PhotoImage(img)
                 lbl = ttk.Label(top, image=tk_img)
@@ -827,6 +849,8 @@ class InterfaceHandler:
                     rotate=t.get("rotate", 0.0),
                     flip=t.get("flip", False),
                     scale=t.get("scale", 1.0),
+                    offset_x=t.get("offset_x", 0.0),
+                    offset_y=t.get("offset_y", 0.0),
                 )
 
         if preview_spells:
@@ -886,6 +910,11 @@ class PreviewWindow(tk.Toplevel):
         cache: dict,
     ) -> None:
         super().__init__(root)
+        try:
+            icon = tk.PhotoImage(file=IMAGE.PATHS.APP_ICON)
+            self.iconphoto(True, icon)
+        except Exception:
+            pass
         self.title(translate(UIText.ITEM_PREVIEW_TITLE))
         self.configure(bg=root["background"])
         self.items = items
@@ -902,6 +931,10 @@ class PreviewWindow(tk.Toplevel):
         ttk.Scale(btn_frame, from_=-180, to=180, orient="horizontal", variable=self.angle_var, command=self._update_angle, length=150).pack(side="left", padx=2)
         self.scale_var = tk.DoubleVar(value=1.0)
         ttk.Scale(btn_frame, from_=0.5, to=1.5, orient="horizontal", variable=self.scale_var, command=self._update_scale, length=150).pack(side="left", padx=2)
+        self.x_var = tk.DoubleVar(value=0)
+        ttk.Scale(btn_frame, from_=-50, to=50, orient="horizontal", variable=self.x_var, command=self._update_offset, length=100).pack(side="left", padx=2)
+        self.y_var = tk.DoubleVar(value=0)
+        ttk.Scale(btn_frame, from_=-50, to=50, orient="horizontal", variable=self.y_var, command=self._update_offset, length=100).pack(side="left", padx=2)
         ttk.Button(btn_frame, text=translate(UIText.BUTTON_FLIP), command=self._toggle_flip).pack(side="left", padx=2)
         ttk.Button(btn_frame, text=translate(UIText.BUTTON_SKIP), command=self._skip).pack(side="left", padx=2)
         ttk.Button(btn_frame, text=translate(UIText.BUTTON_NEXT), command=self._next).pack(side="left", padx=2)
@@ -919,6 +952,8 @@ class PreviewWindow(tk.Toplevel):
         self.angle_var.set(t.get("rotate", 0.0))
         self.scale_var.set(t.get("scale", 1.0))
         self.flip = t.get("flip", False)
+        self.x_var.set(t.get("offset_x", 0.0))
+        self.y_var.set(t.get("offset_y", 0.0))
         if not self._generate_image(item):
             return
         self._update_image()
@@ -930,6 +965,8 @@ class PreviewWindow(tk.Toplevel):
                 rotate=self.angle_var.get(),
                 flip=self.flip,
                 scale=self.scale_var.get(),
+                offset_x=self.x_var.get(),
+                offset_y=self.y_var.get(),
             )
         except FileNotFoundError:
             if messagebox.askretrycancel(
@@ -957,6 +994,9 @@ class PreviewWindow(tk.Toplevel):
     def _update_angle(self, _value: str) -> None:
         self._apply_transform()
 
+    def _update_offset(self, _value: str) -> None:
+        self._apply_transform()
+
     def _toggle_flip(self) -> None:
         self.flip = not self.flip
         self._apply_transform()
@@ -975,6 +1015,8 @@ class PreviewWindow(tk.Toplevel):
                 self.angle_var.get(),
                 self.scale_var.get(),
                 self.flip,
+                self.x_var.get(),
+                self.y_var.get(),
             )
         self.skip_flag = False
         self.index += 1
@@ -997,6 +1039,11 @@ class SpellPreviewWindow(tk.Toplevel):
         cache: dict,
     ) -> None:
         super().__init__(root)
+        try:
+            icon = tk.PhotoImage(file=IMAGE.PATHS.APP_ICON)
+            self.iconphoto(True, icon)
+        except Exception:
+            pass
         self.title(translate(UIText.SPELL_PREVIEW_TITLE))
         self.configure(bg=root["background"])
         self.spells = spells
@@ -1029,6 +1076,26 @@ class SpellPreviewWindow(tk.Toplevel):
             command=self._update_scale,
             length=150,
         ).pack(side="left", padx=2)
+        self.x_var = tk.DoubleVar(value=0)
+        ttk.Scale(
+            btn_frame,
+            from_=-50,
+            to=50,
+            orient="horizontal",
+            variable=self.x_var,
+            command=self._update_offset,
+            length=100,
+        ).pack(side="left", padx=2)
+        self.y_var = tk.DoubleVar(value=0)
+        ttk.Scale(
+            btn_frame,
+            from_=-50,
+            to=50,
+            orient="horizontal",
+            variable=self.y_var,
+            command=self._update_offset,
+            length=100,
+        ).pack(side="left", padx=2)
         ttk.Button(btn_frame, text=translate(UIText.BUTTON_FLIP), command=self._toggle_flip).pack(side="left", padx=2)
         ttk.Button(btn_frame, text=translate(UIText.BUTTON_SKIP), command=self._skip).pack(side="left", padx=2)
         ttk.Button(btn_frame, text=translate(UIText.BUTTON_NEXT), command=self._next).pack(side="left", padx=2)
@@ -1046,6 +1113,8 @@ class SpellPreviewWindow(tk.Toplevel):
         self.angle_var.set(t.get("rotate", 0.0))
         self.scale_var.set(t.get("scale", 1.0))
         self.flip = t.get("flip", False)
+        self.x_var.set(t.get("offset_x", 0.0))
+        self.y_var.set(t.get("offset_y", 0.0))
         if not self._generate_image(sp):
             return
         self._update_image()
@@ -1057,6 +1126,8 @@ class SpellPreviewWindow(tk.Toplevel):
                 rotate=self.angle_var.get(),
                 flip=self.flip,
                 scale=self.scale_var.get(),
+                offset_x=self.x_var.get(),
+                offset_y=self.y_var.get(),
             )
         except FileNotFoundError:
             if messagebox.askretrycancel(
@@ -1085,6 +1156,9 @@ class SpellPreviewWindow(tk.Toplevel):
     def _update_angle(self, _value: str) -> None:
         self._apply_transform()
 
+    def _update_offset(self, _value: str) -> None:
+        self._apply_transform()
+
     def _toggle_flip(self) -> None:
         self.flip = not self.flip
         self._apply_transform()
@@ -1103,6 +1177,8 @@ class SpellPreviewWindow(tk.Toplevel):
                 self.angle_var.get(),
                 self.scale_var.get(),
                 self.flip,
+                self.x_var.get(),
+                self.y_var.get(),
             )
         self.skip_flag = False
         self.index += 1

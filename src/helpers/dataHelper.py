@@ -43,9 +43,22 @@ def saveItemCache(cache: dict[str, JsonItemCache]) -> None:
         dump(cache, file, ensure_ascii=False, indent=4)
 
 
-def updateItemCache(item_id: str, rotate: float, scale: float, flip: bool) -> None:
+def updateItemCache(
+    item_id: str,
+    rotate: float,
+    scale: float,
+    flip: bool,
+    offset_x: float,
+    offset_y: float,
+) -> None:
     cache = loadItemCache()
-    cache[item_id] = {"rotate": rotate, "scale": scale, "flip": flip}
+    cache[item_id] = {
+        "rotate": rotate,
+        "scale": scale,
+        "flip": flip,
+        "offset_x": offset_x,
+        "offset_y": offset_y,
+    }
     saveItemCache(cache)
 
 
@@ -79,7 +92,20 @@ def saveSpellCache(cache: dict[str, JsonItemCache]) -> None:
         dump(cache, file, ensure_ascii=False, indent=4)
 
 
-def updateSpellCache(spell_id: str, rotate: float, scale: float, flip: bool) -> None:
+def updateSpellCache(
+    spell_id: str,
+    rotate: float,
+    scale: float,
+    flip: bool,
+    offset_x: float,
+    offset_y: float,
+) -> None:
     cache = loadSpellCache()
-    cache[spell_id] = {"rotate": rotate, "scale": scale, "flip": flip}
+    cache[spell_id] = {
+        "rotate": rotate,
+        "scale": scale,
+        "flip": flip,
+        "offset_x": offset_x,
+        "offset_y": offset_y,
+    }
     saveSpellCache(cache)
