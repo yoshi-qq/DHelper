@@ -1,10 +1,21 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
 from typing import List
+from datetime import timedelta
 from os.path import join
 from PIL import Image, ImageTk
 
-from classes.types import Item, DamageType, AttributeType, Damage
+from classes.types import (
+    Item,
+    DamageType,
+    AttributeType,
+    Damage,
+    Spell,
+    SpellType,
+    CasterClassType,
+    CastingTimeType,
+    TargetType,
+)
 from classes.textKeys import UIText, MessageText
 from helpers.translationHelper import translate, to_enum
 from config.constants import GAME, PATHS
@@ -13,6 +24,8 @@ from helpers.dataHelper import (
     addItem,
     updateItemCache,
     loadItemCache,
+    getSpells,
+    addSpell,
 )
 from handlers.imageHandler import ImageHandler
 
@@ -81,18 +94,12 @@ class InterfaceHandler:
 
     def _open_spells_menu(self) -> None:
         self._clear_root()
-        try:
-            self.image_handler.createSpellCards()
-            messagebox.showinfo(
-                translate(MessageText.DONE_TITLE),
-                translate(MessageText.DONE_MESSAGE),
-            )
-        except Exception as e:
-            messagebox.showerror(
-                translate(MessageText.ERROR_TITLE),
-                str(e),
-            )
-        self._build_main_menu()
+        frame = ttk.Frame(self.root, padding=20)
+        frame.pack(fill="both", expand=True)
+        ttk.Button(frame, text=translate(UIText.BUTTON_ADD_SPELL), command=self._open_add_spell).pack(pady=5, fill="x")
+        ttk.Button(frame, text=translate(UIText.BUTTON_MANAGE_SPELLS), command=self._open_manage_spells).pack(pady=5, fill="x")
+        ttk.Button(frame, text=translate(UIText.BUTTON_PRINT_SPELLS), command=self._open_print_spells).pack(pady=5, fill="x")
+        ttk.Button(frame, text=translate(UIText.BUTTON_BACK), command=self._build_main_menu).pack(pady=10)
 
     # ===== Manage Items =====
     def _open_manage_items(self) -> None:
@@ -435,6 +442,184 @@ class InterfaceHandler:
 
         ttk.Button(window, text=translate(UIText.SAVE_BUTTON), command=submit).grid(row=row, column=0, columnspan=2, pady=10)
 
+    def _spell_form(self, window: tk.Toplevel, spell: Spell | None) -> None:
+        window.configure(bg=self.root["background"])
+
+        row = 0
+        ttk.Label(window, text="ID").grid(row=row, column=0, sticky="e", padx=5, pady=2)
+        id_entry = ttk.Entry(window)
+        id_entry.grid(row=row, column=1, padx=5, pady=2)
+        if spell:
+            id_entry.insert(0, spell.id)
+        row += 1
+
+        ttk.Label(window, text="Name").grid(row=row, column=0, sticky="e", padx=5, pady=2)
+        name_entry = ttk.Entry(window)
+        name_entry.grid(row=row, column=1, padx=5, pady=2)
+        if spell:
+            name_entry.insert(0, spell.name)
+        row += 1
+
+        ttk.Label(window, text="Level").grid(row=row, column=0, sticky="e", padx=5, pady=2)
+        lvl_cb = ttk.Combobox(window, values=[str(i) for i in range(1, 10)], state="readonly")
+        lvl_cb.grid(row=row, column=1, padx=5, pady=2)
+        if spell:
+            lvl_cb.set(str(spell.level))
+        row += 1
+
+        ttk.Label(window, text="Type").grid(row=row, column=0, sticky="e", padx=5, pady=2)
+        type_var = tk.StringVar()
+        type_cb = ttk.Combobox(window, textvariable=type_var, values=[str(t) for t in SpellType], state="readonly")
+        type_cb.grid(row=row, column=1, padx=5, pady=2)
+        if spell:
+            type_var.set(str(spell.type))
+        row += 1
+
+        ttk.Label(window, text="Class").grid(row=row, column=0, sticky="e", padx=5, pady=2)
+        class_var = tk.StringVar()
+        class_cb = ttk.Combobox(window, textvariable=class_var, values=[str(c) for c in CasterClassType], state="readonly")
+        class_cb.grid(row=row, column=1, padx=5, pady=2)
+        if spell:
+            class_var.set(str(spell.casterClass))
+        row += 1
+
+        ttk.Label(window, text="Range").grid(row=row, column=0, sticky="e", padx=5, pady=2)
+        range_entry = ttk.Entry(window)
+        range_entry.grid(row=row, column=1, padx=5, pady=2)
+        if spell:
+            range_entry.insert(0, str(spell.range))
+        row += 1
+
+        ttk.Label(window, text="Duration (s)").grid(row=row, column=0, sticky="e", padx=5, pady=2)
+        dur_entry = ttk.Entry(window)
+        dur_entry.grid(row=row, column=1, padx=5, pady=2)
+        if spell:
+            dur_entry.insert(0, str(int(spell.duration.total_seconds())))
+        row += 1
+
+        ttk.Label(window, text="Cooldown (s)").grid(row=row, column=0, sticky="e", padx=5, pady=2)
+        cd_entry = ttk.Entry(window)
+        cd_entry.grid(row=row, column=1, padx=5, pady=2)
+        if spell:
+            cd_entry.insert(0, str(int(spell.cooldown.total_seconds())))
+        row += 1
+
+        ttk.Label(window, text="Casting Time").grid(row=row, column=0, sticky="e", padx=5, pady=2)
+        ct_var = tk.StringVar()
+        ct_cb = ttk.Combobox(window, textvariable=ct_var, values=[str(c) for c in CastingTimeType], state="readonly")
+        ct_cb.grid(row=row, column=1, padx=5, pady=2)
+        if spell:
+            ct_var.set(str(spell.castingTime))
+        else:
+            ct_var.set(str(CastingTimeType.ACTION))
+        row += 1
+
+        rit_var = tk.BooleanVar(value=spell.ritual if spell else False)
+        ttk.Checkbutton(window, text="Ritual", variable=rit_var).grid(row=row, column=1, sticky="w", padx=5, pady=2)
+        row += 1
+
+        conc_var = tk.BooleanVar(value=spell.concentration if spell else False)
+        ttk.Checkbutton(window, text="Concentration", variable=conc_var).grid(row=row, column=1, sticky="w", padx=5, pady=2)
+        row += 1
+
+        ttk.Label(window, text="Target").grid(row=row, column=0, sticky="e", padx=5, pady=2)
+        target_var = tk.StringVar()
+        target_cb = ttk.Combobox(window, textvariable=target_var, values=[str(t) for t in TargetType], state="readonly")
+        target_cb.grid(row=row, column=1, padx=5, pady=2)
+        if spell:
+            target_var.set(str(spell.target))
+        else:
+            target_var.set(str(TargetType.SELF))
+        row += 1
+
+        ttk.Label(window, text="Damage Dice Amount").grid(row=row, column=0, sticky="e", padx=5, pady=2)
+        dmg_amount_entry = ttk.Entry(window, width=4)
+        dmg_amount_entry.grid(row=row, column=1, sticky="w", padx=5, pady=2)
+        if spell and spell.damage:
+            dmg_amount_entry.insert(0, str(spell.damage.diceAmount))
+        row += 1
+
+        ttk.Label(window, text="Damage Dice Type").grid(row=row, column=0, sticky="e", padx=5, pady=2)
+        dmg_type_cb = ttk.Combobox(window, values=[str(d) for d in GAME.DICE_SIZES], state="readonly", width=4)
+        dmg_type_cb.grid(row=row, column=1, sticky="w", padx=5, pady=2)
+        if spell and spell.damage:
+            dmg_type_cb.set(str(spell.damage.diceType))
+        row += 1
+
+        ttk.Label(window, text="Damage Bonus").grid(row=row, column=0, sticky="e", padx=5, pady=2)
+        dmg_bonus_entry = ttk.Entry(window, width=4)
+        dmg_bonus_entry.grid(row=row, column=1, sticky="w", padx=5, pady=2)
+        if spell and spell.damage:
+            dmg_bonus_entry.insert(0, str(spell.damage.bonus))
+        row += 1
+
+        ttk.Label(window, text="Damage Type").grid(row=row, column=0, sticky="e", padx=5, pady=2)
+        dmg_type_var = tk.StringVar()
+        dmg_type_enum_cb = ttk.Combobox(window, textvariable=dmg_type_var, values=[str(dt) for dt in DamageType], state="readonly")
+        dmg_type_enum_cb.grid(row=row, column=1, padx=5, pady=2)
+        if spell and spell.damage:
+            dmg_type_var.set(str(spell.damage.damageType))
+        row += 1
+
+        def submit() -> None:
+            try:
+                _id = id_entry.get().strip()
+                name = name_entry.get().strip()
+                level = int(lvl_cb.get() or 1)
+                stype = to_enum(SpellType, type_var.get())
+                cclass = to_enum(CasterClassType, class_var.get())
+                duration = timedelta(seconds=float(dur_entry.get() or 0))
+                cooldown = timedelta(seconds=float(cd_entry.get() or 0))
+                rng = float(range_entry.get() or 0)
+                ctime = to_enum(CastingTimeType, ct_var.get())
+                target = to_enum(TargetType, target_var.get())
+
+                dmg = None
+                if dmg_amount_entry.get() or dmg_bonus_entry.get():
+                    dmg = Damage(
+                        int(dmg_amount_entry.get() or 0),
+                        int(dmg_type_cb.get() or 1),
+                        int(dmg_bonus_entry.get() or 0),
+                        to_enum(DamageType, dmg_type_var.get() or DamageType.SLASHING.value),
+                    )
+            except ValueError as e:
+                messagebox.showerror(
+                    translate(MessageText.ERROR_TITLE),
+                    translate(MessageText.INVALID_VALUE).format(error=e),
+                )
+                return
+
+            if not _id or not name:
+                messagebox.showerror(
+                    translate(MessageText.ERROR_TITLE),
+                    translate(MessageText.ID_NAME_REQUIRED),
+                )
+                return
+
+            new_spell = Spell(
+                id=_id,
+                name=name,
+                level=level,
+                type=stype,
+                casterClass=cclass,
+                duration=duration,
+                cooldown=cooldown,
+                range=rng,
+                castingTime=ctime,
+                ritual=rit_var.get(),
+                concentration=conc_var.get(),
+                target=target,
+                damage=dmg,
+            )
+            addSpell(new_spell)
+            messagebox.showinfo(
+                translate(MessageText.SAVED_TITLE),
+                translate(MessageText.ITEM_SAVED),
+            )
+            window.destroy()
+
+        ttk.Button(window, text=translate(UIText.SAVE_BUTTON), command=submit).grid(row=row, column=0, columnspan=2, pady=10)
+
     def _open_add_item(self) -> None:
         window = tk.Toplevel(self.root)
         window.title(translate(UIText.ADD_ITEM_TITLE))
@@ -444,6 +629,146 @@ class InterfaceHandler:
         window = tk.Toplevel(self.root)
         window.title(f"{translate(UIText.EDIT_ITEM_TITLE)}: {item.name}")
         self._item_form(window, item)
+
+    # ===== Spells =====
+    def _open_add_spell(self) -> None:
+        window = tk.Toplevel(self.root)
+        window.title(translate(UIText.ADD_SPELL_TITLE))
+        self._spell_form(window, None)
+
+    def _open_edit_spell(self, spell: Spell) -> None:
+        window = tk.Toplevel(self.root)
+        window.title(f"{translate(UIText.EDIT_SPELL_TITLE)}: {spell.name}")
+        self._spell_form(window, spell)
+
+    def _open_manage_spells(self) -> None:
+        window = tk.Toplevel(self.root)
+        window.title(translate(UIText.MANAGE_SPELLS_TITLE))
+        window.configure(bg=self.root["background"])
+
+        spells = getSpells()
+
+        search_var = tk.StringVar()
+        ttk.Label(window, text=translate(UIText.SEARCH_LABEL)).grid(row=0, column=0, sticky="e", padx=5, pady=2)
+        search_entry = ttk.Entry(window, textvariable=search_var)
+        search_entry.grid(row=0, column=1, sticky="ew", padx=5, pady=2)
+
+        tree = ttk.Treeview(window, columns=("id", "name"), show="headings", selectmode="browse")
+        tree.heading("id", text=translate(UIText.COLUMN_ID))
+        tree.heading("name", text=translate(UIText.COLUMN_NAME))
+        tree.column("id", width=100, anchor="center")
+        tree.column("name", width=150, anchor="center")
+        tree.grid(row=1, column=0, columnspan=2, sticky="nsew", padx=5, pady=5)
+        window.grid_rowconfigure(1, weight=1)
+        window.grid_columnconfigure(1, weight=1)
+
+        btn_frame = ttk.Frame(window)
+        btn_frame.grid(row=2, column=0, columnspan=2, pady=5)
+        ttk.Button(btn_frame, text=translate(UIText.BUTTON_VIEW_CARD), command=lambda: view_card()).pack(side="left", padx=2)
+        ttk.Button(btn_frame, text=translate(UIText.BUTTON_EDIT_DATA), command=lambda: edit_selected()).pack(side="left", padx=2)
+        ttk.Button(btn_frame, text=translate(UIText.BUTTON_EDIT_CARD), command=lambda: print_card()).pack(side="left", padx=2)
+        ttk.Button(btn_frame, text=translate(UIText.BUTTON_CLOSE), command=window.destroy).pack(side="left", padx=2)
+
+        def filter_spells() -> List[Spell]:
+            search = search_var.get().lower()
+            return [sp for sp in spells if search in sp.id.lower() or search in sp.name.lower()]
+
+        def update_list(*_args: object) -> None:
+            tree.delete(*tree.get_children())
+            for sp in filter_spells():
+                tree.insert("", "end", values=(sp.id, sp.name))
+
+        def get_selected_spell() -> Spell | None:
+            sel = tree.selection()
+            if not sel:
+                return None
+            spell_id = tree.item(sel[0], "values")[0]
+            for sp in spells:
+                if sp.id == spell_id:
+                    return sp
+            return None
+
+        def view_card() -> None:
+            sp = get_selected_spell()
+            if not sp:
+                messagebox.showwarning(
+                    translate(MessageText.NO_SELECTION_TITLE),
+                    translate(MessageText.NO_SELECTION_TEXT),
+                )
+                return
+            try:
+                self.image_handler.createSpellCard(sp)
+                path = join(PATHS.OUTPUT, f"{sp.id}.png")
+                img = Image.open(path)
+                top = tk.Toplevel(window)
+                top.title(sp.name)
+                tk_img = ImageTk.PhotoImage(img)
+                lbl = ttk.Label(top, image=tk_img)
+                lbl.image = tk_img  # type: ignore
+                lbl.pack()
+            except Exception as e:
+                messagebox.showerror(
+                    translate(MessageText.ERROR_TITLE),
+                    str(e),
+                )
+
+        def edit_selected() -> None:
+            sp = get_selected_spell()
+            if not sp:
+                messagebox.showwarning(
+                    translate(MessageText.NO_SELECTION_TITLE),
+                    translate(MessageText.NO_SELECTION_TEXT),
+                )
+                return
+            self._open_edit_spell(sp)
+            spells.clear()
+            spells.extend(getSpells())
+            update_list()
+
+        def print_card() -> None:
+            sp = get_selected_spell()
+            if not sp:
+                messagebox.showwarning(
+                    translate(MessageText.NO_SELECTION_TITLE),
+                    translate(MessageText.NO_SELECTION_TEXT),
+                )
+                return
+            try:
+                self.image_handler.createSpellCard(sp)
+                messagebox.showinfo(
+                    translate(MessageText.DONE_TITLE),
+                    translate(MessageText.DONE_MESSAGE),
+                )
+            except Exception as e:
+                messagebox.showerror(
+                    translate(MessageText.ERROR_TITLE),
+                    str(e),
+                )
+
+        search_var.trace_add("write", update_list)
+        update_list()
+
+    def _open_print_spells(self) -> None:
+        spells = getSpells()
+        if not spells:
+            messagebox.showinfo(
+                translate(MessageText.NO_ITEMS_TITLE),
+                translate(MessageText.NO_ITEMS_MESSAGE),
+            )
+            return
+        for sp in spells:
+            try:
+                self.image_handler.createSpellCard(sp)
+            except Exception as e:
+                messagebox.showerror(
+                    translate(MessageText.ERROR_TITLE),
+                    str(e),
+                )
+                return
+        messagebox.showinfo(
+            translate(MessageText.DONE_TITLE),
+            translate(MessageText.DONE_MESSAGE),
+        )
 
     # ===== Print Items =====
     def _open_print_items(self) -> None:

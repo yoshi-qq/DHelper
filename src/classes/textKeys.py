@@ -9,6 +9,9 @@ class UIText(Enum):
     APP_TITLE = "AppTitle"
     BUTTON_ITEMS = "ItemsButton"
     BUTTON_SPELLS = "SpellsButton"
+    BUTTON_ADD_SPELL = "AddSpellButton"
+    BUTTON_MANAGE_SPELLS = "ManageSpellsButton"
+    BUTTON_PRINT_SPELLS = "PrintSpellsButton"
     BUTTON_ADD_ITEM = "AddItemButton"
     BUTTON_MANAGE_ITEMS = "ManageItemsButton"
     BUTTON_PRINT_ITEMS = "PrintItemsButton"
@@ -34,6 +37,10 @@ class UIText(Enum):
     BUTTON_FLIP = "FlipButton"
     BUTTON_SKIP = "SkipButton"
     BUTTON_NEXT = "NextButton"
+    MANAGE_SPELLS_TITLE = "ManageSpellsTitle"
+    ADD_SPELL_TITLE = "AddSpellTitle"
+    EDIT_SPELL_TITLE = "EditSpellTitle"
+    SPELL_PREVIEW_TITLE = "SpellPreviewTitle"
 
 class MessageText(Enum):
     NO_SELECTION_TITLE = "NoSelectionTitle"
