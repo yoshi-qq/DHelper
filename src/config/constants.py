@@ -129,9 +129,13 @@ DATA = _DataPaths()
 # = Output & Cache Paths =
 class _PathConstants:
     def __init__(self) -> None:
-        self.OUTPUT: str = join(ROOT, "output")
+        output = join(ROOT, "output")
+        self.OUTPUT: str = output
+        self.ITEM_OUTPUT: str = join(output, "items")
+        self.SPELL_OUTPUT: str = join(output, "spells")
         self.CACHE: str = join(ROOT, "cache")
-        self.ITEM_CACHE: str = join(ROOT, "cache", "itemCache.json")
+        self.ITEM_CACHE: str = join(self.CACHE, "itemCache.json")
+        self.SPELL_CACHE: str = join(self.CACHE, "spellCache.json")
 
 PATHS = _PathConstants()
 

@@ -61,3 +61,25 @@ def addSpell(spell: Spell) -> None:
     data[spell.id] = spell.toJsonSpell()
     with open(DATA.SPELLS, "w", encoding="utf-8") as file:
         dump(data, file, ensure_ascii=False, indent=4)
+
+
+def loadSpellCache() -> dict[str, JsonItemCache]:
+    if not os.path.exists(PATHS.SPELL_CACHE):
+        os.makedirs(PATHS.CACHE, exist_ok=True)
+        with open(PATHS.SPELL_CACHE, "w", encoding="utf-8") as file:
+            dump({}, file)
+        return {}
+    with open(PATHS.SPELL_CACHE, "r", encoding="utf-8") as file:
+        return json.load(file)
+
+
+def saveSpellCache(cache: dict[str, JsonItemCache]) -> None:
+    os.makedirs(PATHS.CACHE, exist_ok=True)
+    with open(PATHS.SPELL_CACHE, "w", encoding="utf-8") as file:
+        dump(cache, file, ensure_ascii=False, indent=4)
+
+
+def updateSpellCache(spell_id: str, rotate: float, scale: float, flip: bool) -> None:
+    cache = loadSpellCache()
+    cache[spell_id] = {"rotate": rotate, "scale": scale, "flip": flip}
+    saveSpellCache(cache)

@@ -144,15 +144,21 @@ class ImageHandler:
         addStats(cardImage, item.weight, item.damage, item.versatileDamage, item.attributes, item.ranges)
 
         # Export
-        os.makedirs(PATHS.OUTPUT, exist_ok=True)
-        cardImage.save(join(PATHS.OUTPUT, f"{item.id}.png"))
+        os.makedirs(PATHS.ITEM_OUTPUT, exist_ok=True)
+        cardImage.save(join(PATHS.ITEM_OUTPUT, f"{item.id}.png"))
 
     def createItemCards(self) -> None:
         items: list[Item] = getItems()
         for item in items:
             self.createItemCard(item)
 
-    def createSpellCard(self, spell: Spell) -> None:
+    def createSpellCard(
+        self,
+        spell: Spell,
+        rotate: float = 0.0,
+        flip: bool = False,
+        scale: float = 1.0,
+    ) -> None:
         def addIcon(background: Image.Image, path: str, layout, center: bool = True) -> None:
             icon = Image.open(path).convert("RGBA")
             icon = icon.resize(layout.SIZE.ABSOLUTE, Resampling.LANCZOS)
@@ -181,6 +187,26 @@ class ImageHandler:
 
         card = Image.open(IMAGE.BACKGROUNDS.SPELL).convert("RGBA")
 
+        def addImage(background: Image.Image, id: str, rotate: float, flip: bool, scale: float) -> None:
+            imagePath = join(IMAGE.PATHS.SPELLS, id)
+            if not os.path.exists(f"{imagePath}.{IMAGE.FORMAT}"):
+                raise FileNotFoundError(imagePath)
+            image = Image.open(f"{imagePath}.{IMAGE.FORMAT}").convert("RGBA")
+            if flip:
+                image = image.transpose(Transpose.FLIP_LEFT_RIGHT)
+            if rotate:
+                image = image.rotate(rotate, expand=True, resample=Resampling.BICUBIC)
+            maxWidth, maxHeight = SPELL.IMAGE.SIZE.ABSOLUTE
+            oW, oH = image.size
+            ratio = min(maxWidth / oW, maxHeight / oH) * scale
+            width = int(oW * ratio)
+            height = int(oH * ratio)
+            imageX, imageY = twoDSub(
+                SPELL.IMAGE.POSITION.ABSOLUTE, twoDTruncate((width, height), (1 / 2, 1 / 2))
+            )
+            resized = image.resize((width, height), resample=Resampling.LANCZOS)
+            background.paste(resized, (imageX, imageY), mask=resized)
+
         levelIcons = {
             1: IMAGE.ICONS.LEVELS.LEVEL_1,
             2: IMAGE.ICONS.LEVELS.LEVEL_2,
@@ -197,6 +223,7 @@ class ImageHandler:
 
         addText(card, spell.name, SPELL.TITLE, FONT.TITLE_PATH, FONT_STYLE.SIZES.TITLE)
         addText(card, str(spell.type), SPELL.CATEGORY, FONT.TITLE_PATH, FONT_STYLE.SIZES.TITLE)
+        addImage(card, spell.id, rotate, flip, scale)
 
         addIcon(card, IMAGE.ICONS.DURATION, SPELL.DURATION)
         addText(
@@ -265,8 +292,9 @@ class ImageHandler:
         }
         addIcon(card, targetIcons.get(spell.target, IMAGE.ICONS.TARGETS.SELF), SPELL.TARGET)
 
-        os.makedirs(PATHS.OUTPUT, exist_ok=True)
-        card.save(join(PATHS.OUTPUT, f"{spell.id}.png"))
+        level_dir = join(PATHS.SPELL_OUTPUT, f"level{spell.level}")
+        os.makedirs(level_dir, exist_ok=True)
+        card.save(join(level_dir, f"{spell.id}.png"))
 
     def createSpellCards(self) -> None:
         spells: list[Spell] = getSpells()
