@@ -151,7 +151,7 @@ class JsonSpell(TypedDict):
     name: str
     level: int
     type: str
-    casterClass: str
+    casterClasses: list[str]
     duration: float # in seconds
     cooldown: float # in seconds
     range: float
@@ -255,12 +255,32 @@ class Item:
         }  # type: ignore
 
 class Spell:
-    def __init__(self, id: str, name: str, level: int, type: SpellType, casterClass: CasterClassType, duration: timedelta, cooldown: timedelta, range: float, castingTime: CastingTimeType, ritual: bool, concentration: bool, target: TargetType, subRange: Optional[float] = None, damage: Optional[Damage] = None, components: Components = Components(False, False, None), levelBonus: str = "", savingThrow: Optional[SavingThrowType] = None, areaOfEffect: Optional[TargetType] = None) -> None:
+    def __init__(
+        self,
+        id: str,
+        name: str,
+        level: int,
+        type: SpellType,
+        casterClasses: list[CasterClassType],
+        duration: timedelta,
+        cooldown: timedelta,
+        range: float,
+        castingTime: CastingTimeType,
+        ritual: bool,
+        concentration: bool,
+        target: TargetType,
+        subRange: Optional[float] = None,
+        damage: Optional[Damage] = None,
+        components: Components = Components(False, False, None),
+        levelBonus: str = "",
+        savingThrow: Optional[SavingThrowType] = None,
+        areaOfEffect: Optional[TargetType] = None,
+    ) -> None:
         self.id: str = id
         self.name: str = name
         self.level: int = level
         self.type: SpellType = type
-        self.casterClass: CasterClassType = casterClass
+        self.casterClasses: list[CasterClassType] = casterClasses
         self.duration: timedelta = duration
         self.cooldown: timedelta = cooldown
         self.range: float = range
@@ -281,7 +301,7 @@ class Spell:
             "name": self.name,
             "level": self.level,
             "type": self.type.value,
-            "casterClass": self.casterClass.value,
+            "casterClasses": [c.value for c in self.casterClasses],
             "duration": self.duration.total_seconds(),
             "cooldown": self.cooldown.total_seconds(),
             "range": self.range,

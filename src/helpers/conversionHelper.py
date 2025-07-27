@@ -88,7 +88,10 @@ def toSpell(_id: str, jsonSpell: JsonSpell) -> Spell:
         name=jsonSpell.get("name", ""),
         level=int(jsonSpell.get("level", 1)),
         type=to_enum(SpellType, jsonSpell.get("type", "")),
-        casterClass=to_enum(CasterClassType, jsonSpell.get("casterClass", "")),
+        casterClasses=[
+            to_enum(CasterClassType, c)
+            for c in jsonSpell.get("casterClasses", [])
+        ],
         duration=timedelta(seconds=float(jsonSpell.get("duration", 0))),
         cooldown=timedelta(seconds=float(jsonSpell.get("cooldown", 0))),
         range=float(jsonSpell.get("range", 0)),

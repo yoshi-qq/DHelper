@@ -153,10 +153,16 @@ class ImageHandler:
             self.createItemCard(item)
 
     def createSpellCard(self, spell: Spell) -> None:
-        def addIcon(background: Image.Image, path: str, layout) -> None:
+        def addIcon(background: Image.Image, path: str, layout, center: bool = False) -> None:
             icon = Image.open(path).convert("RGBA")
             icon = icon.resize(layout.SIZE.ABSOLUTE, Resampling.LANCZOS)
-            background.paste(icon, layout.POSITION.ABSOLUTE, mask=icon)
+            pos = layout.POSITION.ABSOLUTE
+            if center:
+                pos = (
+                    pos[0] - layout.SIZE.ABSOLUTE[0] // 2,
+                    pos[1] - layout.SIZE.ABSOLUTE[1] // 2,
+                )
+            background.paste(icon, pos, mask=icon)
 
         def addText(background: Image.Image, text: str, layout, fontPath: str, maxSize: int) -> None:
             draw = ImageDraw.Draw(background)
@@ -187,7 +193,7 @@ class ImageHandler:
             9: IMAGE.ICONS.LEVELS.LEVEL_9,
         }
         levelIcon = levelIcons.get(spell.level, IMAGE.ICONS.LEVELS.LEVEL_1)
-        addIcon(card, levelIcon, SPELL.LEVEL)
+        addIcon(card, levelIcon, SPELL.LEVEL, center=True)
 
         addText(card, spell.name, SPELL.TITLE, FONT.TITLE_PATH, FONT_STYLE.SIZES.TITLE)
         addText(card, str(spell.type), SPELL.CATEGORY, FONT.TITLE_PATH, FONT_STYLE.SIZES.TITLE)
@@ -210,10 +216,10 @@ class ImageHandler:
         )
         addIcon(card, IMAGE.ICONS.DAMAGE, SPELL.DAMAGE)
         if spell.damage:
-            dmg_text = formatDamage(spell.damage, True)
+            dmg_text = f"{formatDamage(spell.damage)}\n{spell.damage.damageType}"
             addText(card, dmg_text, SPELL.DAMAGE_TEXT, FONT.STATS_PATH, FONT_STYLE.SIZES.STATS)
         addIcon(card, IMAGE.ICONS.RANGE, SPELL.RANGE)
-        addText(card, str(int(spell.range)), SPELL.RANGE_TEXT, FONT.STATS_PATH, FONT_STYLE.SIZES.STATS)
+        addText(card, f"{int(spell.range)}m", SPELL.RANGE_TEXT, FONT.STATS_PATH, FONT_STYLE.SIZES.STATS)
 
         # Components
         addIcon(card, IMAGE.ICONS.SPOKEN, SPELL.MATERIAL.SPOKEN)
@@ -244,7 +250,7 @@ class ImageHandler:
             addText(card, str(spell.savingThrow)[:3].upper(), SPELL.SAVING_THROW, FONT.STATS_PATH, FONT_STYLE.SIZES.STATS)
 
         if spell.subRange is not None:
-            addText(card, str(int(spell.subRange)), SPELL.SUB_RANGE, FONT.STATS_PATH, FONT_STYLE.SIZES.STATS)
+            addText(card, f"{int(spell.subRange)}m", SPELL.SUB_RANGE, FONT.STATS_PATH, FONT_STYLE.SIZES.STATS)
         targetIcons = {
             TargetType.CONE: IMAGE.ICONS.TARGETS.CONE,
             TargetType.CREATURE: IMAGE.ICONS.TARGETS.CREATURE,
