@@ -209,6 +209,7 @@ class _SpellConstants:
         self.TITLE: _LayoutElement = _LayoutElement(200, 55, 135, 55)
         self.LEVEL: _LayoutElement = _LayoutElement(109, 61, 56, 56)
         self.CATEGORY: _LayoutElement = _LayoutElement(180, 104, 153, 26)
+        self.IMAGE: _LayoutElement = _LayoutElement(177, 124, 310, 190)
         self.DURATION: _LayoutElement = _LayoutElement(60, 430, 36, 36)
         self.DURATION_TEXT: _LayoutElement = _LayoutElement(60, 460, 36, 26)
         self.COOLDOWN: _LayoutElement = _LayoutElement(105, 395+mY, 36, 36)
