@@ -15,6 +15,8 @@ from classes.types import (
     CasterClassType,
     CastingTimeType,
     TargetType,
+    Material,
+    Components,
 )
 from classes.textKeys import UIText, MessageText
 from helpers.translationHelper import translate, to_enum
@@ -475,19 +477,34 @@ class InterfaceHandler:
             type_var.set(str(spell.type))
         row += 1
 
-        ttk.Label(window, text="Class").grid(row=row, column=0, sticky="e", padx=5, pady=2)
-        class_var = tk.StringVar()
-        class_cb = ttk.Combobox(window, textvariable=class_var, values=[str(c) for c in CasterClassType], state="readonly")
-        class_cb.grid(row=row, column=1, padx=5, pady=2)
-        if spell:
-            class_var.set(str(spell.casterClass))
+        ttk.Label(window, text="Classes").grid(row=row, column=0, sticky="ne", padx=5, pady=2)
+        cls_frame = ttk.Frame(window)
+        cls_frame.grid(row=row, column=1, sticky="w")
+        class_vars: dict[CasterClassType, tk.BooleanVar] = {}
+        for cls in CasterClassType:
+            var = tk.BooleanVar(value=spell is not None and cls in getattr(spell, "casterClasses", []))
+            ttk.Checkbutton(cls_frame, text=str(cls), variable=var).pack(anchor="w")
+            class_vars[cls] = var
         row += 1
 
         ttk.Label(window, text="Range").grid(row=row, column=0, sticky="e", padx=5, pady=2)
-        range_entry = ttk.Entry(window)
-        range_entry.grid(row=row, column=1, padx=5, pady=2)
+        range_frame = ttk.Frame(window)
+        range_frame.grid(row=row, column=1, sticky="w", padx=5, pady=2)
+        range_entry = ttk.Entry(range_frame, width=6)
+        range_entry.pack(side="left")
+        ttk.Label(range_frame, text="m").pack(side="left")
         if spell:
             range_entry.insert(0, str(spell.range))
+        row += 1
+
+        ttk.Label(window, text="Sub Range").grid(row=row, column=0, sticky="e", padx=5, pady=2)
+        sub_range_frame = ttk.Frame(window)
+        sub_range_frame.grid(row=row, column=1, sticky="w", padx=5, pady=2)
+        sub_range_entry = ttk.Entry(sub_range_frame, width=6)
+        sub_range_entry.pack(side="left")
+        ttk.Label(sub_range_frame, text="m").pack(side="left")
+        if spell and spell.subRange is not None:
+            sub_range_entry.insert(0, str(spell.subRange))
         row += 1
 
         ttk.Label(window, text="Duration (s)").grid(row=row, column=0, sticky="e", padx=5, pady=2)
@@ -561,16 +578,43 @@ class InterfaceHandler:
             dmg_type_var.set(str(spell.damage.damageType))
         row += 1
 
+        ttk.Label(window, text="Components").grid(row=row, column=0, sticky="ne", padx=5, pady=2)
+        comp_frame = ttk.Frame(window)
+        comp_frame.grid(row=row, column=1, sticky="w")
+        verbal_var = tk.BooleanVar(value=spell.components.verbal if spell else False)
+        gestural_var = tk.BooleanVar(value=spell.components.gestural if spell else False)
+        ttk.Checkbutton(comp_frame, text="Verbal", variable=verbal_var).pack(anchor="w")
+        ttk.Checkbutton(comp_frame, text="Gestural", variable=gestural_var).pack(anchor="w")
+        mat_name = ttk.Entry(comp_frame)
+        mat_cost = ttk.Entry(comp_frame, width=6)
+        ttk.Label(comp_frame, text="Material").pack(anchor="w")
+        mat_name.pack(anchor="w", padx=10)
+        ttk.Label(comp_frame, text="Cost").pack(anchor="w")
+        mat_cost.pack(anchor="w", padx=10)
+        if spell and spell.components.material:
+            mat_name.insert(0, spell.components.material.name)
+            if spell.components.material.cost is not None:
+                mat_cost.insert(0, str(spell.components.material.cost))
+        row += 1
+
+        ttk.Label(window, text="Level Bonus").grid(row=row, column=0, sticky="e", padx=5, pady=2)
+        level_bonus_entry = ttk.Entry(window, width=25)
+        level_bonus_entry.grid(row=row, column=1, padx=5, pady=2)
+        if spell:
+            level_bonus_entry.insert(0, spell.levelBonus)
+        row += 1
+
         def submit() -> None:
             try:
                 _id = id_entry.get().strip()
                 name = name_entry.get().strip()
                 level = int(lvl_cb.get() or 1)
                 stype = to_enum(SpellType, type_var.get())
-                cclass = to_enum(CasterClassType, class_var.get())
+                classes = [cls for cls, var in class_vars.items() if var.get()]
                 duration = timedelta(seconds=float(dur_entry.get() or 0))
                 cooldown = timedelta(seconds=float(cd_entry.get() or 0))
                 rng = float(range_entry.get() or 0)
+                sub_rng = float(sub_range_entry.get()) if sub_range_entry.get() else None
                 ctime = to_enum(CastingTimeType, ct_var.get())
                 target = to_enum(TargetType, target_var.get())
 
@@ -582,6 +626,11 @@ class InterfaceHandler:
                         int(dmg_bonus_entry.get() or 0),
                         to_enum(DamageType, dmg_type_var.get() or DamageType.SLASHING.value),
                     )
+                material = None
+                if mat_name.get() or mat_cost.get():
+                    cost = float(mat_cost.get()) if mat_cost.get() else None
+                    material = Material(mat_name.get().strip(), cost)
+                comps = Components(verbal_var.get(), gestural_var.get(), material)
             except ValueError as e:
                 messagebox.showerror(
                     translate(MessageText.ERROR_TITLE),
@@ -601,15 +650,18 @@ class InterfaceHandler:
                 name=name,
                 level=level,
                 type=stype,
-                casterClass=cclass,
+                casterClasses=classes,
                 duration=duration,
                 cooldown=cooldown,
                 range=rng,
+                subRange=sub_rng,
                 castingTime=ctime,
                 ritual=rit_var.get(),
                 concentration=conc_var.get(),
                 target=target,
                 damage=dmg,
+                components=comps,
+                levelBonus=level_bonus_entry.get().strip(),
             )
             addSpell(new_spell)
             messagebox.showinfo(

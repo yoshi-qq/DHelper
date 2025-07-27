@@ -4,7 +4,7 @@
         "name": "Feuerball",
         "level": 3,
         "type": "EVOCATION",
-        "casterClass": "WIZARD",
+        "casterClasses": ["WIZARD"],
         "duration": 1.0,
         "cooldown": 0.0,
         "range": 45.0,
