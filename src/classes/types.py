@@ -51,19 +51,6 @@ class AttributeType(Enum):
     def __str__(self) -> str:  # pragma: no cover - simple delegation
         return translate(self)
 
-# alias for weapon properties to keep backwards compatibility
-WeaponProperty = AttributeType
-
-
-class ArmorCategory(Enum):
-    LIGHT = "LIGHT"
-    MEDIUM = "MEDIUM"
-    HEAVY = "HEAVY"
-    SHIELD = "SHIELD"
-
-    def __str__(self) -> str:  # pragma: no cover - simple delegation
-        return translate(self)
-
 class SpellType(Enum):
     ABJURATION = "ABJURATION"
     CONJURATION = "CONJURATION"
@@ -158,29 +145,6 @@ class JsonItem(TypedDict, total=False):
     versatileDamage: JsonDamage | None
     attributes: list[str]
     ranges: dict[str, list[int]]
-
-# separated json structures for new item classes
-class JsonWeapon(JsonItem):
-    properties: list[str]
-
-
-class JsonArmor(TypedDict):
-    name: str
-    price: float
-    weight: float
-    armorClass: int
-    dexBonus: bool
-    dexBonusMax: Optional[int]
-    strengthRequirement: Optional[int]
-    stealthDisadvantage: bool
-    category: str
-
-
-class JsonSimpleItem(TypedDict, total=False):
-    name: str
-    price: float
-    weight: float
-    description: Optional[str]
 
 class JsonSpell(TypedDict):
     id: str
@@ -291,77 +255,6 @@ class Item:
             "attributes": [a.value for a in self.attributes],
             **({"ranges": {k.value: [v[0], v[1]] for k, v in self.ranges.items()}} if self.ranges else {})
         }  # type: ignore
-
-
-class Weapon(Item):
-    """Subclass representing weapons."""
-
-    def toJsonWeapon(self) -> JsonWeapon:
-        data: JsonItem = super().toJsonItem()
-        return data  # type: ignore
-
-
-class Armor:
-    def __init__(
-        self,
-        _id: str,
-        name: str,
-        price: float,
-        weight: float,
-        armorClass: int,
-        dexBonus: bool,
-        dexBonusMax: Optional[int] = None,
-        strengthRequirement: Optional[int] = None,
-        stealthDisadvantage: bool = False,
-        category: ArmorCategory = ArmorCategory.LIGHT,
-    ) -> None:
-        self.id = _id
-        self.name = name
-        self.price = price
-        self.weight = weight
-        self.armorClass = armorClass
-        self.dexBonus = dexBonus
-        self.dexBonusMax = dexBonusMax
-        self.strengthRequirement = strengthRequirement
-        self.stealthDisadvantage = stealthDisadvantage
-        self.category = category
-
-    def toJsonArmor(self) -> JsonArmor:
-        return {
-            "name": self.name,
-            "price": self.price,
-            "weight": self.weight,
-            "armorClass": self.armorClass,
-            "dexBonus": self.dexBonus,
-            "dexBonusMax": self.dexBonusMax,
-            "strengthRequirement": self.strengthRequirement,
-            "stealthDisadvantage": self.stealthDisadvantage,
-            "category": self.category.value,
-        }
-
-
-class SimpleItem:
-    def __init__(
-        self,
-        _id: str,
-        name: str,
-        price: float,
-        weight: float,
-        description: str = "",
-    ) -> None:
-        self.id = _id
-        self.name = name
-        self.price = price
-        self.weight = weight
-        self.description = description
-
-    def toJsonSimpleItem(self) -> JsonSimpleItem:
-        return {
-            "name": self.name,
-            "price": self.price,
-            "weight": self.weight,
-            "description": self.description,
-        }
 
 class Spell:
     def __init__(
