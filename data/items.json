@@ -1,14 +1,15 @@
 {
     "zweihandhammer": {
         "name": "Zweihandhammer",
-        "price": 10,
-        "weight": 5,
+        "price": 10.0,
+        "weight": 5.0,
         "damage": {
             "diceAmount": 2,
             "diceType": 6,
             "bonus": 0,
             "damageType": "Bludgeoning"
         },
+        "versatileDamage": null,
         "attributes": [
             "Heavy",
             "Two-Handed"
@@ -24,6 +25,7 @@
             "bonus": 0,
             "damageType": "Piercing"
         },
+        "versatileDamage": null,
         "attributes": [
             "Light",
             "Thrown"
