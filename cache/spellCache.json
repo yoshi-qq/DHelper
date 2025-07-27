@@ -1,7 +1,9 @@
 {
     "feuerball": {
-        "rotate": 0.0,
-        "scale": 0.9322033898305084,
-        "flip": false
+        "rotate": 15.254237288135585,
+        "scale": 1.2711864406779663,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": -22.058823529411764
     }
 }
