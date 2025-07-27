@@ -25,8 +25,8 @@ from helpers.translationHelper import (
     to_enum,
     get_language,
     set_language,
-    get_theme,
     set_theme,
+    get_theme,
     LANG_DIR,
 )
 from config.constants import GAME, PATHS, IMAGE
@@ -305,7 +305,7 @@ class InterfaceHandler:
                 self.image_handler.createItemCard(
                     item,
                     rotate=t.get("rotate", 0.0),
-                    flip=t.get("flip", False),
+                    flip=bool(t.get("flip", False)),
                     scale=t.get("scale", 1.0),
                     offset_x=t.get("offset_x", 0.0),
                     offset_y=t.get("offset_y", 0.0),
@@ -855,7 +855,7 @@ class InterfaceHandler:
                 self.image_handler.createSpellCard(
                     sp,
                     rotate=t.get("rotate", 0.0),
-                    flip=t.get("flip", False),
+                    flip=bool(t.get("flip", False)),
                     scale=t.get("scale", 1.0),
                     offset_x=t.get("offset_x", 0.0),
                     offset_y=t.get("offset_y", 0.0),
