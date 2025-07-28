@@ -3,6 +3,34 @@ from PIL import ImageFont, ImageDraw, Image
 from classes.types import Damage
 
 
+def formatFloatAsInt(value: float) -> str:
+    if value == int(value):
+        return str(int(value))
+    else:
+        return str(value)
+
+
+def formatPriceWithSuffix(value: float) -> str:
+    """Format a price with K/M suffixes for large numbers."""
+    if value >= 1000000:
+        # Format as millions
+        millions = value / 1000000
+        if millions == int(millions):
+            return f"{int(millions)}M"
+        else:
+            return f"{millions:.1f}M"
+    elif value >= 1000:
+        # Format as thousands
+        thousands = value / 1000
+        if thousands == int(thousands):
+            return f"{int(thousands)}K"
+        else:
+            return f"{thousands:.1f}K"
+    else:
+        # Format as regular number
+        return formatFloatAsInt(value)
+
+
 def getMaxFontSize(text: str, fontPath: str, maxSize: int, maxWidth: float, maxHeight: float = float("inf")) -> int:
     size = maxSize
     dummyImage = Image.new("RGB", (1, 1))

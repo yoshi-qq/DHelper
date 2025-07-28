@@ -341,7 +341,7 @@ class InterfaceHandler:
                     offset_x=t.get("offset_x", 0.0),
                     offset_y=t.get("offset_y", 0.0),
                 )
-                path = join(PATHS.ITEM_OUTPUT, f"{item.id}.png")
+                path = self.image_handler.getItemOutputPath(item)
                 img = Image.open(path)
                 top = tk.Toplevel(window)
                 self._set_icon(top)
@@ -1542,7 +1542,7 @@ class PreviewWindow(tk.Toplevel):
             else:
                 self.skip_flag = True
                 return False
-        path = join(PATHS.ITEM_OUTPUT, f"{item.id}.png")
+        path = self.image_handler.getItemOutputPath(item)
         self.original = Image.open(path)
         self.display = self.original
         return True

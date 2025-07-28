@@ -11,16 +11,19 @@ from classes.types import (
     Armor,
     SimpleItem,
     Item,
+    Weapon,
     Spell,
     TargetType,
 )
 from helpers.translationHelper import translate
-from helpers.dataHelper import getWeapons, getSpells
+from helpers.dataHelper import getWeapons, getArmors, getItems, getSpells
 from helpers.formattingHelper import (
     getMaxFontSize,
     findOptimalAttributeLayout,
     formatDamage,
     formatTimedelta,
+    formatFloatAsInt,
+    formatPriceWithSuffix,
 )
 from os.path import join
 from PIL import Image, ImageDraw, ImageFont
@@ -31,6 +34,28 @@ from helpers.tupleHelper import twoDSub, twoDTruncate
 class ImageHandler:
     def __init__(self) -> None:
         pass
+
+    def getItemOutputPath(self, item: Item | SimpleItem | Armor) -> str:
+        """Get the output path for an item based on its type."""
+        if isinstance(item, Armor):
+            return join(PATHS.ARMOR_OUTPUT, f"{item.id}.png")
+        elif isinstance(item, Weapon):
+            return join(PATHS.WEAPON_OUTPUT, f"{item.id}.png")
+        elif isinstance(item, SimpleItem):
+            return join(PATHS.ITEM_OUTPUT, f"{item.id}.png")
+        else:  # isinstance(item, Item) - covers general items and weapons
+            return join(PATHS.WEAPON_OUTPUT, f"{item.id}.png")
+
+    def getItemAssetPath(self, item: Item | SimpleItem | Armor) -> str:
+        """Get the asset path for an item based on its type."""
+        if isinstance(item, Armor):
+            return join(IMAGE.PATHS.ARMOR, f"{item.id}.{IMAGE.FORMAT}")
+        elif isinstance(item, Weapon):
+            return join(IMAGE.PATHS.WEAPONS, f"{item.id}.{IMAGE.FORMAT}")
+        elif isinstance(item, SimpleItem):
+            return join(IMAGE.PATHS.ITEMS, f"{item.id}.{IMAGE.FORMAT}")
+        else:  # isinstance(item, Item) - covers general items and weapons
+            return join(IMAGE.PATHS.WEAPONS, f"{item.id}.{IMAGE.FORMAT}")
 
     def _iconOp(self, path: str, layout: LayoutElement, center: bool = True) -> Callable[[Image.Image], None]:
         def op(background: Image.Image) -> None:
@@ -112,7 +137,7 @@ class ImageHandler:
     ) -> Callable[[Image.Image], None]:
         def op(background: Image.Image) -> None:
             fixedRows: list[str] = []
-            fixedRows.append(f"{translate(TEXT.WEIGHT_PREFIX)}{weight}{translate(TEXT.WEIGHT_SUFFIX)}")
+            fixedRows.append(f"{translate(TEXT.WEIGHT_PREFIX)}{formatFloatAsInt(weight)}{translate(TEXT.WEIGHT_SUFFIX)}")
             if damage:
                 fixedRows.append(
                     f"{translate(TEXT.DAMAGE_PREFIX)}{formatDamage(damage, True)}"
@@ -125,7 +150,9 @@ class ImageHandler:
                     attr_strings.append(f"{name} ({formatDamage(versatile)})")
                 elif attr in ranges:
                     low, high = ranges[attr]
-                    attr_strings.append(f"{name} ({low}/{high})")
+                    low_str = formatFloatAsInt(float(low))
+                    high_str = formatFloatAsInt(float(high))
+                    attr_strings.append(f"{name} ({low_str}/{high_str})")
                 else:
                     attr_strings.append(name)
 
@@ -148,7 +175,7 @@ class ImageHandler:
 
     def _simpleStatsOp(self, weight: float, description: str) -> Callable[[Image.Image], None]:
         def op(background: Image.Image) -> None:
-            text = f"{translate(TEXT.WEIGHT_PREFIX)}{weight}{translate(TEXT.WEIGHT_SUFFIX)}\n{description}".strip()
+            text = f"{translate(TEXT.WEIGHT_PREFIX)}{formatFloatAsInt(weight)}{translate(TEXT.WEIGHT_SUFFIX)}\n{description}".strip()
             draw = ImageDraw.Draw(background)
             size = getMaxFontSize(
                 text,
@@ -169,9 +196,21 @@ class ImageHandler:
 
     def _armorStatsOp(self, armor: Armor) -> Callable[[Image.Image], None]:
         def op(background: Image.Image) -> None:
-            text = (
-                f"{translate(TEXT.WEIGHT_PREFIX)}{armor.weight}{translate(TEXT.WEIGHT_SUFFIX)}\nAC {armor.armorClass}"
-            )
+            text_lines: list[str] = []
+            text_lines.append(f"{translate(TEXT.WEIGHT_PREFIX)}{formatFloatAsInt(armor.weight)}{translate(TEXT.WEIGHT_SUFFIX)}")
+            text_lines.append(f"AC {armor.armorClass}")
+
+            if armor.dexBonusMax is not None:
+                text_lines.append(f"{translate(TEXT.DEX_MAX_PREFIX)}{armor.dexBonusMax}")
+
+            if armor.strengthRequirement is not None:
+                text_lines.append(f"{translate(TEXT.STRENGTH_REQ_PREFIX)}{armor.strengthRequirement}")
+
+            if armor.stealthDisadvantage:
+                text_lines.append(translate(TEXT.STEALTH_DISADVANTAGE))
+
+            text = "\n".join(text_lines)
+
             draw = ImageDraw.Draw(background)
             size = getMaxFontSize(
                 text,
@@ -230,7 +269,7 @@ class ImageHandler:
 
         instructions: List[Callable[[Image.Image], None]] = [
             self._imageOp(
-                join(IMAGE.PATHS.ITEMS, f"{item.id}.{IMAGE.FORMAT}"),
+                self.getItemAssetPath(item),
                 ITEM.IMAGE,
                 rotate,
                 flip,
@@ -239,7 +278,7 @@ class ImageHandler:
                 offset_y,
             ),
             self._textOp(
-                str(int(item.price / currency.value)),
+                formatPriceWithSuffix(item.price / currency.value),
                 ITEM.PRICE,
                 FONT.PRICE_PATH,
                 FONT_STYLE.SIZES.PRICE,
@@ -265,10 +304,29 @@ class ImageHandler:
             ),
         ]
 
-        self._createCard(cardImage, instructions, join(PATHS.ITEM_OUTPUT, f"{item.id}.png"))
+        self._createCard(cardImage, instructions, self.getItemOutputPath(item))
 
     def createItemCards(self) -> None:
-        items = getWeapons()  # Let type inference handle this
+        """Create cards for all items: weapons, armor, and simple items."""
+        self.createWeaponCards()
+        self.createArmorCards()
+        self.createSimpleItemCards()
+
+    def createWeaponCards(self) -> None:
+        """Create cards for all weapons."""
+        weapons = getWeapons()
+        for weapon in weapons:
+            self.createItemCard(weapon)
+
+    def createArmorCards(self) -> None:
+        """Create cards for all armor."""
+        armors = getArmors()
+        for armor in armors:
+            self.createItemCard(armor)
+
+    def createSimpleItemCards(self) -> None:
+        """Create cards for all simple items."""
+        items = getItems()
         for item in items:
             self.createItemCard(item)
 
@@ -326,7 +384,7 @@ class ImageHandler:
             self._iconOp(IMAGE.ICONS.DAMAGE, SPELL.DAMAGE),
             self._iconOp(IMAGE.ICONS.RANGE, SPELL.RANGE),
             self._textOp(
-                f"{int(spell.range)}m",
+                f"{formatFloatAsInt(spell.range)}m",
                 SPELL.RANGE_TEXT,
                 FONT.STATS_PATH,
                 FONT_STYLE.SIZES.STATS,
@@ -365,7 +423,7 @@ class ImageHandler:
             if spell.components.material.cost is not None:
                 instructions.append(
                     self._textOp(
-                        str(spell.components.material.cost),
+                        formatFloatAsInt(spell.components.material.cost),
                         SPELL.MATERIAL.COST,
                         FONT.STATS_PATH,
                         FONT_STYLE.SIZES.STATS,
@@ -387,7 +445,7 @@ class ImageHandler:
         if spell.subRange is not None:
             instructions.append(
                 self._textOp(
-                    f"{int(spell.subRange)}m",
+                    f"{formatFloatAsInt(spell.subRange)}m",
                     SPELL.SUB_RANGE,
                     FONT.STATS_PATH,
                     FONT_STYLE.SIZES.STATS,

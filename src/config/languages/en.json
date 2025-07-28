@@ -2,7 +2,10 @@
   "PrefixText": {
     "WEIGHT_PREFIX": "Weight: ",
     "WEIGHT_SUFFIX": " kg",
-    "DAMAGE_PREFIX": "Damage: "
+    "DAMAGE_PREFIX": "Damage: ",
+    "DEX_MAX_PREFIX": "Dex Max: ",
+    "STRENGTH_REQ_PREFIX": "Str Req: ",
+    "STEALTH_DISADVANTAGE": "Stealth Disadvantage"
   },
   "DamageType": {
     "LIGHTNING": "Lightning",

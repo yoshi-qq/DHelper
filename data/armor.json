@@ -1,1 +1,167 @@
-{}
+{
+    "gefuetterte_ruestung": {
+        "name": "gefütterte Rüstung",
+        "price": 5.0,
+        "weight": 4.0,
+        "armorClass": 11,
+        "dexBonus": true,
+        "dexBonusMax": null,
+        "strengthRequirement": null,
+        "stealthDisadvantage": true,
+        "category": "LIGHT"
+    },
+    "lederruestung": {
+        "name": "Lederrüstung",
+        "price": 10.0,
+        "weight": 5.0,
+        "armorClass": 11,
+        "dexBonus": true,
+        "dexBonusMax": null,
+        "strengthRequirement": null,
+        "stealthDisadvantage": false,
+        "category": "LIGHT"
+    },
+    "beschlagene_lederruestung": {
+        "name": "beschlagene Lederrüstung",
+        "price": 45.0,
+        "weight": 6.5,
+        "armorClass": 12,
+        "dexBonus": true,
+        "dexBonusMax": null,
+        "strengthRequirement": null,
+        "stealthDisadvantage": false,
+        "category": "LIGHT"
+    },
+    "fellruestung": {
+        "name": "Fellrüstung",
+        "price": 10.0,
+        "weight": 6.0,
+        "armorClass": 12,
+        "dexBonus": true,
+        "dexBonusMax": 2,
+        "strengthRequirement": null,
+        "stealthDisadvantage": false,
+        "category": "MEDIUM"
+    },
+    "kettenhemd": {
+        "name": "Kettenhemd",
+        "price": 50.0,
+        "weight": 10.0,
+        "armorClass": 13,
+        "dexBonus": true,
+        "dexBonusMax": 2,
+        "strengthRequirement": null,
+        "stealthDisadvantage": false,
+        "category": "MEDIUM"
+    },
+    "schuppenpanzer": {
+        "name": "Schuppenpanzer",
+        "price": 50.0,
+        "weight": 22.5,
+        "armorClass": 14,
+        "dexBonus": true,
+        "dexBonusMax": 2,
+        "strengthRequirement": null,
+        "stealthDisadvantage": true,
+        "category": "MEDIUM"
+    },
+    "brustplatte": {
+        "name": "Brustplatte",
+        "price": 400.0,
+        "weight": 10.0,
+        "armorClass": 14,
+        "dexBonus": true,
+        "dexBonusMax": 2,
+        "strengthRequirement": null,
+        "stealthDisadvantage": false,
+        "category": "MEDIUM"
+    },
+    "plattenpanzer": {
+        "name": "Plattenpanzer",
+        "price": 750.0,
+        "weight": 20.0,
+        "armorClass": 15,
+        "dexBonus": true,
+        "dexBonusMax": 2,
+        "strengthRequirement": null,
+        "stealthDisadvantage": true,
+        "category": "MEDIUM"
+    },
+    "ringpanzer": {
+        "name": "Ringpanzer",
+        "price": 30.0,
+        "weight": 20.0,
+        "armorClass": 14,
+        "dexBonus": false,
+        "dexBonusMax": null,
+        "strengthRequirement": null,
+        "stealthDisadvantage": true,
+        "category": "HEAVY"
+    },
+    "kettenpanzer": {
+        "name": "Kettenpanzer",
+        "price": 75.0,
+        "weight": 27.5,
+        "armorClass": 16,
+        "dexBonus": false,
+        "dexBonusMax": null,
+        "strengthRequirement": 13,
+        "stealthDisadvantage": true,
+        "category": "MEDIUM"
+    },
+    "schienenpanzer": {
+        "name": "Schienenpanzer",
+        "price": 200.0,
+        "weight": 30.0,
+        "armorClass": 17,
+        "dexBonus": false,
+        "dexBonusMax": null,
+        "strengthRequirement": 15,
+        "stealthDisadvantage": true,
+        "category": "HEAVY"
+    },
+    "ritterruestung": {
+        "name": "Ritterrüstung",
+        "price": 1500.0,
+        "weight": 32.5,
+        "armorClass": 18,
+        "dexBonus": false,
+        "dexBonusMax": null,
+        "strengthRequirement": 15,
+        "stealthDisadvantage": true,
+        "category": "HEAVY"
+    },
+    "schild1": {
+        "name": "Schild",
+        "price": 10.0,
+        "weight": 3.0,
+        "armorClass": 2,
+        "dexBonus": false,
+        "dexBonusMax": null,
+        "strengthRequirement": null,
+        "stealthDisadvantage": false,
+        "category": "SHIELD"
+    },
+    "schild2": {
+        "name": "Schild",
+        "price": 10.0,
+        "weight": 3.0,
+        "armorClass": 2,
+        "dexBonus": false,
+        "dexBonusMax": null,
+        "strengthRequirement": null,
+        "stealthDisadvantage": false,
+        "category": "SHIELD"
+    },
+    "schild3": {
+        "name": "Schild",
+        "price": 10.0,
+        "weight": 3.0,
+        "armorClass": 2,
+        "dexBonus": false,
+        "dexBonusMax": null,
+        "strengthRequirement": null,
+        "stealthDisadvantage": false,
+        "category": "SHIELD"
+    }
+}

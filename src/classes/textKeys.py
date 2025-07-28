@@ -4,6 +4,9 @@ class PrefixText(Enum):
     WEIGHT_PREFIX = "WeightPrefix"
     WEIGHT_SUFFIX = "WeightSuffix"
     DAMAGE_PREFIX = "DamagePrefix"
+    DEX_MAX_PREFIX = "DexMaxPrefix"
+    STRENGTH_REQ_PREFIX = "StrengthReqPrefix"
+    STEALTH_DISADVANTAGE = "StealthDisadvantage"
 
 class UIText(Enum):
     APP_TITLE = "AppTitle"

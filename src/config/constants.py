@@ -49,6 +49,8 @@ class _ImagePaths:
         assets = join(SRC, "assets")
         self.ASSETS: str = assets
         self.ITEMS: str = join(assets, "items")
+        self.WEAPONS: str = join(assets, "weapons")
+        self.ARMOR: str = join(assets, "armor")
         self.SPELLS: str = join(assets, "spells")
         self.BACKGROUND: str = join(assets, "background")
         # icon used for application windows
@@ -137,6 +139,8 @@ class _PathConstants:
         output = join(ROOT, "output")
         self.OUTPUT: str = output
         self.ITEM_OUTPUT: str = join(output, "items")
+        self.WEAPON_OUTPUT: str = join(output, "weapons")
+        self.ARMOR_OUTPUT: str = join(output, "armor")
         self.SPELL_OUTPUT: str = join(output, "spells")
         self.CACHE: str = join(ROOT, "cache")
         self.ITEM_CACHE: str = join(self.CACHE, "itemCache.json")
@@ -247,6 +251,9 @@ class _TextConstants:
         self.WEIGHT_PREFIX = PrefixText.WEIGHT_PREFIX
         self.WEIGHT_SUFFIX = PrefixText.WEIGHT_SUFFIX
         self.DAMAGE_PREFIX = PrefixText.DAMAGE_PREFIX
+        self.DEX_MAX_PREFIX = PrefixText.DEX_MAX_PREFIX
+        self.STRENGTH_REQ_PREFIX = PrefixText.STRENGTH_REQ_PREFIX
+        self.STEALTH_DISADVANTAGE = PrefixText.STEALTH_DISADVANTAGE
         self.DAMAGE_SPLIT: str = "D"
         self.DAMAGE_SUFFIX: str = ""
 

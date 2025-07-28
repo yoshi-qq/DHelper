@@ -103,5 +103,264 @@
         "flip": true,
         "offset_x": -32.35294117647059,
         "offset_y": 25.0
+    },
+    "dreizack": {
+        "rotate": 82.37288135593218,
+        "scale": 1.0338983050847457,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "flegel": {
+        "rotate": 0.0,
+        "scale": 0.9067796610169492,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 2.941176470588239
+    },
+    "gleve": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": true,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "hellebarde": {
+        "rotate": 21.355932203389813,
+        "scale": 1.3135593220338984,
+        "flip": true,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "kriegshacke": {
+        "rotate": 57.96610169491527,
+        "scale": 1.0932203389830508,
+        "flip": false,
+        "offset_x": 20.588235294117652,
+        "offset_y": 0.0
+    },
+    "kriegshammer": {
+        "rotate": 67.1186440677966,
+        "scale": 1.2542372881355932,
+        "flip": true,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "krummsaebel": {
+        "rotate": 9.152542372881385,
+        "scale": 1.1101694915254239,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "kurzschwert": {
+        "rotate": 0.0,
+        "scale": 0.9491525423728814,
+        "flip": true,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "langschwert": {
+        "rotate": 3.0508474576271,
+        "scale": 1.0169491525423728,
+        "flip": true,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "lanze": {
+        "rotate": -88.47457627118645,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "morgenstern": {
+        "rotate": 3.0508474576271,
+        "scale": 0.9661016949152542,
+        "flip": true,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "peitsche": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": -7.352941176470587,
+        "offset_y": 19.117647058823522
+    },
+    "pike": {
+        "rotate": -15.254237288135585,
+        "scale": 1.1864406779661016,
+        "flip": true,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "rapier": {
+        "rotate": -103.72881355932203,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "streitaxt": {
+        "rotate": 45.76271186440678,
+        "scale": 1.1779661016949152,
+        "flip": true,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "zweihandaxt": {
+        "rotate": 39.661016949152554,
+        "scale": 1.2966101694915255,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "zweihandschwert": {
+        "rotate": -134.23728813559322,
+        "scale": 1.3305084745762712,
+        "flip": true,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "armbrust_hand": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": true,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "blasrohr": {
+        "rotate": 6.101694915254228,
+        "scale": 1.3644067796610169,
+        "flip": true,
+        "offset_x": 13.235294117647058,
+        "offset_y": 25.0
+    },
+    "langbogen": {
+        "rotate": 51.86440677966101,
+        "scale": 1.0084745762711864,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "netz": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "armbrust_schwer": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 33.82352941176471
+    },
+    "gefuetterte_ruestung": {
+        "rotate": 0.0,
+        "scale": 0.9152542372881356,
+        "flip": false,
+        "offset_x": -5.882352941176471,
+        "offset_y": 16.17647058823529
+    },
+    "lederruestung": {
+        "rotate": 0.0,
+        "scale": 0.8135593220338984,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 13.235294117647058
+    },
+    "beschlagene_lederruestung": {
+        "rotate": 0.0,
+        "scale": 0.9067796610169492,
+        "flip": false,
+        "offset_x": -7.352941176470587,
+        "offset_y": 13.235294117647058
+    },
+    "fellruestung": {
+        "rotate": 0.0,
+        "scale": 0.9576271186440678,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 13.235294117647058
+    },
+    "kettenhemd": {
+        "rotate": 0.0,
+        "scale": 0.9152542372881356,
+        "flip": false,
+        "offset_x": -10.294117647058826,
+        "offset_y": 14.705882352941174
+    },
+    "schuppenpanzer": {
+        "rotate": 0.0,
+        "scale": 0.9576271186440678,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 10.294117647058819
+    },
+    "brustplatte": {
+        "rotate": 0.0,
+        "scale": 0.8728813559322034,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 10.294117647058819
+    },
+    "plattenpanzer": {
+        "rotate": 0.0,
+        "scale": 0.8559322033898304,
+        "flip": false,
+        "offset_x": -4.411764705882355,
+        "offset_y": 14.705882352941174
+    },
+    "ringpanzer": {
+        "rotate": 0.0,
+        "scale": 0.9661016949152542,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 10.294117647058819
+    },
+    "kettenpanzer": {
+        "rotate": 0.0,
+        "scale": 0.9830508474576272,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 7.352941176470587
+    },
+    "schienenpanzer": {
+        "rotate": 0.0,
+        "scale": 0.9406779661016949,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 11.764705882352942
+    },
+    "ritterruestung": {
+        "rotate": 0.0,
+        "scale": 0.9745762711864407,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 8.82352941176471
+    },
+    "schild1": {
+        "rotate": -21.35593220338984,
+        "scale": 1.2033898305084745,
+        "flip": true,
+        "offset_x": -11.764705882352942,
+        "offset_y": 0.0
+    },
+    "schild2": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": -14.705882352941174,
+        "offset_y": 13.235294117647058
+    },
+    "schild3": {
+        "rotate": 0.0,
+        "scale": 1.0847457627118644,
+        "flip": true,
+        "offset_x": -10.294117647058826,
+        "offset_y": 16.17647058823529
     }
 }

@@ -294,5 +294,407 @@
                 18
             ]
         }
+    },
+    "dreizack": {
+        "name": "Dreizack",
+        "price": 5.0,
+        "weight": 2.0,
+        "damage": {
+            "diceAmount": 1,
+            "diceType": 6,
+            "bonus": 0,
+            "damageType": "Piercing"
+        },
+        "versatileDamage": {
+            "diceAmount": 1,
+            "diceType": 8,
+            "bonus": 0,
+            "damageType": "Piercing"
+        },
+        "attributes": [
+            "Thrown",
+            "Versatile"
+        ],
+        "ranges": {
+            "Thrown": [
+                6,
+                18
+            ]
+        }
+    },
+    "flegel": {
+        "name": "Flegel",
+        "price": 10.0,
+        "weight": 2.0,
+        "damage": {
+            "diceAmount": 1,
+            "diceType": 8,
+            "bonus": 0,
+            "damageType": "Bludgeoning"
+        },
+        "versatileDamage": null,
+        "attributes": []
+    },
+    "gleve": {
+        "name": "Gleve",
+        "price": 20.0,
+        "weight": 3.0,
+        "damage": {
+            "diceAmount": 1,
+            "diceType": 10,
+            "bonus": 0,
+            "damageType": "Slashing"
+        },
+        "versatileDamage": null,
+        "attributes": [
+            "Heavy",
+            "Reach",
+            "Two-Handed"
+        ]
+    },
+    "hellebarde": {
+        "name": "Hellebarde",
+        "price": 20.0,
+        "weight": 3.0,
+        "damage": {
+            "diceAmount": 1,
+            "diceType": 10,
+            "bonus": 0,
+            "damageType": "Slashing"
+        },
+        "versatileDamage": null,
+        "attributes": [
+            "Heavy",
+            "Reach",
+            "Two-Handed"
+        ]
+    },
+    "kriegshacke": {
+        "name": "Kriegshacke",
+        "price": 5.0,
+        "weight": 1.0,
+        "damage": {
+            "diceAmount": 1,
+            "diceType": 8,
+            "bonus": 0,
+            "damageType": "Piercing"
+        },
+        "versatileDamage": null,
+        "attributes": []
+    },
+    "kriegshammer": {
+        "name": "Kriegshammer",
+        "price": 15.0,
+        "weight": 1.0,
+        "damage": {
+            "diceAmount": 1,
+            "diceType": 8,
+            "bonus": 0,
+            "damageType": "Bludgeoning"
+        },
+        "versatileDamage": {
+            "diceAmount": 1,
+            "diceType": 10,
+            "bonus": 0,
+            "damageType": "Bludgeoning"
+        },
+        "attributes": [
+            "Versatile"
+        ]
+    },
+    "krummsaebel": {
+        "name": "Krummsäbel",
+        "price": 25.0,
+        "weight": 1.5,
+        "damage": {
+            "diceAmount": 1,
+            "diceType": 6,
+            "bonus": 0,
+            "damageType": "Slashing"
+        },
+        "versatileDamage": null,
+        "attributes": [
+            "Finesse",
+            "Light"
+        ]
+    },
+    "kurzschwert": {
+        "name": "Kurzschwert",
+        "price": 10.0,
+        "weight": 1.0,
+        "damage": {
+            "diceAmount": 1,
+            "diceType": 6,
+            "bonus": 0,
+            "damageType": "Piercing"
+        },
+        "versatileDamage": null,
+        "attributes": [
+            "Finesse",
+            "Light"
+        ]
+    },
+    "langschwert": {
+        "name": "Langschwert",
+        "price": 15.0,
+        "weight": 1.5,
+        "damage": {
+            "diceAmount": 1,
+            "diceType": 8,
+            "bonus": 0,
+            "damageType": "Slashing"
+        },
+        "versatileDamage": {
+            "diceAmount": 1,
+            "diceType": 10,
+            "bonus": 0,
+            "damageType": "Slashing"
+        },
+        "attributes": [
+            "Versatile"
+        ]
+    },
+    "lanze": {
+        "name": "Lanze",
+        "price": 10.0,
+        "weight": 3.0,
+        "damage": {
+            "diceAmount": 1,
+            "diceType": 12,
+            "bonus": 0,
+            "damageType": "Piercing"
+        },
+        "versatileDamage": null,
+        "attributes": [
+            "Reach",
+            "Special"
+        ]
+    },
+    "morgenstern": {
+        "name": "Morgenstern",
+        "price": 15.0,
+        "weight": 2.0,
+        "damage": {
+            "diceAmount": 1,
+            "diceType": 8,
+            "bonus": 0,
+            "damageType": "Piercing"
+        },
+        "versatileDamage": null,
+        "attributes": []
+    },
+    "peitsche": {
+        "name": "Peitsche",
+        "price": 2.0,
+        "weight": 1.5,
+        "damage": {
+            "diceAmount": 1,
+            "diceType": 4,
+            "bonus": 0,
+            "damageType": "Slashing"
+        },
+        "versatileDamage": null,
+        "attributes": [
+            "Finesse",
+            "Reach"
+        ]
+    },
+    "pike": {
+        "name": "Pike",
+        "price": 5.0,
+        "weight": 9.0,
+        "damage": {
+            "diceAmount": 1,
+            "diceType": 10,
+            "bonus": 0,
+            "damageType": "Piercing"
+        },
+        "versatileDamage": null,
+        "attributes": [
+            "Heavy",
+            "Reach",
+            "Two-Handed"
+        ]
+    },
+    "rapier": {
+        "name": "Rapier",
+        "price": 25.0,
+        "weight": 1.0,
+        "damage": {
+            "diceAmount": 1,
+            "diceType": 8,
+            "bonus": 0,
+            "damageType": "Piercing"
+        },
+        "versatileDamage": null,
+        "attributes": [
+            "Finesse"
+        ]
+    },
+    "streitaxt": {
+        "name": "Streitaxt",
+        "price": 10.0,
+        "weight": 2.0,
+        "damage": {
+            "diceAmount": 1,
+            "diceType": 8,
+            "bonus": 0,
+            "damageType": "Slashing"
+        },
+        "versatileDamage": {
+            "diceAmount": 1,
+            "diceType": 10,
+            "bonus": 0,
+            "damageType": "Slashing"
+        },
+        "attributes": [
+            "Versatile"
+        ]
+    },
+    "zweihandaxt": {
+        "name": "Zweihandaxt",
+        "price": 30.0,
+        "weight": 3.5,
+        "damage": {
+            "diceAmount": 1,
+            "diceType": 12,
+            "bonus": 0,
+            "damageType": "Slashing"
+        },
+        "versatileDamage": null,
+        "attributes": [
+            "Heavy",
+            "Two-Handed"
+        ]
+    },
+    "zweihandschwert": {
+        "name": "Zweihandschwert",
+        "price": 50.0,
+        "weight": 3.0,
+        "damage": {
+            "diceAmount": 2,
+            "diceType": 6,
+            "bonus": 0,
+            "damageType": "Slashing"
+        },
+        "versatileDamage": null,
+        "attributes": [
+            "Heavy",
+            "Two-Handed"
+        ]
+    },
+    "armbrust_hand": {
+        "name": "Handarmbrust",
+        "price": 75.0,
+        "weight": 1.5,
+        "damage": {
+            "diceAmount": 1,
+            "diceType": 6,
+            "bonus": 0,
+            "damageType": "Piercing"
+        },
+        "versatileDamage": null,
+        "attributes": [
+            "Ammunition",
+            "Light",
+            "Loading"
+        ],
+        "ranges": {
+            "Ammunition": [
+                9,
+                36
+            ]
+        }
+    },
+    "armbrust_schwer": {
+        "name": "Schwere Armbrust",
+        "price": 50.0,
+        "weight": 9.5,
+        "damage": {
+            "diceAmount": 1,
+            "diceType": 10,
+            "bonus": 0,
+            "damageType": "Piercing"
+        },
+        "versatileDamage": null,
+        "attributes": [
+            "Ammunition",
+            "Heavy",
+            "Loading",
+            "Two-Handed"
+        ],
+        "ranges": {
+            "Ammunition": [
+                30,
+                120
+            ]
+        }
+    },
+    "blasrohr": {
+        "name": "Blasrohr",
+        "price": 10.0,
+        "weight": 0.5,
+        "damage": {
+            "diceAmount": 1,
+            "diceType": 1,
+            "bonus": 0,
+            "damageType": "Piercing"
+        },
+        "versatileDamage": null,
+        "attributes": [
+            "Ammunition",
+            "Loading"
+        ],
+        "ranges": {
+            "Ammunition": [
+                7.5,
+                30
+            ]
+        }
+    },
+    "langbogen": {
+        "name": "Langbogen",
+        "price": 50.0,
+        "weight": 1.0,
+        "damage": {
+            "diceAmount": 1,
+            "diceType": 8,
+            "bonus": 0,
+            "damageType": "Piercing"
+        },
+        "versatileDamage": null,
+        "attributes": [
+            "Ammunition",
+            "Heavy",
+            "Two-Handed"
+        ],
+        "ranges": {
+            "Ammunition": [
+                45,
+                180
+            ]
+        }
+    },
+    "netz": {
+        "name": "Netz",
+        "price": 1.0,
+        "weight": 1.5,
+        "damage": {
+            "diceAmount": 0,
+            "diceType": 0,
+            "bonus": 0,
+            "damageType": "Bludgeoning"
+        },
+        "versatileDamage": null,
+        "attributes": [
+            "Special",
+            "Thrown"
+        ],
+        "ranges": {
+            "Thrown": [
+                1.5,
+                4.5
+            ]
+        }
     }
 }
