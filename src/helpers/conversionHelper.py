@@ -28,30 +28,26 @@ from classes.types import (
 from helpers.translationHelper import to_enum
 def toItem(_id: str, jsonItem: JsonItem) -> Item:
     ranges = {
-        to_enum(AttributeType, k): (int(v[0]), int(v[1])) if isinstance(v, (list, tuple)) and len(v) >= 2 else (0, 0)
+        to_enum(AttributeType, k): (int(v[0]), int(v[1])) if len(v) >= 2 else (0, 0)
         for k, v in jsonItem.get("ranges", {}).items()
     }
     damage = jsonItem.get("damage")
     versatile = jsonItem.get("versatileDamage")
     primary_type_str = damage.get("damageType", "") if isinstance(damage, dict) else ""
-    primary_type = to_enum(DamageType, primary_type_str) if primary_type_str else None
+    damageDict = {
+                "damageDiceAmount": damage.get("diceAmount", 0),
+                "damageDiceType": damage.get("diceType", 1),
+                "damageBonus": damage.get("bonus", 0),
+                "damageType": to_enum(DamageType, damage.get("damageType")) if damage.get("damageType") else None,
+            } if damage else {}
     return Item(
         _id=_id,
         name=jsonItem.get("name", ""),
         price=jsonItem.get("price", 0),
         weight=jsonItem.get("weight", 0),
-        attributes=[to_enum(AttributeType, a) for a in jsonItem.get("attributes")] if isinstance(jsonItem.get("attributes"), list) else [],
+        attributes=[to_enum(AttributeType, a) for a in (jsonItem.get("attributes") or [])] if isinstance(jsonItem.get("attributes"), list) else [],
         ranges=ranges if ranges else None,
-        **(
-            {
-                "damageDiceAmount": damage.get("diceAmount", 0),
-                "damageDiceType": damage.get("diceType", ""),
-                "damageBonus": damage.get("bonus", 0),
-                "damageType": to_enum(DamageType, damage.get("damageType")) if damage.get("damageType") else None,
-            }
-            if damage
-            else {}
-        ),
+        **damageDict, # type: ignore # dynamically works
         versatileDamage=(
             (lambda vt: Damage(
                 versatile.get("diceAmount", 0),
@@ -73,21 +69,18 @@ def toWeapon(_id: str, jsonItem: JsonWeapon) -> Weapon:
     """Convert json representation into a :class:`Weapon`."""
     base = toItem(_id, jsonItem)
     damage = base.damage
+    damageDict = {
+                "damageDiceAmount": damage.diceAmount,
+                "damageDiceType": damage.diceType,
+                "damageBonus": damage.bonus,
+                "damageType": damage.damageType,
+            } if damage else {}
     return Weapon(
         _id=base.id,
         name=base.name,
         price=base.price,
         weight=base.weight,
-        **(
-            {
-                "damageDiceAmount": damage.diceAmount,
-                "damageDiceType": damage.diceType,
-                "damageBonus": damage.bonus,
-                "damageType": damage.damageType,
-            }
-            if damage
-            else {}
-        ),
+        **damageDict, # type: ignore # dynamically works
         attributes=base.attributes,
         ranges=base.ranges if base.ranges else None,
         versatileDamage=base.versatileDamage,
@@ -115,7 +108,7 @@ def toSimpleItem(_id: str, jsonItem: JsonSimpleItem) -> SimpleItem:
         name=jsonItem.get("name", ""),
         price=jsonItem.get("price", 0),
         weight=jsonItem.get("weight", 0),
-        description=jsonItem.get("description", ""),
+        description=jsonItem.get("description") or "",
     )
 
 def toSpell(_id: str, jsonSpell: JsonSpell) -> Spell:

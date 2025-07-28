@@ -1,5 +1,3 @@
-import helpers.tupleHelper
-
 def twoDMultiply(a: tuple[float, float], b: tuple[float, float]) -> tuple[float, float]:
     return (a[0] * b[0], a[1] * b[1])
 

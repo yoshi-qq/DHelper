@@ -8,7 +8,7 @@ LANG_DIR = join(dirname(dirname(__file__)), "config", "languages")
 SETTINGS_PATH = join(dirname(dirname(__file__)), "config", "settings.json")
 _current_lang = "en"
 _current_theme = "light"
-_translations: dict[str, dict] = {}
+_translations: dict[str, dict[str, str]] = {}
 
 
 def _load_settings() -> None:
@@ -59,7 +59,7 @@ def set_theme(theme: str) -> None:
 
 def translate(key: Enum) -> str:
     category = key.__class__.__name__
-    return _translations.get(category, {}).get(key.name, key.value)
+    return str(_translations.get(category, {}).get(key.name, key.value))
 
 
 E = TypeVar("E", bound=Enum)
