@@ -89,6 +89,20 @@ def translate(key: Enum) -> str:
     return str(_translations.get(category, {}).get(key.name, key.value))
 
 
+def shortName(key: Enum, translate_name: bool = False) -> str:
+    """Return the first three letters of ``key`` in uppercase.
+
+    Args:
+        key: Enum value to shorten.
+        translate_name: When ``True`` the translated name is used.
+
+    Returns:
+        Three letter abbreviation of ``key``.
+    """
+    name = translate(key) if translate_name else key.name
+    return name[:3].upper()
+
+
 E = TypeVar("E", bound=Enum)
 
 
