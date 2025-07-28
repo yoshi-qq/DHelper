@@ -1,5 +1,6 @@
 from typing import Optional, Callable, List, Any
 import os
+import json
 from config.constants import (
     # New hierarchical constants
     FONT_STYLE,
@@ -42,6 +43,11 @@ from helpers.tupleHelper import twoDSub, twoDTruncate
 class ImageHandler:
     def __init__(self) -> None:
         pass
+
+    def _writeMissing(self, path: str, missing: List[str]) -> None:
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        with open(path, "w", encoding="utf-8") as file:
+            json.dump(sorted(missing), file, ensure_ascii=False, indent=4)
 
     def getItemOutputPath(self, item: Item | SimpleItem | Armor) -> str:
         """Get the output path for an item based on its type."""
@@ -339,29 +345,56 @@ class ImageHandler:
 
         self._createCard(cardImage, instructions, self.getItemOutputPath(item))
 
-    def createItemCards(self) -> None:
+    def createItemCards(self, skip_missing: bool = False) -> None:
         """Create cards for all items: weapons, armor, and simple items."""
-        self.createWeaponCards()
-        self.createArmorCards()
-        self.createSimpleItemCards()
+        missing: List[str] = []
+        self.createWeaponCards(skip_missing, missing)
+        self.createArmorCards(skip_missing, missing)
+        self.createSimpleItemCards(skip_missing, missing)
+        if skip_missing and missing:
+            self._writeMissing(PATHS.MISSING_ITEMS, missing)
 
-    def createWeaponCards(self) -> None:
+    def createWeaponCards(
+        self, skip_missing: bool = False, missing: Optional[List[str]] = None
+    ) -> None:
         """Create cards for all weapons."""
         weapons = getWeapons()
         for weapon in weapons:
-            self.createItemCard(weapon)
+            try:
+                self.createItemCard(weapon)
+            except FileNotFoundError:
+                if not skip_missing:
+                    raise
+                if missing is not None:
+                    missing.append(weapon.id)
 
-    def createArmorCards(self) -> None:
+    def createArmorCards(
+        self, skip_missing: bool = False, missing: Optional[List[str]] = None
+    ) -> None:
         """Create cards for all armor."""
         armors = getArmors()
         for armor in armors:
-            self.createItemCard(armor)
+            try:
+                self.createItemCard(armor)
+            except FileNotFoundError:
+                if not skip_missing:
+                    raise
+                if missing is not None:
+                    missing.append(armor.id)
 
-    def createSimpleItemCards(self) -> None:
+    def createSimpleItemCards(
+        self, skip_missing: bool = False, missing: Optional[List[str]] = None
+    ) -> None:
         """Create cards for all simple items."""
         items = getItems()
         for item in items:
-            self.createItemCard(item)
+            try:
+                self.createItemCard(item)
+            except FileNotFoundError:
+                if not skip_missing:
+                    raise
+                if missing is not None:
+                    missing.append(item.id)
 
     def createSpellCard(
         self,
@@ -519,7 +552,15 @@ class ImageHandler:
         outputPath = join(level_dir, f"{spell.id}.png")
         self._createCard(card, instructions, outputPath)
 
-    def createSpellCards(self) -> None:
+    def createSpellCards(self, skip_missing: bool = False) -> None:
         spells: list[Spell] = getSpells()
+        missing: List[str] = []
         for spell in spells:
-            self.createSpellCard(spell)
+            try:
+                self.createSpellCard(spell)
+            except FileNotFoundError:
+                if not skip_missing:
+                    raise
+                missing.append(spell.id)
+        if skip_missing and missing:
+            self._writeMissing(PATHS.MISSING_SPELLS, missing)
