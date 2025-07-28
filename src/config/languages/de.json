@@ -104,6 +104,7 @@
     "SETTINGS_TITLE": "Einstellungen",
     "LANGUAGE_LABEL": "Sprache",
     "THEME_LABEL": "Thema",
+    "SKIP_MISSING_LABEL": "Fehlende Bilder überspringen",
     "LIGHT_OPTION": "Hell",
     "DARK_OPTION": "Dunkel"
   },

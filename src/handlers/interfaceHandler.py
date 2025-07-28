@@ -33,6 +33,8 @@ from helpers.translationHelper import (
     set_language,
     set_theme,
     get_theme,
+    get_skip_missing,
+    set_skip_missing,
     LANG_DIR,
 )
 from config.constants import GAME, PATHS, IMAGE
@@ -298,15 +300,23 @@ class InterfaceHandler:
             state="readonly",
         ).grid(row=1, column=1, padx=5, pady=2)
 
+        skip_var = tk.BooleanVar(value=get_skip_missing())
+        ttk.Checkbutton(
+            frame,
+            text=translate(UIText.SKIP_MISSING_LABEL),
+            variable=skip_var,
+        ).grid(row=2, column=0, columnspan=2, padx=5, pady=2)
+
         def apply() -> None:
             set_language(lang_var.get())
             reverse = {translate(v): k for k, v in theme_map.items()}
             set_theme(reverse.get(theme_var.get(), "light"))
+            set_skip_missing(skip_var.get())
             self._apply_theme()
             self._build_main_menu()
 
         ttk.Button(frame, text=translate(UIText.SAVE_BUTTON), command=apply).grid(
-            row=2, column=0, columnspan=2, pady=10
+            row=3, column=0, columnspan=2, pady=10
         )
 
     # ===== Manage Weapons =====
@@ -1731,19 +1741,26 @@ class InterfaceHandler:
             translate(MessageText.PREVIEW_QUESTION),
         )
         preview_spells: List[Spell] = []
+        skip_missing = get_skip_missing()
         for sp in spells:
             if show_all or sp.id not in cache:
                 preview_spells.append(sp)
             else:
                 t = cache[sp.id]
-                self.image_handler.createSpellCard(
-                    sp,
-                    rotate=t.get("rotate", 0.0),
-                    flip=t.get("flip", False),
-                    scale=t.get("scale", 1.0),
-                    offset_x=t.get("offset_x", 0.0),
-                    offset_y=t.get("offset_y", 0.0),
-                )
+                try:
+                    self.image_handler.createSpellCard(
+                        sp,
+                        rotate=t.get("rotate", 0.0),
+                        flip=t.get("flip", False),
+                        scale=t.get("scale", 1.0),
+                        offset_x=t.get("offset_x", 0.0),
+                        offset_y=t.get("offset_y", 0.0),
+                    )
+                except FileNotFoundError:
+                    if skip_missing:
+                        self.image_handler.recordMissingSpell(sp.id)
+                    else:
+                        raise
 
         if preview_spells:
             SpellPreviewWindow(self.root, preview_spells, self.image_handler, cache)
@@ -1769,17 +1786,24 @@ class InterfaceHandler:
             translate(MessageText.PREVIEW_QUESTION),
         )
         preview_items: List[Item] = []
+        skip_missing = get_skip_missing()
         for item in items:
             if show_all or item.id not in cache:
                 preview_items.append(item)
             else:
                 t = cache[item.id]
-                self.image_handler.createItemCard(
-                    item,
-                    rotate=t.get("rotate", 0.0),
-                    flip=t.get("flip", False),
-                    scale=t.get("scale", 1.0),
-                )
+                try:
+                    self.image_handler.createItemCard(
+                        item,
+                        rotate=t.get("rotate", 0.0),
+                        flip=t.get("flip", False),
+                        scale=t.get("scale", 1.0),
+                    )
+                except FileNotFoundError:
+                    if skip_missing:
+                        self.image_handler.recordMissingItem(item.id)
+                    else:
+                        raise
 
         if preview_items:
             PreviewWindow(self.root, preview_items, self.image_handler, cache)
@@ -1804,17 +1828,24 @@ class InterfaceHandler:
             translate(MessageText.PREVIEW_QUESTION),
         )
         preview_items: List[SimpleItem] = []
+        skip_missing = get_skip_missing()
         for item in items:
             if show_all or item.id not in cache:
                 preview_items.append(item)
             else:
                 t = cache[item.id]
-                self.image_handler.createItemCard(
-                    item,
-                    rotate=t.get("rotate", 0.0),
-                    flip=t.get("flip", False),
-                    scale=t.get("scale", 1.0),
-                )
+                try:
+                    self.image_handler.createItemCard(
+                        item,
+                        rotate=t.get("rotate", 0.0),
+                        flip=t.get("flip", False),
+                        scale=t.get("scale", 1.0),
+                    )
+                except FileNotFoundError:
+                    if skip_missing:
+                        self.image_handler.recordMissingItem(item.id)
+                    else:
+                        raise
 
         if preview_items:
             PreviewWindow(self.root, preview_items, self.image_handler, cache)
@@ -1839,17 +1870,24 @@ class InterfaceHandler:
             translate(MessageText.PREVIEW_QUESTION),
         )
         preview_items: List[Armor] = []
+        skip_missing = get_skip_missing()
         for item in items:
             if show_all or item.id not in cache:
                 preview_items.append(item)
             else:
                 t = cache[item.id]
-                self.image_handler.createItemCard(
-                    item,
-                    rotate=t.get("rotate", 0.0),
-                    flip=t.get("flip", False),
-                    scale=t.get("scale", 1.0),
-                )
+                try:
+                    self.image_handler.createItemCard(
+                        item,
+                        rotate=t.get("rotate", 0.0),
+                        flip=t.get("flip", False),
+                        scale=t.get("scale", 1.0),
+                    )
+                except FileNotFoundError:
+                    if skip_missing:
+                        self.image_handler.recordMissingItem(item.id)
+                    else:
+                        raise
 
         if preview_items:
             PreviewWindow(self.root, preview_items, self.image_handler, cache)
@@ -1969,6 +2007,10 @@ class PreviewWindow(tk.Toplevel):
                 offset_y=self.y_var.get(),
             )
         except FileNotFoundError:
+            if get_skip_missing():
+                self.image_handler.recordMissingItem(item.id)
+                self.skip_flag = True
+                return False
             if messagebox.askretrycancel(
                 translate(MessageText.MISSING_IMAGE_TITLE),
                 translate(MessageText.MISSING_IMAGE_MESSAGE).format(id=item.id),
@@ -2136,6 +2178,10 @@ class SpellPreviewWindow(tk.Toplevel):
                 offset_y=self.y_var.get(),
             )
         except FileNotFoundError:
+            if get_skip_missing():
+                self.image_handler.recordMissingSpell(spell.id)
+                self.skip_flag = True
+                return False
             if messagebox.askretrycancel(
                 translate(MessageText.MISSING_IMAGE_TITLE),
                 translate(MessageText.MISSING_IMAGE_MESSAGE).format(id=spell.id),

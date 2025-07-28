@@ -48,6 +48,7 @@ class UIText(Enum):
     SETTINGS_TITLE = "SettingsTitle"
     LANGUAGE_LABEL = "LanguageLabel"
     THEME_LABEL = "ThemeLabel"
+    SKIP_MISSING_LABEL = "SkipMissingLabel"
     LIGHT_OPTION = "LightOption"
     DARK_OPTION = "DarkOption"
     MANAGE_SPELLS_TITLE = "ManageSpellsTitle"
