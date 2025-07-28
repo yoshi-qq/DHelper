@@ -23,7 +23,7 @@ from classes.types import (
     Spell,
     TargetType,
 )
-from helpers.translationHelper import translate
+from helpers.translationHelper import translate, shortName
 from helpers.dataHelper import getWeapons, getArmors, getItems, getSpells
 from helpers.formattingHelper import (
     getMaxFontSize,
@@ -535,7 +535,7 @@ class ImageHandler:
         if spell.savingThrow:
             instructions.append(
                 self._textOp(
-                    str(spell.savingThrow)[:3].upper(),
+                    shortName(spell.savingThrow, True),
                     SPELL.SAVING_THROW,
                     FONT.STATS_PATH,
                     FONT_STYLE.SIZES.STATS,
