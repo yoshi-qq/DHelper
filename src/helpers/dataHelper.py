@@ -64,8 +64,6 @@ def addItem(item: SimpleItem) -> None:
         dump(data, file, ensure_ascii=False, indent=4)
 
 
-
-
 def loadItemCache() -> ItemCache:
     if not os.path.exists(PATHS.ITEM_CACHE):
         os.makedirs(PATHS.CACHE, exist_ok=True)

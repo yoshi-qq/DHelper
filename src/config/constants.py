@@ -9,20 +9,26 @@ from helpers.conversionHelper import toRGBA
 SRC = dirname(dirname(__file__))
 ROOT = dirname(SRC)
 
+
 # = Game =
 class _GameConstants:
     """Game-related constants."""
+
     def __init__(self) -> None:
         self.DICE_SIZES: list[int] = [4, 6, 8, 10, 12, 20]
 
+
 GAME = _GameConstants()
+
 
 # = Card =
 class _CardConstants:
     def __init__(self) -> None:
         self.RESOLUTION: tuple[int, int] = (356, 497)  # (x, y)
 
+
 CARD = _CardConstants()
+
 
 # = Font Paths =
 class _FontPaths:
@@ -33,6 +39,7 @@ class _FontPaths:
         self.ITALIC: str = join(folder, "timesi.ttf")
         self.BOLD_ITALIC: str = join(folder, "timesbi.ttf")
 
+
 class _FontConstants:
     def __init__(self) -> None:
         self.PATHS: _FontPaths = _FontPaths()
@@ -41,7 +48,9 @@ class _FontConstants:
         self.PRICE_PATH: str = self.PATHS.BOLD
         self.STATS_PATH: str = self.PATHS.BOLD
 
+
 FONT = _FontConstants()
+
 
 # = Image Paths =
 class _ImagePaths:
@@ -56,6 +65,7 @@ class _ImagePaths:
         # icon used for application windows
         self.APP_ICON: str = join(self.SPELLS, "feuerball.png")
 
+
 class _BackgroundImages:
     def __init__(self) -> None:
         bg_path = join(SRC, "assets", "background")
@@ -63,6 +73,7 @@ class _BackgroundImages:
         self.SILVER_ITEM: str = join(bg_path, "item_silver_template.png")
         self.COPPER_ITEM: str = join(bg_path, "item_copper_template.png")
         self.SPELL: str = join(bg_path, "spell_background.png")
+
 
 class _TargetIconPaths:
     def __init__(self) -> None:
@@ -78,6 +89,7 @@ class _TargetIconPaths:
         self.SELF: str = join(targets_path, "self.png")
         self.SPHERE: str = join(targets_path, "sphere.png")
 
+
 class _LevelIconPaths:
     def __init__(self) -> None:
         levels_path = join(SRC, "assets", "icons", "levels")
@@ -90,6 +102,7 @@ class _LevelIconPaths:
         self.LEVEL_7: str = join(levels_path, "7dark_seal.png")
         self.LEVEL_8: str = join(levels_path, "8enchanted_seal.png")
         self.LEVEL_9: str = join(levels_path, "9molten_seal.png")
+
 
 class _IconPaths:
     def __init__(self) -> None:
@@ -111,6 +124,7 @@ class _IconPaths:
         # Level icons
         self.LEVELS: _LevelIconPaths = _LevelIconPaths()
 
+
 class _ImageConstants:
     def __init__(self) -> None:
         self.FORMAT: str = "png"
@@ -118,7 +132,9 @@ class _ImageConstants:
         self.BACKGROUNDS: _BackgroundImages = _BackgroundImages()
         self.ICONS: _IconPaths = _IconPaths()
 
+
 IMAGE = _ImageConstants()
+
 
 # = Data Paths =
 class _DataPaths:
@@ -131,7 +147,9 @@ class _DataPaths:
         self.ITEMS: str = join(data, "items.json")
         self.SPELLS: str = join(data, "spells.json")
 
+
 DATA = _DataPaths()
+
 
 # = Output & Cache Paths =
 class _PathConstants:
@@ -146,13 +164,14 @@ class _PathConstants:
         self.ITEM_CACHE: str = join(self.CACHE, "itemCache.json")
         self.SPELL_CACHE: str = join(self.CACHE, "spellCache.json")
 
-PATHS = _PathConstants()
 
+PATHS = _PathConstants()
 
 
 # =============
 # = CHANGEABLE
 # =============
+
 
 # = Font Styling =
 class _FontColors:
@@ -162,29 +181,39 @@ class _FontColors:
         self.PRICE: tuple[int, int, int, int] = self.BLUE_INK
         self.STATS: tuple[int, int, int, int] = self.BLUE_INK
 
+
 class _FontSizes:
     def __init__(self) -> None:
         self.TITLE: int = 50
         self.PRICE: int = 50
         self.STATS: int = 18
 
+
 class _FontStyling:
     def __init__(self) -> None:
         self.COLORS: _FontColors = _FontColors()
         self.SIZES: _FontSizes = _FontSizes()
 
+
 FONT_STYLE = _FontStyling()
+
 
 # = Items =
 class _Position:
-    def __init__(self, relative: tuple[float, float], absolute: tuple[int, int]) -> None:
+    def __init__(
+        self, relative: tuple[float, float], absolute: tuple[int, int]
+    ) -> None:
         self.RELATIVE: tuple[float, float] = relative
         self.ABSOLUTE: tuple[int, int] = absolute
 
+
 class _Size:
-    def __init__(self, relative: tuple[float, float], absolute: tuple[int, int]) -> None:
+    def __init__(
+        self, relative: tuple[float, float], absolute: tuple[int, int]
+    ) -> None:
         self.RELATIVE: tuple[float, float] = relative
         self.ABSOLUTE: tuple[int, int] = absolute
+
 
 class LayoutElement:
     def __init__(self, x: float, y: float, width: float, height: float) -> None:
@@ -195,6 +224,7 @@ class LayoutElement:
 
         self.POSITION: _Position = _Position(rel_pos, abs_pos)
         self.SIZE: _Size = _Size(rel_size, abs_size)
+
 
 class _ItemConstants:
     def __init__(self) -> None:
@@ -207,15 +237,17 @@ class _ItemConstants:
 class _MaterialConstants:
     def __init__(self) -> None:
         sY = _SpellConstants.SMALLS_Y_OFFSET
-        self.SPOKEN: LayoutElement = LayoutElement(150, 380+sY, 25, 25)
-        self.MATERIAL: LayoutElement = LayoutElement(185, 380+sY, 25, 25)
-        self.GESTURAL: LayoutElement = LayoutElement(220, 380+sY, 25, 25)
-        self.NAME: LayoutElement = LayoutElement(185, 400+sY, 100, 18)
-        self.COST: LayoutElement = LayoutElement(185, 420+sY, 75, 20)
+        self.SPOKEN: LayoutElement = LayoutElement(150, 380 + sY, 25, 25)
+        self.MATERIAL: LayoutElement = LayoutElement(185, 380 + sY, 25, 25)
+        self.GESTURAL: LayoutElement = LayoutElement(220, 380 + sY, 25, 25)
+        self.NAME: LayoutElement = LayoutElement(185, 400 + sY, 100, 18)
+        self.COST: LayoutElement = LayoutElement(185, 420 + sY, 75, 20)
+
 
 class _SpellConstants:
     SMALLS_Y_OFFSET: int = 60
     MID_Y_OFFSET: int = -15
+
     def __init__(self) -> None:
         sY = _SpellConstants.SMALLS_Y_OFFSET
         mY = _SpellConstants.MID_Y_OFFSET
@@ -225,26 +257,30 @@ class _SpellConstants:
         self.IMAGE: LayoutElement = LayoutElement(177, 240, 310, 190)
         self.DURATION: LayoutElement = LayoutElement(60, 430, 36, 36)
         self.DURATION_TEXT: LayoutElement = LayoutElement(60, 460, 36, 26)
-        self.COOLDOWN: LayoutElement = LayoutElement(105, 395+mY, 36, 36)
-        self.COOLDOWN_TEXT: LayoutElement = LayoutElement(105, 425+mY, 36, 26)
-        self.DAMAGE: LayoutElement = LayoutElement(255, 395+mY, 36, 36)
-        self.DAMAGE_TEXT: LayoutElement = LayoutElement(255, 425+mY, 36, 26)
+        self.COOLDOWN: LayoutElement = LayoutElement(105, 395 + mY, 36, 36)
+        self.COOLDOWN_TEXT: LayoutElement = LayoutElement(105, 425 + mY, 36, 26)
+        self.DAMAGE: LayoutElement = LayoutElement(255, 395 + mY, 36, 36)
+        self.DAMAGE_TEXT: LayoutElement = LayoutElement(255, 425 + mY, 36, 26)
         self.RANGE: LayoutElement = LayoutElement(300, 430, 36, 36)
         self.RANGE_TEXT: LayoutElement = LayoutElement(300, 460, 36, 26)
         self.MATERIAL: _MaterialConstants = _MaterialConstants()
-        self.CONCENTRATION: LayoutElement = LayoutElement(150, 355+sY, 25, 25)
-        self.CAST_TIME: LayoutElement = LayoutElement(185, 355+sY, 25, 25)
-        self.RITUAL: LayoutElement = LayoutElement(220, 355+sY, 25, 25)
+        self.CONCENTRATION: LayoutElement = LayoutElement(150, 355 + sY, 25, 25)
+        self.CAST_TIME: LayoutElement = LayoutElement(185, 355 + sY, 25, 25)
+        self.RITUAL: LayoutElement = LayoutElement(220, 355 + sY, 25, 25)
         self.SAVING_THROW: LayoutElement = LayoutElement(260, 365, 40, 18)
         self.SUB_RANGE: LayoutElement = LayoutElement(185, 385, 50, 20)
         self.TARGET: LayoutElement = LayoutElement(185, 360, 40, 40)
-        self.OVERLEVEL: LayoutElement = LayoutElement(320, 275, 30, 190) # for later use
+        self.OVERLEVEL: LayoutElement = LayoutElement(
+            320, 275, 30, 190
+        )  # for later use
+
 
 ITEM = _ItemConstants()
 SPELL = _SpellConstants()
 
 # = Text Constants =
 from classes.textKeys import PrefixText
+
 
 class _TextConstants:
     def __init__(self) -> None:
@@ -256,5 +292,6 @@ class _TextConstants:
         self.STEALTH_DISADVANTAGE = PrefixText.STEALTH_DISADVANTAGE
         self.DAMAGE_SPLIT: str = "D"
         self.DAMAGE_SUFFIX: str = ""
+
 
 TEXT = _TextConstants()

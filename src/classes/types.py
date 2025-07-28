@@ -4,18 +4,16 @@ from typing import Optional, TypedDict, Annotated, Tuple
 from helpers.translationHelper import translate
 import re
 
-HexColor = Annotated[
-    str,
-    re.compile(r'^#(?:[0-9A-Fa-f]{3}){1,2}$')
-]
+HexColor = Annotated[str, re.compile(r"^#(?:[0-9A-Fa-f]{3}){1,2}$")]
 RGB = Annotated[
     Tuple[int, int, int],
-    lambda value: all(0 <= v <= 255 for v in value) # type: ignore
+    lambda value: all(0 <= v <= 255 for v in value),  # type: ignore
 ]
 RGBA = Annotated[
     Tuple[int, int, int, int],
-    lambda value: all(0 <= v <= 255 for v in value) # type: ignore
+    lambda value: all(0 <= v <= 255 for v in value),  # type: ignore
 ]
+
 
 class DamageType(Enum):
     LIGHTNING = "Lightning"
@@ -35,6 +33,7 @@ class DamageType(Enum):
     def __str__(self) -> str:  # pragma: no cover - simple delegation
         return translate(self)
 
+
 class AttributeType(Enum):
     FINESSE = "Finesse"
     AMMUNITION = "Ammunition"
@@ -51,6 +50,7 @@ class AttributeType(Enum):
     def __str__(self) -> str:  # pragma: no cover - simple delegation
         return translate(self)
 
+
 # alias for weapon properties to keep backwards compatibility
 WeaponProperty = AttributeType
 
@@ -64,6 +64,7 @@ class ArmorCategory(Enum):
     def __str__(self) -> str:  # pragma: no cover - simple delegation
         return translate(self)
 
+
 class SpellType(Enum):
     ABJURATION = "ABJURATION"
     CONJURATION = "CONJURATION"
@@ -76,6 +77,7 @@ class SpellType(Enum):
 
     def __str__(self) -> str:  # pragma: no cover - simple delegation
         return translate(self)
+
 
 class CasterClassType(Enum):
     BARD = "BARD"
@@ -91,6 +93,7 @@ class CasterClassType(Enum):
     def __str__(self) -> str:  # pragma: no cover - simple delegation
         return translate(self)
 
+
 class CastingTimeType(Enum):
     ACTION = "ACTION"
     BONUS_ACTION = "BONUS_ACTION"
@@ -103,6 +106,7 @@ class CastingTimeType(Enum):
 
     def __str__(self) -> str:  # pragma: no cover - simple delegation
         return translate(self)
+
 
 class TargetType(Enum):
     SELF = "SELF"
@@ -118,6 +122,7 @@ class TargetType(Enum):
 
     def __str__(self) -> str:
         return translate(self)
+
 
 class SavingThrowType(Enum):
     STRENGTH = "STRENGTH"
@@ -135,20 +140,24 @@ class SavingThrowType(Enum):
 # = JSON
 # ========
 
+
 class JsonMaterial(TypedDict, total=False):
     name: str
     cost: Optional[float]
+
 
 class JsonComponents(TypedDict):
     verbal: bool
     gestural: bool
     material: Optional[JsonMaterial]
 
+
 class JsonDamage(TypedDict):
     diceAmount: int
     diceType: int
     bonus: int
     damageType: str
+
 
 class JsonItem(TypedDict, total=False):
     name: str
@@ -158,6 +167,7 @@ class JsonItem(TypedDict, total=False):
     versatileDamage: JsonDamage | None
     attributes: list[str]
     ranges: dict[str, list[int]]
+
 
 # separated json structures for new item classes
 class JsonWeapon(JsonItem):
@@ -182,14 +192,15 @@ class JsonSimpleItem(TypedDict, total=False):
     weight: float
     description: Optional[str]
 
+
 class JsonSpell(TypedDict):
     id: str
     name: str
     level: int
     type: str
     casterClasses: list[str]
-    duration: float # in seconds
-    cooldown: float # in seconds
+    duration: float  # in seconds
+    cooldown: float  # in seconds
     range: float
     subRange: Optional[float]
     damage: JsonDamage | None
@@ -202,12 +213,14 @@ class JsonSpell(TypedDict):
     savingThrow: Optional[str]
     areaOfEffect: Optional[str]
 
+
 class JsonItemCache(TypedDict):
     rotate: float
     scale: float
     flip: bool
     offset_x: float
     offset_y: float
+
 
 ItemCache = dict[str, JsonItemCache]
 SpellCache = dict[str, JsonItemCache]
@@ -217,10 +230,12 @@ SpellCache = dict[str, JsonItemCache]
 # = Python
 # ==========
 
+
 class Currency(Enum):
     GOLD = 1
     SILVER = 0.1
     COPPER = 0.01
+
 
 class Material:
     def __init__(self, name: str, cost: Optional[float]) -> None:
@@ -228,13 +243,13 @@ class Material:
         self.cost: Optional[float] = cost
 
     def toJsonMaterial(self) -> JsonMaterial:
-        return {
-            "name": self.name,
-            "cost": self.cost
-        }
+        return {"name": self.name, "cost": self.cost}
+
 
 class Components:
-    def __init__(self, verbal: bool, gestural: bool, material: Optional[Material]) -> None:
+    def __init__(
+        self, verbal: bool, gestural: bool, material: Optional[Material]
+    ) -> None:
         self.verbal: bool = verbal
         self.gestural: bool = gestural
         self.material: Optional[Material] = material
@@ -243,15 +258,19 @@ class Components:
         return {
             "verbal": self.verbal,
             "gestural": self.gestural,
-            "material": self.material.toJsonMaterial() if self.material else None
+            "material": self.material.toJsonMaterial() if self.material else None,
         }
 
+
 class Damage:
-    def __init__(self, diceAmount: int, diceType: int, bonus: int, damageType: DamageType) -> None:
+    def __init__(
+        self, diceAmount: int, diceType: int, bonus: int, damageType: DamageType
+    ) -> None:
         self.diceAmount: int = diceAmount
         self.diceType: int = diceType
         self.bonus: int = bonus
         self.damageType: DamageType = damageType
+
     def toJsonDamage(self) -> JsonDamage:
         return {
             "diceAmount": self.diceAmount,
@@ -259,6 +278,7 @@ class Damage:
             "bonus": self.bonus,
             "damageType": self.damageType.value,
         }
+
 
 class Item:
     def __init__(
@@ -279,19 +299,30 @@ class Item:
         self.name: str = name
         self.price: float = price
         self.weight: float = weight
-        self.damage = Damage(damageDiceAmount, damageDiceType, damageBonus, damageType) if damageType is not None else None
+        self.damage = (
+            Damage(damageDiceAmount, damageDiceType, damageBonus, damageType)
+            if damageType is not None
+            else None
+        )
         self.versatileDamage: Optional[Damage] = versatileDamage
         self.attributes: list[AttributeType] = attributes if attributes else []
         self.ranges: dict[AttributeType, tuple[int, int]] = ranges if ranges else {}
+
     def toJsonItem(self) -> JsonItem:
         return {
             "name": self.name,
             "price": self.price,
             "weight": self.weight,
             "damage": self.damage.toJsonDamage() if self.damage else None,
-            "versatileDamage": self.versatileDamage.toJsonDamage() if self.versatileDamage else None,
+            "versatileDamage": (
+                self.versatileDamage.toJsonDamage() if self.versatileDamage else None
+            ),
             "attributes": [a.value for a in self.attributes],
-            **({"ranges": {k.value: [v[0], v[1]] for k, v in self.ranges.items()}} if self.ranges else {})
+            **(
+                {"ranges": {k.value: [v[0], v[1]] for k, v in self.ranges.items()}}
+                if self.ranges
+                else {}
+            ),
         }  # type: ignore
 
 
@@ -365,6 +396,7 @@ class SimpleItem:
             "description": self.description,
         }
 
+
 class Spell:
     def __init__(
         self,
@@ -425,5 +457,5 @@ class Spell:
             "concentration": self.concentration,
             "target": self.target.value,
             "savingThrow": self.savingThrow.value if self.savingThrow else None,
-            "areaOfEffect": self.areaOfEffect.value if self.areaOfEffect else None
+            "areaOfEffect": self.areaOfEffect.value if self.areaOfEffect else None,
         }
