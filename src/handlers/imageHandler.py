@@ -53,7 +53,11 @@ class ImageHandler:
         try:
             with open(path, "r", encoding="utf-8") as file:
                 data = json.load(file)
-                ids = set(data if isinstance(data, list) else [])
+                if not isinstance(data, list):
+                    ids: set[str] = set()
+                else:
+                    ids = set([str(i) for i in data]) # type: ignore
+                ids = set(str(i) for i in ids)
         except FileNotFoundError:
             ids = set()
         ids.add(asset_id)
