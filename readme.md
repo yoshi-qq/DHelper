@@ -22,6 +22,7 @@ DHelper started as a small private project and aims to make managing custom game
 - **Monster Cards**
 - **Enchantments** for items (a custom feature similar to item enchants in games like Minecraft)
 - **UI Overhaul**
+- **Alternative Card Designs**
 - **Exports** to PDF/PNG sheets and print templates
 - **Distributable Executable**
 - **Detailed Guide**
