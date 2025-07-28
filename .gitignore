@@ -5,3 +5,4 @@
 __pycache__/
 *.py[cod]
 desktop.ini
+/data/phb_spells.json
