@@ -1,4 +1,5 @@
 {
   "language": "de",
-  "theme": "dark"
+  "theme": "dark",
+  "skip_missing": false
 }
