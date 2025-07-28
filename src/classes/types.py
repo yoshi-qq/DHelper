@@ -1,7 +1,7 @@
 from datetime import timedelta
 from enum import Enum
-from typing import Optional, Type, TypedDict, Annotated, Tuple, Literal
-from helpers.translationHelper import translate, to_enum
+from typing import Optional, TypedDict, Annotated, Tuple
+from helpers.translationHelper import translate
 import re
 
 HexColor = Annotated[
@@ -10,11 +10,11 @@ HexColor = Annotated[
 ]
 RGB = Annotated[
     Tuple[int, int, int],
-    lambda value: all(0 <= v <= 255 for v in value)
+    lambda value: all(0 <= v <= 255 for v in value) # type: ignore
 ]
 RGBA = Annotated[
     Tuple[int, int, int, int],
-    lambda value: all(0 <= v <= 255 for v in value)
+    lambda value: all(0 <= v <= 255 for v in value) # type: ignore
 ]
 
 class DamageType(Enum):
@@ -209,6 +209,9 @@ class JsonItemCache(TypedDict):
     offset_x: float
     offset_y: float
 
+ItemCache = dict[str, JsonItemCache]
+SpellCache = dict[str, JsonItemCache]
+
 
 # ==========
 # = Python
@@ -218,7 +221,6 @@ class Currency(Enum):
     GOLD = 1
     SILVER = 0.1
     COPPER = 0.01
-
 
 class Material:
     def __init__(self, name: str, cost: Optional[float]) -> None:
@@ -236,7 +238,7 @@ class Components:
         self.verbal: bool = verbal
         self.gestural: bool = gestural
         self.material: Optional[Material] = material
-    
+
     def toJsonComponents(self) -> JsonComponents:
         return {
             "verbal": self.verbal,

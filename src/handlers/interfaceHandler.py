@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
-from typing import List, Sequence, Union
+from typing import Callable, List, Sequence, Union
 from datetime import timedelta
 import os
 from os.path import join
@@ -22,6 +22,8 @@ from classes.types import (
     TargetType,
     Material,
     Components,
+    ItemCache,
+    SpellCache,
 )
 from classes.textKeys import UIText, MessageText
 from helpers.translationHelper import (
@@ -68,40 +70,40 @@ class InterfaceHandler:
             pass
 
     def _set_modern_theme(self) -> None:
-        style = ttk.Style(self.root)
+        style: ttk.Style = ttk.Style(self.root)
         try:
             style.theme_use("clam")
         except tk.TclError:
             pass
         bg = "#f5f5f5"
         fg = "#333333"
-        style.configure(".", background=bg, foreground=fg)
-        style.configure("TFrame", background=bg)
-        style.configure("TLabel", background=bg, foreground=fg)
-        style.configure("TCheckbutton", background=bg, foreground=fg)
-        style.configure("TButton", background="#e0e0e0", foreground=fg)
-        style.configure(
+        style.configure(".", background=bg, foreground=fg) # type: ignore
+        style.configure("TFrame", background=bg) # type: ignore
+        style.configure("TLabel", background=bg, foreground=fg) # type: ignore
+        style.configure("TCheckbutton", background=bg, foreground=fg) # type: ignore
+        style.configure("TButton", background="#e0e0e0", foreground=fg) # type: ignore
+        style.configure( # type: ignore
             "TEntry",
             fieldbackground="#ffffff",
             background="#ffffff",
             foreground=fg,
             insertcolor=fg,
         )
-        style.configure(
+        style.configure( # type: ignore
             "TCombobox",
             fieldbackground="#ffffff",
             background="#ffffff",
             foreground=fg,
             selectbackground="#dddddd",
         )
-        self.root.option_add("*TCombobox*Listbox.background", "#ffffff")
-        self.root.option_add("*TCombobox*Listbox.foreground", fg)
-        self.root.option_add("*TCombobox*Listbox.selectBackground", "#dddddd")
-        style.map("TButton", background=[("active", "#cccccc")])
-        style.map("TCheckbutton", background=[("active", "#cccccc")])
-        style.configure("Treeview", background="#ffffff", foreground=fg, fieldbackground="#ffffff")
-        style.configure("Treeview.Heading", background="#e0e0e0", foreground=fg)
-        style.map("Treeview", background=[("selected", "#cccccc")])
+        self.root.option_add("*TCombobox*Listbox.background", "#ffffff") # type: ignore
+        self.root.option_add("*TCombobox*Listbox.foreground", fg) # type: ignore
+        self.root.option_add("*TCombobox*Listbox.selectBackground", "#dddddd") # type: ignore
+        style.map("TButton", background=[("active", "#cccccc")]) # type: ignore
+        style.map("TCheckbutton", background=[("active", "#cccccc")]) # type: ignore
+        style.configure("Treeview", background="#ffffff", foreground=fg, fieldbackground="#ffffff") # type: ignore
+        style.configure("Treeview.Heading", background="#e0e0e0", foreground=fg) # type: ignore
+        style.map("Treeview", background=[("selected", "#cccccc")]) # type: ignore
         self.root.configure(bg=bg)
 
     def _set_dark_theme(self) -> None:
@@ -112,33 +114,33 @@ class InterfaceHandler:
             pass
         bg = "#333333"
         fg = "#f5f5f5"
-        style.configure(".", background=bg, foreground=fg)
-        style.configure("TFrame", background=bg)
-        style.configure("TLabel", background=bg, foreground=fg)
-        style.configure("TCheckbutton", background=bg, foreground=fg)
-        style.configure("TButton", background="#444444", foreground=fg)
-        style.configure(
+        style.configure(".", background=bg, foreground=fg) # type: ignore
+        style.configure("TFrame", background=bg) # type: ignore
+        style.configure("TLabel", background=bg, foreground=fg) # type: ignore
+        style.configure("TCheckbutton", background=bg, foreground=fg) # type: ignore
+        style.configure("TButton", background="#444444", foreground=fg) # type: ignore
+        style.configure( # type: ignore
             "TEntry",
             fieldbackground="#555555",
             background="#555555",
             foreground=fg,
             insertcolor=fg,
         )
-        style.configure(
+        style.configure( # type: ignore
             "TCombobox",
             fieldbackground="#555555",
             background="#555555",
             foreground=fg,
             selectbackground="#666666",
         )
-        self.root.option_add("*TCombobox*Listbox.background", "#555555")
-        self.root.option_add("*TCombobox*Listbox.foreground", fg)
-        self.root.option_add("*TCombobox*Listbox.selectBackground", "#777777")
-        style.map("TButton", background=[("active", "#666666")])
-        style.map("TCheckbutton", background=[("active", "#666666")])
-        style.configure("Treeview", background="#555555", foreground=fg, fieldbackground="#555555")
-        style.configure("Treeview.Heading", background="#444444", foreground=fg)
-        style.map("Treeview", background=[("selected", "#666666")])
+        self.root.option_add("*TCombobox*Listbox.background", "#555555") # type: ignore
+        self.root.option_add("*TCombobox*Listbox.foreground", fg) # type: ignore
+        self.root.option_add("*TCombobox*Listbox.selectBackground", "#777777") # type: ignore
+        style.map("TButton", background=[("active", "#666666")]) # type: ignore
+        style.map("TCheckbutton", background=[("active", "#666666")]) # type: ignore
+        style.configure("Treeview", background="#555555", foreground=fg, fieldbackground="#555555") # type: ignore
+        style.configure("Treeview.Heading", background="#444444", foreground=fg) # type: ignore
+        style.map("Treeview", background=[("selected", "#666666")]) # type: ignore
         self.root.configure(bg=bg)
 
     def _apply_theme(self) -> None:
@@ -282,7 +284,7 @@ class InterfaceHandler:
         def filter_items() -> List[Item]:
             search = search_var.get().lower()
             selected = [to_enum(AttributeType, a) for a, v in attr_vars.items() if v.get()]
-            filtered = []
+            filtered: List[Item] = []
             for it in items:
                 if search not in it.name.lower() and search not in it.id.lower():
                     continue
@@ -296,6 +298,7 @@ class InterfaceHandler:
             data = filter_items()
             reverse_map = {translate(v): k for k, v in sort_map.items()}
             key = reverse_map.get(sort_var.get(), "name")
+            sort_key: Callable[[Item], object]
             if key == "id":
                 sort_key = lambda i: i.id
             elif key == "name":
@@ -328,7 +331,7 @@ class InterfaceHandler:
                 )
                 return
             try:
-                cache = loadItemCache()
+                cache: ItemCache = loadItemCache()
                 t = cache.get(item.id, {"rotate": 0.0, "scale": 1.0, "flip": False})
                 self.image_handler.createItemCard(
                     item,
@@ -575,6 +578,8 @@ class InterfaceHandler:
                         entry.insert(0, str(item.price))
                     case UIText.COLUMN_WEIGHT:
                         entry.insert(0, str(item.weight))
+                    case _:
+                        pass
             entries[text] = entry
             row += 1
 
@@ -771,6 +776,8 @@ class InterfaceHandler:
                         entry.insert(0, str(item.price))
                     case UIText.COLUMN_WEIGHT:
                         entry.insert(0, str(item.weight))
+                    case _:
+                        pass
             entries[text] = entry
             row += 1
 
@@ -834,6 +841,8 @@ class InterfaceHandler:
                         entry.insert(0, str(armor.price))
                     case UIText.COLUMN_WEIGHT:
                         entry.insert(0, str(armor.weight))
+                    case _:
+                        pass
             entries[text] = entry
             row += 1
 
@@ -1320,7 +1329,7 @@ class InterfaceHandler:
                 translate(MessageText.NO_ITEMS_MESSAGE),
             )
             return
-        cache = loadSpellCache()
+        cache: SpellCache = loadSpellCache()
         show_all = messagebox.askyesno(
             translate(MessageText.PREVIEW_MODE),
             translate(MessageText.PREVIEW_QUESTION),
@@ -1428,7 +1437,7 @@ class InterfaceHandler:
             )
             return
 
-        cache = loadItemCache()
+        cache: ItemCache = loadItemCache()
         show_all = messagebox.askyesno(
             translate(MessageText.PREVIEW_MODE),
             translate(MessageText.PREVIEW_QUESTION),
@@ -1457,14 +1466,13 @@ class InterfaceHandler:
     def run(self) -> None:
         self.root.mainloop()
 
-
 class PreviewWindow(tk.Toplevel):
     def __init__(
         self,
         root: tk.Tk,
         items: Sequence[Union[Item, SimpleItem, Armor]],
         image_handler: ImageHandler,
-        cache: dict,
+        cache: ItemCache,
     ) -> None:
         super().__init__(root)
         try:
@@ -1495,7 +1503,7 @@ class PreviewWindow(tk.Toplevel):
         ttk.Button(btn_frame, text=translate(UIText.BUTTON_FLIP), command=self._toggle_flip).pack(side="left", padx=2)
         ttk.Button(btn_frame, text=translate(UIText.BUTTON_SKIP), command=self._skip).pack(side="left", padx=2)
         ttk.Button(btn_frame, text=translate(UIText.BUTTON_NEXT), command=self._next).pack(side="left", padx=2)
-        self.flip = False
+        self.flip: bool = False
         self.skip_flag = False
 
         self.original: Image.Image | None = None
@@ -1506,11 +1514,11 @@ class PreviewWindow(tk.Toplevel):
     def _load_current(self) -> None:
         item = self.items[self.index]
         t = self.cache.get(item.id, {"rotate": 0.0, "scale": 1.0, "flip": False})
-        self.angle_var.set(t.get("rotate", 0.0))
-        self.scale_var.set(t.get("scale", 1.0))
-        self.flip = t.get("flip", False)
-        self.x_var.set(t.get("offset_x", 0.0))
-        self.y_var.set(t.get("offset_y", 0.0))
+        self.angle_var.set(float(t.get("rotate", 0.0)))
+        self.scale_var.set(float(t.get("scale", 1.0)))
+        self.flip = bool(t.get("flip", False))
+        self.x_var.set(float(t.get("offset_x", 0.0)))
+        self.y_var.set(float(t.get("offset_y", 0.0)))
         if not self._generate_image(item):
             return
         self._update_image()
@@ -1593,7 +1601,7 @@ class SpellPreviewWindow(tk.Toplevel):
         root: tk.Tk,
         spells: List[Spell],
         image_handler: ImageHandler,
-        cache: dict,
+        cache: SpellCache,
     ) -> None:
         super().__init__(root)
         try:
@@ -1656,7 +1664,7 @@ class SpellPreviewWindow(tk.Toplevel):
         ttk.Button(btn_frame, text=translate(UIText.BUTTON_FLIP), command=self._toggle_flip).pack(side="left", padx=2)
         ttk.Button(btn_frame, text=translate(UIText.BUTTON_SKIP), command=self._skip).pack(side="left", padx=2)
         ttk.Button(btn_frame, text=translate(UIText.BUTTON_NEXT), command=self._next).pack(side="left", padx=2)
-        self.flip = False
+        self.flip: bool = False
         self.skip_flag = False
 
         self.original: Image.Image | None = None
@@ -1667,11 +1675,11 @@ class SpellPreviewWindow(tk.Toplevel):
     def _load_current(self) -> None:
         sp = self.spells[self.index]
         t = self.cache.get(sp.id, {"rotate": 0.0, "scale": 1.0, "flip": False})
-        self.angle_var.set(t.get("rotate", 0.0))
-        self.scale_var.set(t.get("scale", 1.0))
-        self.flip = t.get("flip", False)
-        self.x_var.set(t.get("offset_x", 0.0))
-        self.y_var.set(t.get("offset_y", 0.0))
+        self.angle_var.set(float(t.get("rotate", 0.0)))
+        self.scale_var.set(float(t.get("scale", 1.0)))
+        self.flip = bool(t.get("flip", False))
+        self.x_var.set(float(t.get("offset_x", 0.0)))
+        self.y_var.set(float(t.get("offset_y", 0.0)))
         if not self._generate_image(sp):
             return
         self._update_image()

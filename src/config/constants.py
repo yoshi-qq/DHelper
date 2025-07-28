@@ -182,7 +182,7 @@ class _Size:
         self.RELATIVE: tuple[float, float] = relative
         self.ABSOLUTE: tuple[int, int] = absolute
 
-class _LayoutElement:
+class LayoutElement:
     def __init__(self, x: float, y: float, width: float, height: float) -> None:
         rel_pos = (x / 356, y / 497)
         rel_size = (width / 356, height / 497)
@@ -194,20 +194,20 @@ class _LayoutElement:
 
 class _ItemConstants:
     def __init__(self) -> None:
-        self.TITLE: _LayoutElement = _LayoutElement(177, 55, 200, 55)
-        self.PRICE: _LayoutElement = _LayoutElement(292, 116, 70, 50)
-        self.STATS: _LayoutElement = _LayoutElement(60, 386, 270, 70)
-        self.IMAGE: _LayoutElement = _LayoutElement(180, 229, 313, 266)
+        self.TITLE: LayoutElement = LayoutElement(177, 55, 200, 55)
+        self.PRICE: LayoutElement = LayoutElement(292, 116, 70, 50)
+        self.STATS: LayoutElement = LayoutElement(60, 386, 270, 70)
+        self.IMAGE: LayoutElement = LayoutElement(180, 229, 313, 266)
 
 
 class _MaterialConstants:
     def __init__(self) -> None:
         sY = _SpellConstants.SMALLS_Y_OFFSET
-        self.SPOKEN: _LayoutElement = _LayoutElement(150, 380+sY, 25, 25)
-        self.MATERIAL: _LayoutElement = _LayoutElement(185, 380+sY, 25, 25)
-        self.GESTURAL: _LayoutElement = _LayoutElement(220, 380+sY, 25, 25)
-        self.NAME: _LayoutElement = _LayoutElement(185, 400+sY, 100, 18)
-        self.COST: _LayoutElement = _LayoutElement(185, 420+sY, 75, 20)
+        self.SPOKEN: LayoutElement = LayoutElement(150, 380+sY, 25, 25)
+        self.MATERIAL: LayoutElement = LayoutElement(185, 380+sY, 25, 25)
+        self.GESTURAL: LayoutElement = LayoutElement(220, 380+sY, 25, 25)
+        self.NAME: LayoutElement = LayoutElement(185, 400+sY, 100, 18)
+        self.COST: LayoutElement = LayoutElement(185, 420+sY, 75, 20)
 
 class _SpellConstants:
     SMALLS_Y_OFFSET: int = 60
@@ -215,26 +215,26 @@ class _SpellConstants:
     def __init__(self) -> None:
         sY = _SpellConstants.SMALLS_Y_OFFSET
         mY = _SpellConstants.MID_Y_OFFSET
-        self.TITLE: _LayoutElement = _LayoutElement(200, 55, 135, 55)
-        self.LEVEL: _LayoutElement = _LayoutElement(109, 61, 56, 56)
-        self.CATEGORY: _LayoutElement = _LayoutElement(180, 104, 153, 26)
-        self.IMAGE: _LayoutElement = _LayoutElement(177, 240, 310, 190)
-        self.DURATION: _LayoutElement = _LayoutElement(60, 430, 36, 36)
-        self.DURATION_TEXT: _LayoutElement = _LayoutElement(60, 460, 36, 26)
-        self.COOLDOWN: _LayoutElement = _LayoutElement(105, 395+mY, 36, 36)
-        self.COOLDOWN_TEXT: _LayoutElement = _LayoutElement(105, 425+mY, 36, 26)
-        self.DAMAGE: _LayoutElement = _LayoutElement(255, 395+mY, 36, 36)
-        self.DAMAGE_TEXT: _LayoutElement = _LayoutElement(255, 425+mY, 36, 26)
-        self.RANGE: _LayoutElement = _LayoutElement(300, 430, 36, 36)
-        self.RANGE_TEXT: _LayoutElement = _LayoutElement(300, 460, 36, 26)
+        self.TITLE: LayoutElement = LayoutElement(200, 55, 135, 55)
+        self.LEVEL: LayoutElement = LayoutElement(109, 61, 56, 56)
+        self.CATEGORY: LayoutElement = LayoutElement(180, 104, 153, 26)
+        self.IMAGE: LayoutElement = LayoutElement(177, 240, 310, 190)
+        self.DURATION: LayoutElement = LayoutElement(60, 430, 36, 36)
+        self.DURATION_TEXT: LayoutElement = LayoutElement(60, 460, 36, 26)
+        self.COOLDOWN: LayoutElement = LayoutElement(105, 395+mY, 36, 36)
+        self.COOLDOWN_TEXT: LayoutElement = LayoutElement(105, 425+mY, 36, 26)
+        self.DAMAGE: LayoutElement = LayoutElement(255, 395+mY, 36, 36)
+        self.DAMAGE_TEXT: LayoutElement = LayoutElement(255, 425+mY, 36, 26)
+        self.RANGE: LayoutElement = LayoutElement(300, 430, 36, 36)
+        self.RANGE_TEXT: LayoutElement = LayoutElement(300, 460, 36, 26)
         self.MATERIAL: _MaterialConstants = _MaterialConstants()
-        self.CONCENTRATION: _LayoutElement = _LayoutElement(150, 355+sY, 25, 25)
-        self.CAST_TIME: _LayoutElement = _LayoutElement(185, 355+sY, 25, 25)
-        self.RITUAL: _LayoutElement = _LayoutElement(220, 355+sY, 25, 25)
-        self.SAVING_THROW: _LayoutElement = _LayoutElement(260, 365, 40, 18)
-        self.SUB_RANGE: _LayoutElement = _LayoutElement(185, 385, 50, 20)
-        self.TARGET: _LayoutElement = _LayoutElement(185, 360, 40, 40)
-        self.OVERLEVEL: _LayoutElement = _LayoutElement(320, 275, 30, 190) # for later use
+        self.CONCENTRATION: LayoutElement = LayoutElement(150, 355+sY, 25, 25)
+        self.CAST_TIME: LayoutElement = LayoutElement(185, 355+sY, 25, 25)
+        self.RITUAL: LayoutElement = LayoutElement(220, 355+sY, 25, 25)
+        self.SAVING_THROW: LayoutElement = LayoutElement(260, 365, 40, 18)
+        self.SUB_RANGE: LayoutElement = LayoutElement(185, 385, 50, 20)
+        self.TARGET: LayoutElement = LayoutElement(185, 360, 40, 40)
+        self.OVERLEVEL: LayoutElement = LayoutElement(320, 275, 30, 190) # for later use
 
 ITEM = _ItemConstants()
 SPELL = _SpellConstants()

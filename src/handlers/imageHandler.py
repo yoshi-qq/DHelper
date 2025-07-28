@@ -1,14 +1,13 @@
-from typing import Optional, Callable, List
+from typing import Optional, Callable, List, Any
 import os
 from config.constants import (
     # New hierarchical constants
-    FONT_STYLE, IMAGE, ITEM, PATHS, SPELL, TEXT, FONT
+    FONT_STYLE, IMAGE, ITEM, PATHS, SPELL, TEXT, FONT, LayoutElement
 )
 from classes.types import (
     AttributeType,
     Currency,
     Damage,
-    Weapon,
     Armor,
     SimpleItem,
     Item,
@@ -16,7 +15,7 @@ from classes.types import (
     TargetType,
 )
 from helpers.translationHelper import translate
-from helpers.dataHelper import getWeapons, getItems, getSpells, getArmors
+from helpers.dataHelper import getWeapons, getSpells
 from helpers.formattingHelper import (
     getMaxFontSize,
     findOptimalAttributeLayout,
@@ -33,10 +32,10 @@ class ImageHandler:
     def __init__(self) -> None:
         pass
 
-    def _iconOp(self, path: str, layout, center: bool = True) -> Callable[[Image.Image], None]:
+    def _iconOp(self, path: str, layout: LayoutElement, center: bool = True) -> Callable[[Image.Image], None]:
         def op(background: Image.Image) -> None:
             icon = Image.open(path).convert("RGBA")
-            icon = icon.resize(layout.SIZE.ABSOLUTE, Resampling.LANCZOS)
+            icon = icon.resize(tuple(map(int, layout.SIZE.ABSOLUTE)), Resampling.LANCZOS) # type: ignore
             pos = layout.POSITION.ABSOLUTE
             if center:
                 pos = (
@@ -50,7 +49,7 @@ class ImageHandler:
     def _textOp(
         self,
         text: str,
-        layout,
+        layout: LayoutElement,
         fontPath: str,
         maxSize: int,
     ) -> Callable[[Image.Image], None]:
@@ -73,7 +72,7 @@ class ImageHandler:
     def _imageOp(
         self,
         path: str,
-        layout,
+        layout: Any,
         rotate: float = 0.0,
         flip: bool = False,
         scale: float = 1.0,
@@ -98,7 +97,7 @@ class ImageHandler:
             )
             imageX += int(offset_x)
             imageY += int(offset_y)
-            resized = image.resize((width, height), resample=Resampling.LANCZOS)
+            resized = image.resize((width, height), resample=Resampling.LANCZOS) # type: ignore
             background.paste(resized, (imageX, imageY), mask=resized)
 
         return op

@@ -1,22 +1,20 @@
 import json
 from json import load, dump
 from classes.types import (
-    Item,
     Weapon,
     Armor,
     SimpleItem,
-    JsonItem,
     JsonWeapon,
     JsonArmor,
     JsonSimpleItem,
-    JsonItemCache,
+    ItemCache,
+    SpellCache,
     Spell,
     JsonSpell,
 )
 from config.constants import DATA, PATHS
 import os
 from helpers.conversionHelper import (
-    toItem,
     toWeapon,
     toArmor,
     toSimpleItem,
@@ -68,7 +66,7 @@ def addItem(item: SimpleItem) -> None:
 
 
 
-def loadItemCache() -> dict[str, JsonItemCache]:
+def loadItemCache() -> ItemCache:
     if not os.path.exists(PATHS.ITEM_CACHE):
         os.makedirs(PATHS.CACHE, exist_ok=True)
         with open(PATHS.ITEM_CACHE, "w", encoding="utf-8") as file:
@@ -78,7 +76,7 @@ def loadItemCache() -> dict[str, JsonItemCache]:
         return json.load(file)
 
 
-def saveItemCache(cache: dict[str, JsonItemCache]) -> None:
+def saveItemCache(cache: ItemCache) -> None:
     os.makedirs(PATHS.CACHE, exist_ok=True)
     with open(PATHS.ITEM_CACHE, "w", encoding="utf-8") as file:
         dump(cache, file, ensure_ascii=False, indent=4)
@@ -117,7 +115,7 @@ def addSpell(spell: Spell) -> None:
         dump(data, file, ensure_ascii=False, indent=4)
 
 
-def loadSpellCache() -> dict[str, JsonItemCache]:
+def loadSpellCache() -> SpellCache:
     if not os.path.exists(PATHS.SPELL_CACHE):
         os.makedirs(PATHS.CACHE, exist_ok=True)
         with open(PATHS.SPELL_CACHE, "w", encoding="utf-8") as file:
@@ -127,7 +125,7 @@ def loadSpellCache() -> dict[str, JsonItemCache]:
         return json.load(file)
 
 
-def saveSpellCache(cache: dict[str, JsonItemCache]) -> None:
+def saveSpellCache(cache: SpellCache) -> None:
     os.makedirs(PATHS.CACHE, exist_ok=True)
     with open(PATHS.SPELL_CACHE, "w", encoding="utf-8") as file:
         dump(cache, file, ensure_ascii=False, indent=4)
