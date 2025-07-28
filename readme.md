@@ -1,4 +1,4 @@
-# DHelper – card generator for DnD 5e
+# ![Logo](src/assets/logo.png) DHelper – card generator for DnD 5e
 
 ## Welcome
 

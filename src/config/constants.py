@@ -43,7 +43,6 @@ class _FontPaths:
 class _FontConstants:
     def __init__(self) -> None:
         self.PATHS: _FontPaths = _FontPaths()
-        # Semantic aliases for specific uses
         self.TITLE_PATH: str = self.PATHS.BOLD_ITALIC
         self.PRICE_PATH: str = self.PATHS.BOLD
         self.STATS_PATH: str = self.PATHS.BOLD
@@ -62,8 +61,7 @@ class _ImagePaths:
         self.ARMOR: str = join(assets, "armor")
         self.SPELLS: str = join(assets, "spells")
         self.BACKGROUND: str = join(assets, "background")
-        # icon used for application windows
-        self.APP_ICON: str = join(self.SPELLS, "feuerball.png")
+        self.APP_ICON: str = join(self.ASSETS, "logo.png")
 
 
 class _BackgroundImages:
