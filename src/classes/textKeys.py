@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class PrefixText(Enum):
     WEIGHT_PREFIX = "WeightPrefix"
     WEIGHT_SUFFIX = "WeightSuffix"
@@ -7,6 +8,7 @@ class PrefixText(Enum):
     DEX_MAX_PREFIX = "DexMaxPrefix"
     STRENGTH_REQ_PREFIX = "StrengthReqPrefix"
     STEALTH_DISADVANTAGE = "StealthDisadvantage"
+
 
 class UIText(Enum):
     APP_TITLE = "AppTitle"
@@ -52,6 +54,7 @@ class UIText(Enum):
     ADD_SPELL_TITLE = "AddSpellTitle"
     EDIT_SPELL_TITLE = "EditSpellTitle"
     SPELL_PREVIEW_TITLE = "SpellPreviewTitle"
+
 
 class MessageText(Enum):
     NO_SELECTION_TITLE = "NoSelectionTitle"

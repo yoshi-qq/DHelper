@@ -15,7 +15,9 @@ def _load_settings() -> None:
     global _current_lang, _current_theme
     if not os.path.exists(SETTINGS_PATH):
         with open(SETTINGS_PATH, "w", encoding="utf-8") as f:
-            json.dump({"language": "en", "theme": "light"}, f, ensure_ascii=False, indent=2)
+            json.dump(
+                {"language": "en", "theme": "light"}, f, ensure_ascii=False, indent=2
+            )
         _current_lang = "en"
         _current_theme = "light"
         return
@@ -27,7 +29,12 @@ def _load_settings() -> None:
 
 def _save_settings() -> None:
     with open(SETTINGS_PATH, "w", encoding="utf-8") as f:
-        json.dump({"language": _current_lang, "theme": _current_theme}, f, ensure_ascii=False, indent=2)
+        json.dump(
+            {"language": _current_lang, "theme": _current_theme},
+            f,
+            ensure_ascii=False,
+            indent=2,
+        )
 
 
 def load_language(lang: str) -> None:

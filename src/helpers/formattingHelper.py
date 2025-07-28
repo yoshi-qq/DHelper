@@ -31,7 +31,13 @@ def formatPriceWithSuffix(value: float) -> str:
         return formatFloatAsInt(value)
 
 
-def getMaxFontSize(text: str, fontPath: str, maxSize: int, maxWidth: float, maxHeight: float = float("inf")) -> int:
+def getMaxFontSize(
+    text: str,
+    fontPath: str,
+    maxSize: int,
+    maxWidth: float,
+    maxHeight: float = float("inf"),
+) -> int:
     size = maxSize
     dummyImage = Image.new("RGB", (1, 1))
     draw = ImageDraw.Draw(dummyImage)
@@ -45,12 +51,23 @@ def getMaxFontSize(text: str, fontPath: str, maxSize: int, maxWidth: float, maxH
     return size
 
 
-def findOptimalAttributeLayout(attributes: list[str], fixedRows: list[str], fontPath: str, maxFontSize: int, maxWidth: float, maxHeight: float) -> tuple[list[str], int]:
+def findOptimalAttributeLayout(
+    attributes: list[str],
+    fixedRows: list[str],
+    fontPath: str,
+    maxFontSize: int,
+    maxWidth: float,
+    maxHeight: float,
+) -> tuple[list[str], int]:
     if not attributes:
-        return fixedRows, getMaxFontSize("\n".join(fixedRows), fontPath, maxFontSize, maxWidth, maxHeight)
+        return fixedRows, getMaxFontSize(
+            "\n".join(fixedRows), fontPath, maxFontSize, maxWidth, maxHeight
+        )
 
     bestLayout = fixedRows + [", ".join(attributes)]
-    bestFontSize = getMaxFontSize("\n".join(bestLayout), fontPath, maxFontSize, maxWidth, maxHeight)
+    bestFontSize = getMaxFontSize(
+        "\n".join(bestLayout), fontPath, maxFontSize, maxWidth, maxHeight
+    )
 
     if len(attributes) > 1:
         for splitPoint in range(1, len(attributes)):
@@ -59,7 +76,9 @@ def findOptimalAttributeLayout(attributes: list[str], fixedRows: list[str], font
             testRows = fixedRows + [line1, line2]
             testString = "\n".join(testRows)
 
-            fontSize = getMaxFontSize(testString, fontPath, maxFontSize, maxWidth, maxHeight)
+            fontSize = getMaxFontSize(
+                testString, fontPath, maxFontSize, maxWidth, maxHeight
+            )
 
             if fontSize > bestFontSize:
                 bestFontSize = fontSize
@@ -76,7 +95,9 @@ def findOptimalAttributeLayout(attributes: list[str], fixedRows: list[str], font
         testRows = fixedRows + [line1, line2, line3]
         testString = "\n".join(testRows)
 
-        fontSize = getMaxFontSize(testString, fontPath, maxFontSize, maxWidth, maxHeight)
+        fontSize = getMaxFontSize(
+            testString, fontPath, maxFontSize, maxWidth, maxHeight
+        )
 
         if fontSize > bestFontSize:
             bestFontSize = fontSize
@@ -90,7 +111,9 @@ def findOptimalAttributeLayout(attributes: list[str], fixedRows: list[str], font
                 testRows = fixedRows + [line1, line2, line3]
                 testString = "\n".join(testRows)
 
-                fontSize = getMaxFontSize(testString, fontPath, maxFontSize, maxWidth, maxHeight)
+                fontSize = getMaxFontSize(
+                    testString, fontPath, maxFontSize, maxWidth, maxHeight
+                )
 
                 if fontSize > bestFontSize:
                     bestFontSize = fontSize
@@ -102,7 +125,11 @@ def findOptimalAttributeLayout(attributes: list[str], fixedRows: list[str], font
 def formatDamage(d: Damage, withType: bool = False) -> str:
     """Return a formatted damage string."""
     diceStr = f"{d.diceAmount}D{d.diceType}" if d.diceAmount > 0 else ""
-    bonusStr = "" if d.bonus == 0 else str(d.bonus) if not diceStr else f" {'+' if d.bonus > 0 else ''}{d.bonus}"
+    bonusStr = (
+        ""
+        if d.bonus == 0
+        else str(d.bonus) if not diceStr else f" {'+' if d.bonus > 0 else ''}{d.bonus}"
+    )
     result = f"{diceStr}{bonusStr}"
     if withType:
         result = f"{result} {d.damageType}".strip()

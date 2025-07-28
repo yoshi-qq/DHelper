@@ -77,33 +77,33 @@ class InterfaceHandler:
             pass
         bg = "#f5f5f5"
         fg = "#333333"
-        style.configure(".", background=bg, foreground=fg) # type: ignore
-        style.configure("TFrame", background=bg) # type: ignore
-        style.configure("TLabel", background=bg, foreground=fg) # type: ignore
-        style.configure("TCheckbutton", background=bg, foreground=fg) # type: ignore
-        style.configure("TButton", background="#e0e0e0", foreground=fg) # type: ignore
-        style.configure( # type: ignore
+        style.configure(".", background=bg, foreground=fg)  # type: ignore
+        style.configure("TFrame", background=bg)  # type: ignore
+        style.configure("TLabel", background=bg, foreground=fg)  # type: ignore
+        style.configure("TCheckbutton", background=bg, foreground=fg)  # type: ignore
+        style.configure("TButton", background="#e0e0e0", foreground=fg)  # type: ignore
+        style.configure(  # type: ignore
             "TEntry",
             fieldbackground="#ffffff",
             background="#ffffff",
             foreground=fg,
             insertcolor=fg,
         )
-        style.configure( # type: ignore
+        style.configure(  # type: ignore
             "TCombobox",
             fieldbackground="#ffffff",
             background="#ffffff",
             foreground=fg,
             selectbackground="#dddddd",
         )
-        self.root.option_add("*TCombobox*Listbox.background", "#ffffff") # type: ignore
-        self.root.option_add("*TCombobox*Listbox.foreground", fg) # type: ignore
-        self.root.option_add("*TCombobox*Listbox.selectBackground", "#dddddd") # type: ignore
-        style.map("TButton", background=[("active", "#cccccc")]) # type: ignore
-        style.map("TCheckbutton", background=[("active", "#cccccc")]) # type: ignore
-        style.configure("Treeview", background="#ffffff", foreground=fg, fieldbackground="#ffffff") # type: ignore
-        style.configure("Treeview.Heading", background="#e0e0e0", foreground=fg) # type: ignore
-        style.map("Treeview", background=[("selected", "#cccccc")]) # type: ignore
+        self.root.option_add("*TCombobox*Listbox.background", "#ffffff")  # type: ignore
+        self.root.option_add("*TCombobox*Listbox.foreground", fg)  # type: ignore
+        self.root.option_add("*TCombobox*Listbox.selectBackground", "#dddddd")  # type: ignore
+        style.map("TButton", background=[("active", "#cccccc")])  # type: ignore
+        style.map("TCheckbutton", background=[("active", "#cccccc")])  # type: ignore
+        style.configure("Treeview", background="#ffffff", foreground=fg, fieldbackground="#ffffff")  # type: ignore
+        style.configure("Treeview.Heading", background="#e0e0e0", foreground=fg)  # type: ignore
+        style.map("Treeview", background=[("selected", "#cccccc")])  # type: ignore
         self.root.configure(bg=bg)
 
     def _set_dark_theme(self) -> None:
@@ -114,33 +114,33 @@ class InterfaceHandler:
             pass
         bg = "#333333"
         fg = "#f5f5f5"
-        style.configure(".", background=bg, foreground=fg) # type: ignore
-        style.configure("TFrame", background=bg) # type: ignore
-        style.configure("TLabel", background=bg, foreground=fg) # type: ignore
-        style.configure("TCheckbutton", background=bg, foreground=fg) # type: ignore
-        style.configure("TButton", background="#444444", foreground=fg) # type: ignore
-        style.configure( # type: ignore
+        style.configure(".", background=bg, foreground=fg)  # type: ignore
+        style.configure("TFrame", background=bg)  # type: ignore
+        style.configure("TLabel", background=bg, foreground=fg)  # type: ignore
+        style.configure("TCheckbutton", background=bg, foreground=fg)  # type: ignore
+        style.configure("TButton", background="#444444", foreground=fg)  # type: ignore
+        style.configure(  # type: ignore
             "TEntry",
             fieldbackground="#555555",
             background="#555555",
             foreground=fg,
             insertcolor=fg,
         )
-        style.configure( # type: ignore
+        style.configure(  # type: ignore
             "TCombobox",
             fieldbackground="#555555",
             background="#555555",
             foreground=fg,
             selectbackground="#666666",
         )
-        self.root.option_add("*TCombobox*Listbox.background", "#555555") # type: ignore
-        self.root.option_add("*TCombobox*Listbox.foreground", fg) # type: ignore
-        self.root.option_add("*TCombobox*Listbox.selectBackground", "#777777") # type: ignore
-        style.map("TButton", background=[("active", "#666666")]) # type: ignore
-        style.map("TCheckbutton", background=[("active", "#666666")]) # type: ignore
-        style.configure("Treeview", background="#555555", foreground=fg, fieldbackground="#555555") # type: ignore
-        style.configure("Treeview.Heading", background="#444444", foreground=fg) # type: ignore
-        style.map("Treeview", background=[("selected", "#666666")]) # type: ignore
+        self.root.option_add("*TCombobox*Listbox.background", "#555555")  # type: ignore
+        self.root.option_add("*TCombobox*Listbox.foreground", fg)  # type: ignore
+        self.root.option_add("*TCombobox*Listbox.selectBackground", "#777777")  # type: ignore
+        style.map("TButton", background=[("active", "#666666")])  # type: ignore
+        style.map("TCheckbutton", background=[("active", "#666666")])  # type: ignore
+        style.configure("Treeview", background="#555555", foreground=fg, fieldbackground="#555555")  # type: ignore
+        style.configure("Treeview.Heading", background="#444444", foreground=fg)  # type: ignore
+        style.map("Treeview", background=[("selected", "#666666")])  # type: ignore
         self.root.configure(bg=bg)
 
     def _apply_theme(self) -> None:
@@ -157,62 +157,146 @@ class InterfaceHandler:
         self._clear_root()
         frame = ttk.Frame(self.root, padding=20)
         frame.pack(fill="both", expand=True)
-        ttk.Button(frame, text=translate(UIText.BUTTON_WEAPONS), command=self._open_weapons_menu, width=30).pack(pady=10)
-        ttk.Button(frame, text=translate(UIText.BUTTON_ARMOR), command=self._open_armors_menu, width=30).pack(pady=10)
-        ttk.Button(frame, text=translate(UIText.BUTTON_ITEMS), command=self._open_items_menu, width=30).pack(pady=10)
-        ttk.Button(frame, text=translate(UIText.BUTTON_SPELLS), command=self._open_spells_menu, width=30).pack(pady=10)
-        ttk.Button(frame, text=translate(UIText.BUTTON_SETTINGS), command=self._open_settings_menu, width=30).pack(pady=10)
+        ttk.Button(
+            frame,
+            text=translate(UIText.BUTTON_WEAPONS),
+            command=self._open_weapons_menu,
+            width=30,
+        ).pack(pady=10)
+        ttk.Button(
+            frame,
+            text=translate(UIText.BUTTON_ARMOR),
+            command=self._open_armors_menu,
+            width=30,
+        ).pack(pady=10)
+        ttk.Button(
+            frame,
+            text=translate(UIText.BUTTON_ITEMS),
+            command=self._open_items_menu,
+            width=30,
+        ).pack(pady=10)
+        ttk.Button(
+            frame,
+            text=translate(UIText.BUTTON_SPELLS),
+            command=self._open_spells_menu,
+            width=30,
+        ).pack(pady=10)
+        ttk.Button(
+            frame,
+            text=translate(UIText.BUTTON_SETTINGS),
+            command=self._open_settings_menu,
+            width=30,
+        ).pack(pady=10)
 
     def _open_weapons_menu(self) -> None:
         self._clear_root()
         frame = ttk.Frame(self.root, padding=20)
         frame.pack(fill="both", expand=True)
-        ttk.Button(frame, text=translate(UIText.BUTTON_ADD_ITEM), command=self._open_add_weapon).pack(pady=5, fill="x")
-        ttk.Button(frame, text=translate(UIText.BUTTON_MANAGE_ITEMS), command=self._open_manage_weapons).pack(pady=5, fill="x")
-        ttk.Button(frame, text=translate(UIText.BUTTON_PRINT_ITEMS), command=self._open_print_weapons).pack(pady=5, fill="x")
-        ttk.Button(frame, text=translate(UIText.BUTTON_BACK), command=self._build_main_menu).pack(pady=10)
+        ttk.Button(
+            frame, text=translate(UIText.BUTTON_ADD_ITEM), command=self._open_add_weapon
+        ).pack(pady=5, fill="x")
+        ttk.Button(
+            frame,
+            text=translate(UIText.BUTTON_MANAGE_ITEMS),
+            command=self._open_manage_weapons,
+        ).pack(pady=5, fill="x")
+        ttk.Button(
+            frame,
+            text=translate(UIText.BUTTON_PRINT_ITEMS),
+            command=self._open_print_weapons,
+        ).pack(pady=5, fill="x")
+        ttk.Button(
+            frame, text=translate(UIText.BUTTON_BACK), command=self._build_main_menu
+        ).pack(pady=10)
 
     def _open_armors_menu(self) -> None:
         self._clear_root()
         frame = ttk.Frame(self.root, padding=20)
         frame.pack(fill="both", expand=True)
-        ttk.Button(frame, text=translate(UIText.BUTTON_ADD_ITEM), command=self._open_add_armor).pack(pady=5, fill="x")
-        ttk.Button(frame, text=translate(UIText.BUTTON_MANAGE_ITEMS), command=self._open_manage_armors).pack(pady=5, fill="x")
-        ttk.Button(frame, text=translate(UIText.BUTTON_PRINT_ITEMS), command=self._open_print_armors).pack(pady=5, fill="x")
-        ttk.Button(frame, text=translate(UIText.BUTTON_BACK), command=self._build_main_menu).pack(pady=10)
+        ttk.Button(
+            frame, text=translate(UIText.BUTTON_ADD_ITEM), command=self._open_add_armor
+        ).pack(pady=5, fill="x")
+        ttk.Button(
+            frame,
+            text=translate(UIText.BUTTON_MANAGE_ITEMS),
+            command=self._open_manage_armors,
+        ).pack(pady=5, fill="x")
+        ttk.Button(
+            frame,
+            text=translate(UIText.BUTTON_PRINT_ITEMS),
+            command=self._open_print_armors,
+        ).pack(pady=5, fill="x")
+        ttk.Button(
+            frame, text=translate(UIText.BUTTON_BACK), command=self._build_main_menu
+        ).pack(pady=10)
 
     def _open_items_menu(self) -> None:
         self._clear_root()
         frame = ttk.Frame(self.root, padding=20)
         frame.pack(fill="both", expand=True)
-        ttk.Button(frame, text=translate(UIText.BUTTON_ADD_ITEM), command=self._open_add_item).pack(pady=5, fill="x")
-        ttk.Button(frame, text=translate(UIText.BUTTON_MANAGE_ITEMS), command=self._open_manage_items).pack(pady=5, fill="x")
-        ttk.Button(frame, text=translate(UIText.BUTTON_PRINT_ITEMS), command=self._open_print_items).pack(pady=5, fill="x")
-        ttk.Button(frame, text=translate(UIText.BUTTON_BACK), command=self._build_main_menu).pack(pady=10)
+        ttk.Button(
+            frame, text=translate(UIText.BUTTON_ADD_ITEM), command=self._open_add_item
+        ).pack(pady=5, fill="x")
+        ttk.Button(
+            frame,
+            text=translate(UIText.BUTTON_MANAGE_ITEMS),
+            command=self._open_manage_items,
+        ).pack(pady=5, fill="x")
+        ttk.Button(
+            frame,
+            text=translate(UIText.BUTTON_PRINT_ITEMS),
+            command=self._open_print_items,
+        ).pack(pady=5, fill="x")
+        ttk.Button(
+            frame, text=translate(UIText.BUTTON_BACK), command=self._build_main_menu
+        ).pack(pady=10)
 
     def _open_spells_menu(self) -> None:
         self._clear_root()
         frame = ttk.Frame(self.root, padding=20)
         frame.pack(fill="both", expand=True)
-        ttk.Button(frame, text=translate(UIText.BUTTON_ADD_SPELL), command=self._open_add_spell).pack(pady=5, fill="x")
-        ttk.Button(frame, text=translate(UIText.BUTTON_MANAGE_SPELLS), command=self._open_manage_spells).pack(pady=5, fill="x")
-        ttk.Button(frame, text=translate(UIText.BUTTON_PRINT_SPELLS), command=self._open_print_spells).pack(pady=5, fill="x")
-        ttk.Button(frame, text=translate(UIText.BUTTON_BACK), command=self._build_main_menu).pack(pady=10)
+        ttk.Button(
+            frame, text=translate(UIText.BUTTON_ADD_SPELL), command=self._open_add_spell
+        ).pack(pady=5, fill="x")
+        ttk.Button(
+            frame,
+            text=translate(UIText.BUTTON_MANAGE_SPELLS),
+            command=self._open_manage_spells,
+        ).pack(pady=5, fill="x")
+        ttk.Button(
+            frame,
+            text=translate(UIText.BUTTON_PRINT_SPELLS),
+            command=self._open_print_spells,
+        ).pack(pady=5, fill="x")
+        ttk.Button(
+            frame, text=translate(UIText.BUTTON_BACK), command=self._build_main_menu
+        ).pack(pady=10)
 
     def _open_settings_menu(self) -> None:
         self._clear_root()
         frame = ttk.Frame(self.root, padding=20)
         frame.pack(fill="both", expand=True)
 
-        ttk.Label(frame, text=translate(UIText.LANGUAGE_LABEL)).grid(row=0, column=0, sticky="e", padx=5, pady=2)
+        ttk.Label(frame, text=translate(UIText.LANGUAGE_LABEL)).grid(
+            row=0, column=0, sticky="e", padx=5, pady=2
+        )
         languages = [f[:-5] for f in os.listdir(LANG_DIR) if f.endswith(".json")]
         lang_var = tk.StringVar(value=get_language())
-        ttk.Combobox(frame, textvariable=lang_var, values=languages, state="readonly").grid(row=0, column=1, padx=5, pady=2)
+        ttk.Combobox(
+            frame, textvariable=lang_var, values=languages, state="readonly"
+        ).grid(row=0, column=1, padx=5, pady=2)
 
-        ttk.Label(frame, text=translate(UIText.THEME_LABEL)).grid(row=1, column=0, sticky="e", padx=5, pady=2)
+        ttk.Label(frame, text=translate(UIText.THEME_LABEL)).grid(
+            row=1, column=0, sticky="e", padx=5, pady=2
+        )
         theme_map = {"light": UIText.LIGHT_OPTION, "dark": UIText.DARK_OPTION}
         theme_var = tk.StringVar(value=translate(theme_map[get_theme()]))
-        ttk.Combobox(frame, textvariable=theme_var, values=[translate(v) for v in theme_map.values()], state="readonly").grid(row=1, column=1, padx=5, pady=2)
+        ttk.Combobox(
+            frame,
+            textvariable=theme_var,
+            values=[translate(v) for v in theme_map.values()],
+            state="readonly",
+        ).grid(row=1, column=1, padx=5, pady=2)
 
         def apply() -> None:
             set_language(lang_var.get())
@@ -221,7 +305,9 @@ class InterfaceHandler:
             self._apply_theme()
             self._build_main_menu()
 
-        ttk.Button(frame, text=translate(UIText.SAVE_BUTTON), command=apply).grid(row=2, column=0, columnspan=2, pady=10)
+        ttk.Button(frame, text=translate(UIText.SAVE_BUTTON), command=apply).grid(
+            row=2, column=0, columnspan=2, pady=10
+        )
 
     # ===== Manage Weapons =====
     def _open_manage_weapons(self) -> None:
@@ -235,18 +321,27 @@ class InterfaceHandler:
         search_var = tk.StringVar()
         sort_var = tk.StringVar(value=translate(UIText.COLUMN_ID))
 
-        ttk.Label(window, text=translate(UIText.SEARCH_LABEL)).grid(row=0, column=0, sticky="e", padx=5, pady=2)
+        ttk.Label(window, text=translate(UIText.SEARCH_LABEL)).grid(
+            row=0, column=0, sticky="e", padx=5, pady=2
+        )
         search_entry = ttk.Entry(window, textvariable=search_var)
         search_entry.grid(row=0, column=1, sticky="ew", padx=5, pady=2)
 
-        ttk.Label(window, text=translate(UIText.SORT_BY_LABEL)).grid(row=1, column=0, sticky="e", padx=5, pady=2)
+        ttk.Label(window, text=translate(UIText.SORT_BY_LABEL)).grid(
+            row=1, column=0, sticky="e", padx=5, pady=2
+        )
         sort_map = {
             "id": UIText.COLUMN_ID,
             "name": UIText.COLUMN_NAME,
             "price": UIText.COLUMN_PRICE,
             "weight": UIText.COLUMN_WEIGHT,
         }
-        sort_cb = ttk.Combobox(window, textvariable=sort_var, values=[translate(v) for v in sort_map.values()], state="readonly")
+        sort_cb = ttk.Combobox(
+            window,
+            textvariable=sort_var,
+            values=[translate(v) for v in sort_map.values()],
+            state="readonly",
+        )
         sort_cb.grid(row=1, column=1, sticky="ew", padx=5, pady=2)
 
         attribute_types = [str(at) for at in AttributeType]
@@ -255,12 +350,16 @@ class InterfaceHandler:
         attr_frame.grid(row=2, column=0, columnspan=2, sticky="w", padx=5)
         for at in attribute_types:
             var = tk.BooleanVar(value=False)
-            chk = ttk.Checkbutton(attr_frame, text=at, variable=var, command=lambda: update_list())
+            chk = ttk.Checkbutton(
+                attr_frame, text=at, variable=var, command=lambda: update_list()
+            )
             chk.pack(side="left")
             attr_vars[at] = var
 
         columns = ("id", "name", "price", "weight")
-        tree = ttk.Treeview(window, columns=columns, show="headings", selectmode="browse")
+        tree = ttk.Treeview(
+            window, columns=columns, show="headings", selectmode="browse"
+        )
         headings = {
             "id": UIText.COLUMN_ID,
             "name": UIText.COLUMN_NAME,
@@ -276,14 +375,30 @@ class InterfaceHandler:
 
         btn_frame = ttk.Frame(window)
         btn_frame.grid(row=4, column=0, columnspan=2, pady=5)
-        ttk.Button(btn_frame, text=translate(UIText.BUTTON_VIEW_CARD), command=lambda: view_card()).pack(side="left", padx=2)
-        ttk.Button(btn_frame, text=translate(UIText.BUTTON_EDIT_DATA), command=lambda: edit_selected()).pack(side="left", padx=2)
-        ttk.Button(btn_frame, text=translate(UIText.BUTTON_EDIT_CARD), command=lambda: edit_card()).pack(side="left", padx=2)
-        ttk.Button(btn_frame, text=translate(UIText.BUTTON_CLOSE), command=window.destroy).pack(side="left", padx=2)
+        ttk.Button(
+            btn_frame,
+            text=translate(UIText.BUTTON_VIEW_CARD),
+            command=lambda: view_card(),
+        ).pack(side="left", padx=2)
+        ttk.Button(
+            btn_frame,
+            text=translate(UIText.BUTTON_EDIT_DATA),
+            command=lambda: edit_selected(),
+        ).pack(side="left", padx=2)
+        ttk.Button(
+            btn_frame,
+            text=translate(UIText.BUTTON_EDIT_CARD),
+            command=lambda: edit_card(),
+        ).pack(side="left", padx=2)
+        ttk.Button(
+            btn_frame, text=translate(UIText.BUTTON_CLOSE), command=window.destroy
+        ).pack(side="left", padx=2)
 
         def filter_items() -> List[Item]:
             search = search_var.get().lower()
-            selected = [to_enum(AttributeType, a) for a, v in attr_vars.items() if v.get()]
+            selected = [
+                to_enum(AttributeType, a) for a, v in attr_vars.items() if v.get()
+            ]
             filtered: List[Item] = []
             for it in items:
                 if search not in it.name.lower() and search not in it.id.lower():
@@ -348,7 +463,7 @@ class InterfaceHandler:
                 top.title(f"{item.name} Card")
                 tk_img = ImageTk.PhotoImage(img)
                 lbl = ttk.Label(top, image=tk_img)
-                lbl.image = tk_img # type: ignore (anti garbage collection)
+                lbl.image = tk_img  # type: ignore (anti garbage collection)
                 lbl.pack()
             except Exception as e:
                 messagebox.showerror(
@@ -384,7 +499,6 @@ class InterfaceHandler:
         sort_cb.bind("<<ComboboxSelected>>", update_list)
         update_list()
 
-
     def _open_manage_items(self) -> None:
         window = tk.Toplevel(self.root)
         self._set_icon(window)
@@ -394,11 +508,28 @@ class InterfaceHandler:
         items = getItems()
 
         search_var = tk.StringVar()
-        ttk.Label(window, text=translate(UIText.SEARCH_LABEL)).grid(row=0, column=0, sticky="e", padx=5, pady=2)
-        ttk.Entry(window, textvariable=search_var).grid(row=0, column=1, sticky="ew", padx=5, pady=2)
+        ttk.Label(window, text=translate(UIText.SEARCH_LABEL)).grid(
+            row=0, column=0, sticky="e", padx=5, pady=2
+        )
+        ttk.Entry(window, textvariable=search_var).grid(
+            row=0, column=1, sticky="ew", padx=5, pady=2
+        )
 
-        tree = ttk.Treeview(window, columns=("id", "name", "price", "weight"), show="headings", selectmode="browse")
-        for col, key in zip(("id", "name", "price", "weight"), [UIText.COLUMN_ID, UIText.COLUMN_NAME, UIText.COLUMN_PRICE, UIText.COLUMN_WEIGHT]):
+        tree = ttk.Treeview(
+            window,
+            columns=("id", "name", "price", "weight"),
+            show="headings",
+            selectmode="browse",
+        )
+        for col, key in zip(
+            ("id", "name", "price", "weight"),
+            [
+                UIText.COLUMN_ID,
+                UIText.COLUMN_NAME,
+                UIText.COLUMN_PRICE,
+                UIText.COLUMN_WEIGHT,
+            ],
+        ):
             tree.heading(col, text=translate(key))
             tree.column(col, width=100, anchor="center")
         tree.grid(row=1, column=0, columnspan=2, sticky="nsew", padx=5, pady=5)
@@ -407,14 +538,32 @@ class InterfaceHandler:
 
         btn_frame = ttk.Frame(window)
         btn_frame.grid(row=2, column=0, columnspan=2, pady=5)
-        ttk.Button(btn_frame, text=translate(UIText.BUTTON_VIEW_CARD), command=lambda: view_card()).pack(side="left", padx=2)
-        ttk.Button(btn_frame, text=translate(UIText.BUTTON_EDIT_DATA), command=lambda: edit_selected()).pack(side="left", padx=2)
-        ttk.Button(btn_frame, text=translate(UIText.BUTTON_EDIT_CARD), command=lambda: edit_card()).pack(side="left", padx=2)
-        ttk.Button(btn_frame, text=translate(UIText.BUTTON_CLOSE), command=window.destroy).pack(side="left", padx=2)
+        ttk.Button(
+            btn_frame,
+            text=translate(UIText.BUTTON_VIEW_CARD),
+            command=lambda: view_card(),
+        ).pack(side="left", padx=2)
+        ttk.Button(
+            btn_frame,
+            text=translate(UIText.BUTTON_EDIT_DATA),
+            command=lambda: edit_selected(),
+        ).pack(side="left", padx=2)
+        ttk.Button(
+            btn_frame,
+            text=translate(UIText.BUTTON_EDIT_CARD),
+            command=lambda: edit_card(),
+        ).pack(side="left", padx=2)
+        ttk.Button(
+            btn_frame, text=translate(UIText.BUTTON_CLOSE), command=window.destroy
+        ).pack(side="left", padx=2)
 
         def filter_items() -> List[SimpleItem]:
             search = search_var.get().lower()
-            return [it for it in items if search in it.id.lower() or search in it.name.lower()]
+            return [
+                it
+                for it in items
+                if search in it.id.lower() or search in it.name.lower()
+            ]
 
         def update_list(*_args: object) -> None:
             tree.delete(*tree.get_children())
@@ -478,10 +627,16 @@ class InterfaceHandler:
         items = getArmors()
 
         search_var = tk.StringVar()
-        ttk.Label(window, text=translate(UIText.SEARCH_LABEL)).grid(row=0, column=0, sticky="e", padx=5, pady=2)
-        ttk.Entry(window, textvariable=search_var).grid(row=0, column=1, sticky="ew", padx=5, pady=2)
+        ttk.Label(window, text=translate(UIText.SEARCH_LABEL)).grid(
+            row=0, column=0, sticky="e", padx=5, pady=2
+        )
+        ttk.Entry(window, textvariable=search_var).grid(
+            row=0, column=1, sticky="ew", padx=5, pady=2
+        )
 
-        tree = ttk.Treeview(window, columns=("id", "name", "ac"), show="headings", selectmode="browse")
+        tree = ttk.Treeview(
+            window, columns=("id", "name", "ac"), show="headings", selectmode="browse"
+        )
         tree.heading("id", text=translate(UIText.COLUMN_ID))
         tree.heading("name", text=translate(UIText.COLUMN_NAME))
         tree.heading("ac", text="AC")
@@ -493,14 +648,32 @@ class InterfaceHandler:
 
         btn_frame = ttk.Frame(window)
         btn_frame.grid(row=2, column=0, columnspan=2, pady=5)
-        ttk.Button(btn_frame, text=translate(UIText.BUTTON_VIEW_CARD), command=lambda: view_card()).pack(side="left", padx=2)
-        ttk.Button(btn_frame, text=translate(UIText.BUTTON_EDIT_DATA), command=lambda: edit_selected()).pack(side="left", padx=2)
-        ttk.Button(btn_frame, text=translate(UIText.BUTTON_EDIT_CARD), command=lambda: edit_card()).pack(side="left", padx=2)
-        ttk.Button(btn_frame, text=translate(UIText.BUTTON_CLOSE), command=window.destroy).pack(side="left", padx=2)
+        ttk.Button(
+            btn_frame,
+            text=translate(UIText.BUTTON_VIEW_CARD),
+            command=lambda: view_card(),
+        ).pack(side="left", padx=2)
+        ttk.Button(
+            btn_frame,
+            text=translate(UIText.BUTTON_EDIT_DATA),
+            command=lambda: edit_selected(),
+        ).pack(side="left", padx=2)
+        ttk.Button(
+            btn_frame,
+            text=translate(UIText.BUTTON_EDIT_CARD),
+            command=lambda: edit_card(),
+        ).pack(side="left", padx=2)
+        ttk.Button(
+            btn_frame, text=translate(UIText.BUTTON_CLOSE), command=window.destroy
+        ).pack(side="left", padx=2)
 
         def filter_items() -> List[Armor]:
             search = search_var.get().lower()
-            return [it for it in items if search in it.id.lower() or search in it.name.lower()]
+            return [
+                it
+                for it in items
+                if search in it.id.lower() or search in it.name.lower()
+            ]
 
         def update_list(*_args: object) -> None:
             tree.delete(*tree.get_children())
@@ -562,10 +735,17 @@ class InterfaceHandler:
 
         entries: dict[str, tk.Entry] = {}
         row = 0
-        labels = [UIText.COLUMN_ID, UIText.COLUMN_NAME, UIText.COLUMN_PRICE, UIText.COLUMN_WEIGHT]
+        labels = [
+            UIText.COLUMN_ID,
+            UIText.COLUMN_NAME,
+            UIText.COLUMN_PRICE,
+            UIText.COLUMN_WEIGHT,
+        ]
         for label in labels:
             text = translate(label)
-            ttk.Label(window, text=text).grid(row=row, column=0, sticky="e", padx=5, pady=2)
+            ttk.Label(window, text=text).grid(
+                row=row, column=0, sticky="e", padx=5, pady=2
+            )
             entry = ttk.Entry(window)
             entry.grid(row=row, column=1, padx=5, pady=2)
             if item:
@@ -584,19 +764,32 @@ class InterfaceHandler:
             row += 1
 
         damage_types = [str(dt) for dt in DamageType]
-        ttk.Label(window, text=translate(UIText.DAMAGE_LABEL)).grid(row=row, column=0, sticky="e", padx=5, pady=2)
+        ttk.Label(window, text=translate(UIText.DAMAGE_LABEL)).grid(
+            row=row, column=0, sticky="e", padx=5, pady=2
+        )
         dmg_frame = ttk.Frame(window)
         dmg_frame.grid(row=row, column=1, sticky="w")
         entries["Damage Dice Amount"] = ttk.Entry(dmg_frame, width=4)
         entries["Damage Dice Amount"].pack(side="left")
         ttk.Label(dmg_frame, text="d").pack(side="left")
-        dmg_dice_type = ttk.Combobox(dmg_frame, values=[str(d) for d in GAME.DICE_SIZES], width=4, state="readonly")
+        dmg_dice_type = ttk.Combobox(
+            dmg_frame,
+            values=[str(d) for d in GAME.DICE_SIZES],
+            width=4,
+            state="readonly",
+        )
         dmg_dice_type.pack(side="left", padx=2)
         entries["Damage Dice Type"] = dmg_dice_type
         entries["Damage Bonus"] = ttk.Entry(dmg_frame, width=4)
         entries["Damage Bonus"].pack(side="left", padx=2)
         dmg_type_var = tk.StringVar(value="")
-        dmg_type_cb = ttk.Combobox(dmg_frame, textvariable=dmg_type_var, values=[""] + damage_types, state="readonly", width=10)
+        dmg_type_cb = ttk.Combobox(
+            dmg_frame,
+            textvariable=dmg_type_var,
+            values=[""] + damage_types,
+            state="readonly",
+            width=10,
+        )
         dmg_type_cb.pack(side="left", padx=2)
         if item and item.damage:
             entries["Damage Dice Amount"].insert(0, str(item.damage.diceAmount))
@@ -609,7 +802,9 @@ class InterfaceHandler:
         attr_vars: dict[str, tk.BooleanVar] = {}
         range_frames: dict[str, ttk.Frame] = {}
         range_entries: dict[str, tuple[tk.Entry, tk.Entry]] = {}
-        ttk.Label(window, text=translate(UIText.ATTRIBUTES_LABEL)).grid(row=row, column=0, sticky="ne", padx=5, pady=2)
+        ttk.Label(window, text=translate(UIText.ATTRIBUTES_LABEL)).grid(
+            row=row, column=0, sticky="ne", padx=5, pady=2
+        )
         attr_frame = ttk.Frame(window)
         attr_frame.grid(row=row, column=1, sticky="w")
 
@@ -627,11 +822,18 @@ class InterfaceHandler:
                     vers_frame.grid_remove()
 
         for at in attribute_types:
-            var = tk.BooleanVar(value=item is not None and to_enum(AttributeType, at) in item.attributes)
-            chk = ttk.Checkbutton(attr_frame, text=at, variable=var, command=lambda a=at: toggle_range(a))
+            var = tk.BooleanVar(
+                value=item is not None and to_enum(AttributeType, at) in item.attributes
+            )
+            chk = ttk.Checkbutton(
+                attr_frame, text=at, variable=var, command=lambda a=at: toggle_range(a)
+            )
             chk.pack(anchor="w")
             attr_vars[at] = var
-            if at in (translate(AttributeType.THROWN), translate(AttributeType.AMMUNITION)):
+            if at in (
+                translate(AttributeType.THROWN),
+                translate(AttributeType.AMMUNITION),
+            ):
                 r_frame = ttk.Frame(attr_frame)
                 ttk.Label(r_frame, text="min").pack(side="left")
                 e_min = ttk.Entry(r_frame, width=4)
@@ -650,20 +852,29 @@ class InterfaceHandler:
         row += 1
 
         vers_frame = ttk.Frame(window)
-        ttk.Label(vers_frame, text=translate(AttributeType.VERSATILE)).grid(row=0, column=0, sticky="e", padx=5, pady=2)
+        ttk.Label(vers_frame, text=translate(AttributeType.VERSATILE)).grid(
+            row=0, column=0, sticky="e", padx=5, pady=2
+        )
         vers_inner = ttk.Frame(vers_frame)
         vers_inner.grid(row=0, column=1, sticky="w")
         entries["Versatile Dice Amount"] = ttk.Entry(vers_inner, width=4)
         entries["Versatile Dice Amount"].pack(side="left")
         ttk.Label(vers_inner, text="d").pack(side="left")
-        vers_dice_type = ttk.Combobox(vers_inner, values=[str(d) for d in GAME.DICE_SIZES], width=4, state="readonly")
+        vers_dice_type = ttk.Combobox(
+            vers_inner,
+            values=[str(d) for d in GAME.DICE_SIZES],
+            width=4,
+            state="readonly",
+        )
         vers_dice_type.pack(side="left", padx=2)
         entries["Versatile Dice Type"] = vers_dice_type
         entries["Versatile Damage Bonus"] = ttk.Entry(vers_inner, width=4)
         entries["Versatile Damage Bonus"].pack(side="left", padx=2)
         vers_frame.grid(row=row, column=0, columnspan=2, sticky="w")
         if item and item.versatileDamage:
-            entries["Versatile Dice Amount"].insert(0, str(item.versatileDamage.diceAmount))
+            entries["Versatile Dice Amount"].insert(
+                0, str(item.versatileDamage.diceAmount)
+            )
             vers_dice_type.set(str(item.versatileDamage.diceType))
             entries["Versatile Damage Bonus"].insert(0, str(item.versatileDamage.bonus))
         if item and AttributeType.VERSATILE in item.attributes:
@@ -676,18 +887,61 @@ class InterfaceHandler:
             try:
                 _id = entries[translate(UIText.COLUMN_ID)].get().strip()
                 name = entries[translate(UIText.COLUMN_NAME)].get().strip()
-                price = float(entries[translate(UIText.COLUMN_PRICE)].get()) if entries[translate(UIText.COLUMN_PRICE)].get() else 0
-                weight = float(entries[translate(UIText.COLUMN_WEIGHT)].get()) if entries[translate(UIText.COLUMN_WEIGHT)].get() else 0
-                dmg_amount = int(entries["Damage Dice Amount"].get()) if entries["Damage Dice Amount"].get() else 0
-                dmg_type = int(entries["Damage Dice Type"].get()) if entries["Damage Dice Type"].get() else 1
-                dmg_bonus = int(entries["Damage Bonus"].get()) if entries["Damage Bonus"].get() else 0
-                vers_amount = int(entries["Versatile Dice Amount"].get()) if entries["Versatile Dice Amount"].get() else 0
-                vers_type = int(entries["Versatile Dice Type"].get()) if entries["Versatile Dice Type"].get() else 1
-                vers_bonus = int(entries["Versatile Damage Bonus"].get()) if entries["Versatile Damage Bonus"].get() else 0
-                damage_type = to_enum(DamageType, dmg_type_var.get()) if dmg_type_var.get() else None
-                attributes = [to_enum(AttributeType, at) for at in attribute_types if attr_vars[at].get()]
+                price = (
+                    float(entries[translate(UIText.COLUMN_PRICE)].get())
+                    if entries[translate(UIText.COLUMN_PRICE)].get()
+                    else 0
+                )
+                weight = (
+                    float(entries[translate(UIText.COLUMN_WEIGHT)].get())
+                    if entries[translate(UIText.COLUMN_WEIGHT)].get()
+                    else 0
+                )
+                dmg_amount = (
+                    int(entries["Damage Dice Amount"].get())
+                    if entries["Damage Dice Amount"].get()
+                    else 0
+                )
+                dmg_type = (
+                    int(entries["Damage Dice Type"].get())
+                    if entries["Damage Dice Type"].get()
+                    else 1
+                )
+                dmg_bonus = (
+                    int(entries["Damage Bonus"].get())
+                    if entries["Damage Bonus"].get()
+                    else 0
+                )
+                vers_amount = (
+                    int(entries["Versatile Dice Amount"].get())
+                    if entries["Versatile Dice Amount"].get()
+                    else 0
+                )
+                vers_type = (
+                    int(entries["Versatile Dice Type"].get())
+                    if entries["Versatile Dice Type"].get()
+                    else 1
+                )
+                vers_bonus = (
+                    int(entries["Versatile Damage Bonus"].get())
+                    if entries["Versatile Damage Bonus"].get()
+                    else 0
+                )
+                damage_type = (
+                    to_enum(DamageType, dmg_type_var.get())
+                    if dmg_type_var.get()
+                    else None
+                )
+                attributes = [
+                    to_enum(AttributeType, at)
+                    for at in attribute_types
+                    if attr_vars[at].get()
+                ]
                 ranges: dict[AttributeType, tuple[int, int]] = {}
-                for at in (translate(AttributeType.THROWN), translate(AttributeType.AMMUNITION)):
+                for at in (
+                    translate(AttributeType.THROWN),
+                    translate(AttributeType.AMMUNITION),
+                ):
                     if attr_vars.get(at) and attr_vars[at].get():
                         try:
                             low = int(range_entries[at][0].get())
@@ -725,34 +979,47 @@ class InterfaceHandler:
                         vers_amount,
                         vers_type,
                         vers_bonus,
-                        to_enum(DamageType, dmg_type_var.get()) if dmg_type_var.get() else (damage_type if damage_type is not None else DamageType.SLASHING)
+                        (
+                            to_enum(DamageType, dmg_type_var.get())
+                            if dmg_type_var.get()
+                            else (
+                                damage_type
+                                if damage_type is not None
+                                else DamageType.SLASHING
+                            )
+                        ),
                     )
-                    if (vers_amount or vers_bonus) and (dmg_type_var.get() or damage_type)
+                    if (vers_amount or vers_bonus)
+                    and (dmg_type_var.get() or damage_type)
                     else None
                 ),
                 attributes=attributes,
                 ranges=ranges,
             )
-            addWeapon(Weapon(
-                _id=new_item.id,
-                name=new_item.name,
-                price=new_item.price,
-                weight=new_item.weight,
-                damageDiceAmount=dmg_amount,
-                damageDiceType=dmg_type,
-                damageBonus=dmg_bonus,
-                damageType=damage_type,
-                versatileDamage=new_item.versatileDamage,
-                attributes=new_item.attributes,
-                ranges=new_item.ranges,
-            ))
+            addWeapon(
+                Weapon(
+                    _id=new_item.id,
+                    name=new_item.name,
+                    price=new_item.price,
+                    weight=new_item.weight,
+                    damageDiceAmount=dmg_amount,
+                    damageDiceType=dmg_type,
+                    damageBonus=dmg_bonus,
+                    damageType=damage_type,
+                    versatileDamage=new_item.versatileDamage,
+                    attributes=new_item.attributes,
+                    ranges=new_item.ranges,
+                )
+            )
             messagebox.showinfo(
                 translate(MessageText.SAVED_TITLE),
                 translate(MessageText.ITEM_SAVED),
             )
             window.destroy()
 
-        ttk.Button(window, text=translate(UIText.SAVE_BUTTON), command=submit).grid(row=row, column=0, columnspan=2, pady=10)
+        ttk.Button(window, text=translate(UIText.SAVE_BUTTON), command=submit).grid(
+            row=row, column=0, columnspan=2, pady=10
+        )
 
     def _simple_item_form(self, window: tk.Toplevel, item: SimpleItem | None) -> None:
         self._set_icon(window)
@@ -760,10 +1027,17 @@ class InterfaceHandler:
 
         entries: dict[str, tk.Entry] = {}
         row = 0
-        labels = [UIText.COLUMN_ID, UIText.COLUMN_NAME, UIText.COLUMN_PRICE, UIText.COLUMN_WEIGHT]
+        labels = [
+            UIText.COLUMN_ID,
+            UIText.COLUMN_NAME,
+            UIText.COLUMN_PRICE,
+            UIText.COLUMN_WEIGHT,
+        ]
         for label in labels:
             text = translate(label)
-            ttk.Label(window, text=text).grid(row=row, column=0, sticky="e", padx=5, pady=2)
+            ttk.Label(window, text=text).grid(
+                row=row, column=0, sticky="e", padx=5, pady=2
+            )
             entry = ttk.Entry(window)
             entry.grid(row=row, column=1, padx=5, pady=2)
             if item:
@@ -781,7 +1055,9 @@ class InterfaceHandler:
             entries[text] = entry
             row += 1
 
-        ttk.Label(window, text="Description").grid(row=row, column=0, sticky="ne", padx=5, pady=2)
+        ttk.Label(window, text="Description").grid(
+            row=row, column=0, sticky="ne", padx=5, pady=2
+        )
         desc = tk.Text(window, width=30, height=4)
         desc.grid(row=row, column=1, padx=5, pady=2)
         if item:
@@ -817,7 +1093,9 @@ class InterfaceHandler:
             )
             window.destroy()
 
-        ttk.Button(window, text=translate(UIText.SAVE_BUTTON), command=submit).grid(row=row, column=0, columnspan=2, pady=10)
+        ttk.Button(window, text=translate(UIText.SAVE_BUTTON), command=submit).grid(
+            row=row, column=0, columnspan=2, pady=10
+        )
 
     def _armor_form(self, window: tk.Toplevel, armor: Armor | None) -> None:
         self._set_icon(window)
@@ -825,10 +1103,17 @@ class InterfaceHandler:
 
         entries: dict[str, tk.Entry] = {}
         row = 0
-        labels = [UIText.COLUMN_ID, UIText.COLUMN_NAME, UIText.COLUMN_PRICE, UIText.COLUMN_WEIGHT]
+        labels = [
+            UIText.COLUMN_ID,
+            UIText.COLUMN_NAME,
+            UIText.COLUMN_PRICE,
+            UIText.COLUMN_WEIGHT,
+        ]
         for label in labels:
             text = translate(label)
-            ttk.Label(window, text=text).grid(row=row, column=0, sticky="e", padx=5, pady=2)
+            ttk.Label(window, text=text).grid(
+                row=row, column=0, sticky="e", padx=5, pady=2
+            )
             entry = ttk.Entry(window)
             entry.grid(row=row, column=1, padx=5, pady=2)
             if armor:
@@ -854,17 +1139,23 @@ class InterfaceHandler:
         row += 1
 
         dex_var = tk.BooleanVar(value=armor.dexBonus if armor else True)
-        ttk.Checkbutton(window, text="Dex Bonus", variable=dex_var).grid(row=row, column=1, sticky="w", padx=5, pady=2)
+        ttk.Checkbutton(window, text="Dex Bonus", variable=dex_var).grid(
+            row=row, column=1, sticky="w", padx=5, pady=2
+        )
         row += 1
 
-        ttk.Label(window, text="Dex Bonus Max").grid(row=row, column=0, sticky="e", padx=5, pady=2)
+        ttk.Label(window, text="Dex Bonus Max").grid(
+            row=row, column=0, sticky="e", padx=5, pady=2
+        )
         dex_max = ttk.Entry(window, width=4)
         dex_max.grid(row=row, column=1, sticky="w", padx=5, pady=2)
         if armor and armor.dexBonusMax is not None:
             dex_max.insert(0, str(armor.dexBonusMax))
         row += 1
 
-        ttk.Label(window, text="Strength Req").grid(row=row, column=0, sticky="e", padx=5, pady=2)
+        ttk.Label(window, text="Strength Req").grid(
+            row=row, column=0, sticky="e", padx=5, pady=2
+        )
         str_req = ttk.Entry(window, width=4)
         str_req.grid(row=row, column=1, sticky="w", padx=5, pady=2)
         if armor and armor.strengthRequirement is not None:
@@ -872,12 +1163,21 @@ class InterfaceHandler:
         row += 1
 
         stealth_var = tk.BooleanVar(value=armor.stealthDisadvantage if armor else False)
-        ttk.Checkbutton(window, text="Stealth Disadvantage", variable=stealth_var).grid(row=row, column=1, sticky="w", padx=5, pady=2)
+        ttk.Checkbutton(window, text="Stealth Disadvantage", variable=stealth_var).grid(
+            row=row, column=1, sticky="w", padx=5, pady=2
+        )
         row += 1
 
-        ttk.Label(window, text="Category").grid(row=row, column=0, sticky="e", padx=5, pady=2)
+        ttk.Label(window, text="Category").grid(
+            row=row, column=0, sticky="e", padx=5, pady=2
+        )
         cat_var = tk.StringVar()
-        cat_cb = ttk.Combobox(window, textvariable=cat_var, values=[c.value for c in ArmorCategory], state="readonly")
+        cat_cb = ttk.Combobox(
+            window,
+            textvariable=cat_var,
+            values=[c.value for c in ArmorCategory],
+            state="readonly",
+        )
         cat_cb.grid(row=row, column=1, padx=5, pady=2)
         if armor:
             cat_var.set(armor.category.value)
@@ -932,7 +1232,9 @@ class InterfaceHandler:
             )
             window.destroy()
 
-        ttk.Button(window, text=translate(UIText.SAVE_BUTTON), command=submit).grid(row=row, column=0, columnspan=2, pady=10)
+        ttk.Button(window, text=translate(UIText.SAVE_BUTTON), command=submit).grid(
+            row=row, column=0, columnspan=2, pady=10
+        )
 
     def _spell_form(self, window: tk.Toplevel, spell: Spell | None) -> None:
         self._set_icon(window)
@@ -946,39 +1248,58 @@ class InterfaceHandler:
             id_entry.insert(0, spell.id)
         row += 1
 
-        ttk.Label(window, text="Name").grid(row=row, column=0, sticky="e", padx=5, pady=2)
+        ttk.Label(window, text="Name").grid(
+            row=row, column=0, sticky="e", padx=5, pady=2
+        )
         name_entry = ttk.Entry(window)
         name_entry.grid(row=row, column=1, padx=5, pady=2)
         if spell:
             name_entry.insert(0, spell.name)
         row += 1
 
-        ttk.Label(window, text="Level").grid(row=row, column=0, sticky="e", padx=5, pady=2)
-        lvl_cb = ttk.Combobox(window, values=[str(i) for i in range(1, 10)], state="readonly")
+        ttk.Label(window, text="Level").grid(
+            row=row, column=0, sticky="e", padx=5, pady=2
+        )
+        lvl_cb = ttk.Combobox(
+            window, values=[str(i) for i in range(1, 10)], state="readonly"
+        )
         lvl_cb.grid(row=row, column=1, padx=5, pady=2)
         if spell:
             lvl_cb.set(str(spell.level))
         row += 1
 
-        ttk.Label(window, text="Type").grid(row=row, column=0, sticky="e", padx=5, pady=2)
+        ttk.Label(window, text="Type").grid(
+            row=row, column=0, sticky="e", padx=5, pady=2
+        )
         type_var = tk.StringVar()
-        type_cb = ttk.Combobox(window, textvariable=type_var, values=[str(t) for t in SpellType], state="readonly")
+        type_cb = ttk.Combobox(
+            window,
+            textvariable=type_var,
+            values=[str(t) for t in SpellType],
+            state="readonly",
+        )
         type_cb.grid(row=row, column=1, padx=5, pady=2)
         if spell:
             type_var.set(str(spell.type))
         row += 1
 
-        ttk.Label(window, text="Classes").grid(row=row, column=0, sticky="ne", padx=5, pady=2)
+        ttk.Label(window, text="Classes").grid(
+            row=row, column=0, sticky="ne", padx=5, pady=2
+        )
         cls_frame = ttk.Frame(window)
         cls_frame.grid(row=row, column=1, sticky="w")
         class_vars: dict[CasterClassType, tk.BooleanVar] = {}
         for cls in CasterClassType:
-            var = tk.BooleanVar(value=spell is not None and cls in getattr(spell, "casterClasses", []))
+            var = tk.BooleanVar(
+                value=spell is not None and cls in getattr(spell, "casterClasses", [])
+            )
             ttk.Checkbutton(cls_frame, text=str(cls), variable=var).pack(anchor="w")
             class_vars[cls] = var
         row += 1
 
-        ttk.Label(window, text="Range").grid(row=row, column=0, sticky="e", padx=5, pady=2)
+        ttk.Label(window, text="Range").grid(
+            row=row, column=0, sticky="e", padx=5, pady=2
+        )
         range_frame = ttk.Frame(window)
         range_frame.grid(row=row, column=1, sticky="w", padx=5, pady=2)
         range_entry = ttk.Entry(range_frame, width=6)
@@ -988,7 +1309,9 @@ class InterfaceHandler:
             range_entry.insert(0, str(spell.range))
         row += 1
 
-        ttk.Label(window, text="Sub Range").grid(row=row, column=0, sticky="e", padx=5, pady=2)
+        ttk.Label(window, text="Sub Range").grid(
+            row=row, column=0, sticky="e", padx=5, pady=2
+        )
         sub_range_frame = ttk.Frame(window)
         sub_range_frame.grid(row=row, column=1, sticky="w", padx=5, pady=2)
         sub_range_entry = ttk.Entry(sub_range_frame, width=6)
@@ -998,23 +1321,34 @@ class InterfaceHandler:
             sub_range_entry.insert(0, str(spell.subRange))
         row += 1
 
-        ttk.Label(window, text="Duration (s)").grid(row=row, column=0, sticky="e", padx=5, pady=2)
+        ttk.Label(window, text="Duration (s)").grid(
+            row=row, column=0, sticky="e", padx=5, pady=2
+        )
         dur_entry = ttk.Entry(window)
         dur_entry.grid(row=row, column=1, padx=5, pady=2)
         if spell:
             dur_entry.insert(0, str(int(spell.duration.total_seconds())))
         row += 1
 
-        ttk.Label(window, text="Cooldown (s)").grid(row=row, column=0, sticky="e", padx=5, pady=2)
+        ttk.Label(window, text="Cooldown (s)").grid(
+            row=row, column=0, sticky="e", padx=5, pady=2
+        )
         cd_entry = ttk.Entry(window)
         cd_entry.grid(row=row, column=1, padx=5, pady=2)
         if spell:
             cd_entry.insert(0, str(int(spell.cooldown.total_seconds())))
         row += 1
 
-        ttk.Label(window, text="Casting Time").grid(row=row, column=0, sticky="e", padx=5, pady=2)
+        ttk.Label(window, text="Casting Time").grid(
+            row=row, column=0, sticky="e", padx=5, pady=2
+        )
         ct_var = tk.StringVar()
-        ct_cb = ttk.Combobox(window, textvariable=ct_var, values=[str(c) for c in CastingTimeType], state="readonly")
+        ct_cb = ttk.Combobox(
+            window,
+            textvariable=ct_var,
+            values=[str(c) for c in CastingTimeType],
+            state="readonly",
+        )
         ct_cb.grid(row=row, column=1, padx=5, pady=2)
         if spell:
             ct_var.set(str(spell.castingTime))
@@ -1023,16 +1357,27 @@ class InterfaceHandler:
         row += 1
 
         rit_var = tk.BooleanVar(value=spell.ritual if spell else False)
-        ttk.Checkbutton(window, text="Ritual", variable=rit_var).grid(row=row, column=1, sticky="w", padx=5, pady=2)
+        ttk.Checkbutton(window, text="Ritual", variable=rit_var).grid(
+            row=row, column=1, sticky="w", padx=5, pady=2
+        )
         row += 1
 
         conc_var = tk.BooleanVar(value=spell.concentration if spell else False)
-        ttk.Checkbutton(window, text="Concentration", variable=conc_var).grid(row=row, column=1, sticky="w", padx=5, pady=2)
+        ttk.Checkbutton(window, text="Concentration", variable=conc_var).grid(
+            row=row, column=1, sticky="w", padx=5, pady=2
+        )
         row += 1
 
-        ttk.Label(window, text="Target").grid(row=row, column=0, sticky="e", padx=5, pady=2)
+        ttk.Label(window, text="Target").grid(
+            row=row, column=0, sticky="e", padx=5, pady=2
+        )
         target_var = tk.StringVar()
-        target_cb = ttk.Combobox(window, textvariable=target_var, values=[str(t) for t in TargetType], state="readonly")
+        target_cb = ttk.Combobox(
+            window,
+            textvariable=target_var,
+            values=[str(t) for t in TargetType],
+            state="readonly",
+        )
         target_cb.grid(row=row, column=1, padx=5, pady=2)
         if spell:
             target_var.set(str(spell.target))
@@ -1040,42 +1385,63 @@ class InterfaceHandler:
             target_var.set(str(TargetType.SELF))
         row += 1
 
-        ttk.Label(window, text="Damage Dice Amount").grid(row=row, column=0, sticky="e", padx=5, pady=2)
+        ttk.Label(window, text="Damage Dice Amount").grid(
+            row=row, column=0, sticky="e", padx=5, pady=2
+        )
         dmg_amount_entry = ttk.Entry(window, width=4)
         dmg_amount_entry.grid(row=row, column=1, sticky="w", padx=5, pady=2)
         if spell and spell.damage:
             dmg_amount_entry.insert(0, str(spell.damage.diceAmount))
         row += 1
 
-        ttk.Label(window, text="Damage Dice Type").grid(row=row, column=0, sticky="e", padx=5, pady=2)
-        dmg_type_cb = ttk.Combobox(window, values=[str(d) for d in GAME.DICE_SIZES], state="readonly", width=4)
+        ttk.Label(window, text="Damage Dice Type").grid(
+            row=row, column=0, sticky="e", padx=5, pady=2
+        )
+        dmg_type_cb = ttk.Combobox(
+            window, values=[str(d) for d in GAME.DICE_SIZES], state="readonly", width=4
+        )
         dmg_type_cb.grid(row=row, column=1, sticky="w", padx=5, pady=2)
         if spell and spell.damage:
             dmg_type_cb.set(str(spell.damage.diceType))
         row += 1
 
-        ttk.Label(window, text="Damage Bonus").grid(row=row, column=0, sticky="e", padx=5, pady=2)
+        ttk.Label(window, text="Damage Bonus").grid(
+            row=row, column=0, sticky="e", padx=5, pady=2
+        )
         dmg_bonus_entry = ttk.Entry(window, width=4)
         dmg_bonus_entry.grid(row=row, column=1, sticky="w", padx=5, pady=2)
         if spell and spell.damage:
             dmg_bonus_entry.insert(0, str(spell.damage.bonus))
         row += 1
 
-        ttk.Label(window, text="Damage Type").grid(row=row, column=0, sticky="e", padx=5, pady=2)
+        ttk.Label(window, text="Damage Type").grid(
+            row=row, column=0, sticky="e", padx=5, pady=2
+        )
         dmg_type_var = tk.StringVar()
-        dmg_type_enum_cb = ttk.Combobox(window, textvariable=dmg_type_var, values=[str(dt) for dt in DamageType], state="readonly")
+        dmg_type_enum_cb = ttk.Combobox(
+            window,
+            textvariable=dmg_type_var,
+            values=[str(dt) for dt in DamageType],
+            state="readonly",
+        )
         dmg_type_enum_cb.grid(row=row, column=1, padx=5, pady=2)
         if spell and spell.damage:
             dmg_type_var.set(str(spell.damage.damageType))
         row += 1
 
-        ttk.Label(window, text="Components").grid(row=row, column=0, sticky="ne", padx=5, pady=2)
+        ttk.Label(window, text="Components").grid(
+            row=row, column=0, sticky="ne", padx=5, pady=2
+        )
         comp_frame = ttk.Frame(window)
         comp_frame.grid(row=row, column=1, sticky="w")
         verbal_var = tk.BooleanVar(value=spell.components.verbal if spell else False)
-        gestural_var = tk.BooleanVar(value=spell.components.gestural if spell else False)
+        gestural_var = tk.BooleanVar(
+            value=spell.components.gestural if spell else False
+        )
         ttk.Checkbutton(comp_frame, text="Verbal", variable=verbal_var).pack(anchor="w")
-        ttk.Checkbutton(comp_frame, text="Gestural", variable=gestural_var).pack(anchor="w")
+        ttk.Checkbutton(comp_frame, text="Gestural", variable=gestural_var).pack(
+            anchor="w"
+        )
         mat_name = ttk.Entry(comp_frame)
         mat_cost = ttk.Entry(comp_frame, width=6)
         ttk.Label(comp_frame, text="Material").pack(anchor="w")
@@ -1088,7 +1454,9 @@ class InterfaceHandler:
                 mat_cost.insert(0, str(spell.components.material.cost))
         row += 1
 
-        ttk.Label(window, text="Level Bonus").grid(row=row, column=0, sticky="e", padx=5, pady=2)
+        ttk.Label(window, text="Level Bonus").grid(
+            row=row, column=0, sticky="e", padx=5, pady=2
+        )
         level_bonus_entry = ttk.Entry(window, width=25)
         level_bonus_entry.grid(row=row, column=1, padx=5, pady=2)
         if spell:
@@ -1105,7 +1473,9 @@ class InterfaceHandler:
                 duration = timedelta(seconds=float(dur_entry.get() or 0))
                 cooldown = timedelta(seconds=float(cd_entry.get() or 0))
                 rng = float(range_entry.get() or 0)
-                sub_rng = float(sub_range_entry.get()) if sub_range_entry.get() else None
+                sub_rng = (
+                    float(sub_range_entry.get()) if sub_range_entry.get() else None
+                )
                 ctime = to_enum(CastingTimeType, ct_var.get())
                 target = to_enum(TargetType, target_var.get())
 
@@ -1115,7 +1485,9 @@ class InterfaceHandler:
                         int(dmg_amount_entry.get() or 0),
                         int(dmg_type_cb.get() or 1),
                         int(dmg_bonus_entry.get() or 0),
-                        to_enum(DamageType, dmg_type_var.get() or DamageType.SLASHING.value),
+                        to_enum(
+                            DamageType, dmg_type_var.get() or DamageType.SLASHING.value
+                        ),
                     )
                 material = None
                 if mat_name.get() or mat_cost.get():
@@ -1161,7 +1533,9 @@ class InterfaceHandler:
             )
             window.destroy()
 
-        ttk.Button(window, text=translate(UIText.SAVE_BUTTON), command=submit).grid(row=row, column=0, columnspan=2, pady=10)
+        ttk.Button(window, text=translate(UIText.SAVE_BUTTON), command=submit).grid(
+            row=row, column=0, columnspan=2, pady=10
+        )
 
     def _open_add_weapon(self) -> None:
         window = tk.Toplevel(self.root)
@@ -1221,11 +1595,15 @@ class InterfaceHandler:
         spells = getSpells()
 
         search_var = tk.StringVar()
-        ttk.Label(window, text=translate(UIText.SEARCH_LABEL)).grid(row=0, column=0, sticky="e", padx=5, pady=2)
+        ttk.Label(window, text=translate(UIText.SEARCH_LABEL)).grid(
+            row=0, column=0, sticky="e", padx=5, pady=2
+        )
         search_entry = ttk.Entry(window, textvariable=search_var)
         search_entry.grid(row=0, column=1, sticky="ew", padx=5, pady=2)
 
-        tree = ttk.Treeview(window, columns=("id", "name"), show="headings", selectmode="browse")
+        tree = ttk.Treeview(
+            window, columns=("id", "name"), show="headings", selectmode="browse"
+        )
         tree.heading("id", text=translate(UIText.COLUMN_ID))
         tree.heading("name", text=translate(UIText.COLUMN_NAME))
         tree.column("id", width=100, anchor="center")
@@ -1236,14 +1614,32 @@ class InterfaceHandler:
 
         btn_frame = ttk.Frame(window)
         btn_frame.grid(row=2, column=0, columnspan=2, pady=5)
-        ttk.Button(btn_frame, text=translate(UIText.BUTTON_VIEW_CARD), command=lambda: view_card()).pack(side="left", padx=2)
-        ttk.Button(btn_frame, text=translate(UIText.BUTTON_EDIT_DATA), command=lambda: edit_selected()).pack(side="left", padx=2)
-        ttk.Button(btn_frame, text=translate(UIText.BUTTON_EDIT_CARD), command=lambda: print_card()).pack(side="left", padx=2)
-        ttk.Button(btn_frame, text=translate(UIText.BUTTON_CLOSE), command=window.destroy).pack(side="left", padx=2)
+        ttk.Button(
+            btn_frame,
+            text=translate(UIText.BUTTON_VIEW_CARD),
+            command=lambda: view_card(),
+        ).pack(side="left", padx=2)
+        ttk.Button(
+            btn_frame,
+            text=translate(UIText.BUTTON_EDIT_DATA),
+            command=lambda: edit_selected(),
+        ).pack(side="left", padx=2)
+        ttk.Button(
+            btn_frame,
+            text=translate(UIText.BUTTON_EDIT_CARD),
+            command=lambda: print_card(),
+        ).pack(side="left", padx=2)
+        ttk.Button(
+            btn_frame, text=translate(UIText.BUTTON_CLOSE), command=window.destroy
+        ).pack(side="left", padx=2)
 
         def filter_spells() -> List[Spell]:
             search = search_var.get().lower()
-            return [sp for sp in spells if search in sp.id.lower() or search in sp.name.lower()]
+            return [
+                sp
+                for sp in spells
+                if search in sp.id.lower() or search in sp.name.lower()
+            ]
 
         def update_list(*_args: object) -> None:
             tree.delete(*tree.get_children())
@@ -1466,6 +1862,7 @@ class InterfaceHandler:
     def run(self) -> None:
         self.root.mainloop()
 
+
 class PreviewWindow(tk.Toplevel):
     def __init__(
         self,
@@ -1493,16 +1890,54 @@ class PreviewWindow(tk.Toplevel):
         btn_frame = ttk.Frame(self)
         btn_frame.pack()
         self.angle_var = tk.DoubleVar(value=0)
-        ttk.Scale(btn_frame, from_=-180, to=180, orient="horizontal", variable=self.angle_var, command=self._update_angle, length=150).pack(side="left", padx=2)
+        ttk.Scale(
+            btn_frame,
+            from_=-180,
+            to=180,
+            orient="horizontal",
+            variable=self.angle_var,
+            command=self._update_angle,
+            length=150,
+        ).pack(side="left", padx=2)
         self.scale_var = tk.DoubleVar(value=1.0)
-        ttk.Scale(btn_frame, from_=0.5, to=1.5, orient="horizontal", variable=self.scale_var, command=self._update_scale, length=150).pack(side="left", padx=2)
+        ttk.Scale(
+            btn_frame,
+            from_=0.5,
+            to=1.5,
+            orient="horizontal",
+            variable=self.scale_var,
+            command=self._update_scale,
+            length=150,
+        ).pack(side="left", padx=2)
         self.x_var = tk.DoubleVar(value=0)
-        ttk.Scale(btn_frame, from_=-50, to=50, orient="horizontal", variable=self.x_var, command=self._update_offset, length=100).pack(side="left", padx=2)
+        ttk.Scale(
+            btn_frame,
+            from_=-50,
+            to=50,
+            orient="horizontal",
+            variable=self.x_var,
+            command=self._update_offset,
+            length=100,
+        ).pack(side="left", padx=2)
         self.y_var = tk.DoubleVar(value=0)
-        ttk.Scale(btn_frame, from_=-50, to=50, orient="horizontal", variable=self.y_var, command=self._update_offset, length=100).pack(side="left", padx=2)
-        ttk.Button(btn_frame, text=translate(UIText.BUTTON_FLIP), command=self._toggle_flip).pack(side="left", padx=2)
-        ttk.Button(btn_frame, text=translate(UIText.BUTTON_SKIP), command=self._skip).pack(side="left", padx=2)
-        ttk.Button(btn_frame, text=translate(UIText.BUTTON_NEXT), command=self._next).pack(side="left", padx=2)
+        ttk.Scale(
+            btn_frame,
+            from_=-50,
+            to=50,
+            orient="horizontal",
+            variable=self.y_var,
+            command=self._update_offset,
+            length=100,
+        ).pack(side="left", padx=2)
+        ttk.Button(
+            btn_frame, text=translate(UIText.BUTTON_FLIP), command=self._toggle_flip
+        ).pack(side="left", padx=2)
+        ttk.Button(
+            btn_frame, text=translate(UIText.BUTTON_SKIP), command=self._skip
+        ).pack(side="left", padx=2)
+        ttk.Button(
+            btn_frame, text=translate(UIText.BUTTON_NEXT), command=self._next
+        ).pack(side="left", padx=2)
         self.flip: bool = False
         self.skip_flag = False
 
@@ -1661,9 +2096,15 @@ class SpellPreviewWindow(tk.Toplevel):
             command=self._update_offset,
             length=100,
         ).pack(side="left", padx=2)
-        ttk.Button(btn_frame, text=translate(UIText.BUTTON_FLIP), command=self._toggle_flip).pack(side="left", padx=2)
-        ttk.Button(btn_frame, text=translate(UIText.BUTTON_SKIP), command=self._skip).pack(side="left", padx=2)
-        ttk.Button(btn_frame, text=translate(UIText.BUTTON_NEXT), command=self._next).pack(side="left", padx=2)
+        ttk.Button(
+            btn_frame, text=translate(UIText.BUTTON_FLIP), command=self._toggle_flip
+        ).pack(side="left", padx=2)
+        ttk.Button(
+            btn_frame, text=translate(UIText.BUTTON_SKIP), command=self._skip
+        ).pack(side="left", padx=2)
+        ttk.Button(
+            btn_frame, text=translate(UIText.BUTTON_NEXT), command=self._next
+        ).pack(side="left", padx=2)
         self.flip: bool = False
         self.skip_flag = False
 

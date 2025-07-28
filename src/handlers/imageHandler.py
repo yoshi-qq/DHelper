@@ -2,7 +2,14 @@ from typing import Optional, Callable, List, Any
 import os
 from config.constants import (
     # New hierarchical constants
-    FONT_STYLE, IMAGE, ITEM, PATHS, SPELL, TEXT, FONT, LayoutElement
+    FONT_STYLE,
+    IMAGE,
+    ITEM,
+    PATHS,
+    SPELL,
+    TEXT,
+    FONT,
+    LayoutElement,
 )
 from classes.types import (
     AttributeType,
@@ -31,6 +38,7 @@ from PIL.Image import Resampling, Transpose
 
 from helpers.tupleHelper import twoDSub, twoDTruncate
 
+
 class ImageHandler:
     def __init__(self) -> None:
         pass
@@ -57,10 +65,12 @@ class ImageHandler:
         else:  # isinstance(item, Item) - covers general items and weapons
             return join(IMAGE.PATHS.WEAPONS, f"{item.id}.{IMAGE.FORMAT}")
 
-    def _iconOp(self, path: str, layout: LayoutElement, center: bool = True) -> Callable[[Image.Image], None]:
+    def _iconOp(
+        self, path: str, layout: LayoutElement, center: bool = True
+    ) -> Callable[[Image.Image], None]:
         def op(background: Image.Image) -> None:
             icon = Image.open(path).convert("RGBA")
-            icon = icon.resize(tuple(map(int, layout.SIZE.ABSOLUTE)), Resampling.LANCZOS) # type: ignore
+            icon = icon.resize(tuple(map(int, layout.SIZE.ABSOLUTE)), Resampling.LANCZOS)  # type: ignore
             pos = layout.POSITION.ABSOLUTE
             if center:
                 pos = (
@@ -86,7 +96,10 @@ class ImageHandler:
             w = bbox[2] - bbox[0]
             h = bbox[3] - bbox[1]
             draw.text(
-                (layout.POSITION.ABSOLUTE[0] - w / 2, layout.POSITION.ABSOLUTE[1] - h / 2),
+                (
+                    layout.POSITION.ABSOLUTE[0] - w / 2,
+                    layout.POSITION.ABSOLUTE[1] - h / 2,
+                ),
                 text,
                 font=font,
                 fill=FONT_STYLE.COLORS.STATS,
@@ -122,7 +135,7 @@ class ImageHandler:
             )
             imageX += int(offset_x)
             imageY += int(offset_y)
-            resized = image.resize((width, height), resample=Resampling.LANCZOS) # type: ignore
+            resized = image.resize((width, height), resample=Resampling.LANCZOS)  # type: ignore
             background.paste(resized, (imageX, imageY), mask=resized)
 
         return op
@@ -137,7 +150,9 @@ class ImageHandler:
     ) -> Callable[[Image.Image], None]:
         def op(background: Image.Image) -> None:
             fixedRows: list[str] = []
-            fixedRows.append(f"{translate(TEXT.WEIGHT_PREFIX)}{formatFloatAsInt(weight)}{translate(TEXT.WEIGHT_SUFFIX)}")
+            fixedRows.append(
+                f"{translate(TEXT.WEIGHT_PREFIX)}{formatFloatAsInt(weight)}{translate(TEXT.WEIGHT_SUFFIX)}"
+            )
             if damage:
                 fixedRows.append(
                     f"{translate(TEXT.DAMAGE_PREFIX)}{formatDamage(damage, True)}"
@@ -169,11 +184,18 @@ class ImageHandler:
             draw = ImageDraw.Draw(background)
             statsX, statsY = ITEM.STATS.POSITION.ABSOLUTE
             statsFont = ImageFont.truetype(FONT.STATS_PATH, optimalFontSize)
-            draw.text((statsX, statsY), statsString, font=statsFont, fill=FONT_STYLE.COLORS.STATS)
+            draw.text(
+                (statsX, statsY),
+                statsString,
+                font=statsFont,
+                fill=FONT_STYLE.COLORS.STATS,
+            )
 
         return op
 
-    def _simpleStatsOp(self, weight: float, description: str) -> Callable[[Image.Image], None]:
+    def _simpleStatsOp(
+        self, weight: float, description: str
+    ) -> Callable[[Image.Image], None]:
         def op(background: Image.Image) -> None:
             text = f"{translate(TEXT.WEIGHT_PREFIX)}{formatFloatAsInt(weight)}{translate(TEXT.WEIGHT_SUFFIX)}\n{description}".strip()
             draw = ImageDraw.Draw(background)
@@ -197,14 +219,20 @@ class ImageHandler:
     def _armorStatsOp(self, armor: Armor) -> Callable[[Image.Image], None]:
         def op(background: Image.Image) -> None:
             text_lines: list[str] = []
-            text_lines.append(f"{translate(TEXT.WEIGHT_PREFIX)}{formatFloatAsInt(armor.weight)}{translate(TEXT.WEIGHT_SUFFIX)}")
+            text_lines.append(
+                f"{translate(TEXT.WEIGHT_PREFIX)}{formatFloatAsInt(armor.weight)}{translate(TEXT.WEIGHT_SUFFIX)}"
+            )
             text_lines.append(f"AC {armor.armorClass}")
 
             if armor.dexBonusMax is not None:
-                text_lines.append(f"{translate(TEXT.DEX_MAX_PREFIX)}{armor.dexBonusMax}")
+                text_lines.append(
+                    f"{translate(TEXT.DEX_MAX_PREFIX)}{armor.dexBonusMax}"
+                )
 
             if armor.strengthRequirement is not None:
-                text_lines.append(f"{translate(TEXT.STRENGTH_REQ_PREFIX)}{armor.strengthRequirement}")
+                text_lines.append(
+                    f"{translate(TEXT.STRENGTH_REQ_PREFIX)}{armor.strengthRequirement}"
+                )
 
             if armor.stealthDisadvantage:
                 text_lines.append(translate(TEXT.STEALTH_DISADVANTAGE))
@@ -230,7 +258,10 @@ class ImageHandler:
         return op
 
     def _createCard(
-        self, background: Image.Image, instructions: List[Callable[[Image.Image], None]], outputPath: str
+        self,
+        background: Image.Image,
+        instructions: List[Callable[[Image.Image], None]],
+        outputPath: str,
     ) -> None:
         for inst in instructions:
             inst(background)
@@ -292,14 +323,16 @@ class ImageHandler:
             (
                 self._simpleStatsOp(item.weight, item.description)
                 if isinstance(item, SimpleItem)
-                else self._armorStatsOp(item)
-                if isinstance(item, Armor)
-                else self._statsOp(
-                    item.weight,
-                    getattr(item, "damage", None),
-                    getattr(item, "versatileDamage", None),
-                    getattr(item, "attributes", []),
-                    getattr(item, "ranges", {}),
+                else (
+                    self._armorStatsOp(item)
+                    if isinstance(item, Armor)
+                    else self._statsOp(
+                        item.weight,
+                        getattr(item, "damage", None),
+                        getattr(item, "versatileDamage", None),
+                        getattr(item, "attributes", []),
+                        getattr(item, "ranges", {}),
+                    )
                 )
             ),
         ]
@@ -356,8 +389,12 @@ class ImageHandler:
 
         instructions: List[Callable[[Image.Image], None]] = [
             self._iconOp(levelIcon, SPELL.LEVEL, center=True),
-            self._textOp(spell.name, SPELL.TITLE, FONT.TITLE_PATH, FONT_STYLE.SIZES.TITLE),
-            self._textOp(str(spell.type), SPELL.CATEGORY, FONT.TITLE_PATH, FONT_STYLE.SIZES.TITLE),
+            self._textOp(
+                spell.name, SPELL.TITLE, FONT.TITLE_PATH, FONT_STYLE.SIZES.TITLE
+            ),
+            self._textOp(
+                str(spell.type), SPELL.CATEGORY, FONT.TITLE_PATH, FONT_STYLE.SIZES.TITLE
+            ),
             self._imageOp(
                 join(IMAGE.PATHS.SPELLS, f"{spell.id}.{IMAGE.FORMAT}"),
                 SPELL.IMAGE,
@@ -395,21 +432,30 @@ class ImageHandler:
             self._iconOp(IMAGE.ICONS.CONCENTRATION, SPELL.CONCENTRATION),
             self._iconOp(IMAGE.ICONS.RITUAL, SPELL.RITUAL),
             self._textOp(
-                str(spell.castingTime), SPELL.CAST_TIME, FONT.STATS_PATH, FONT_STYLE.SIZES.STATS
+                str(spell.castingTime),
+                SPELL.CAST_TIME,
+                FONT.STATS_PATH,
+                FONT_STYLE.SIZES.STATS,
             ),
         ]
 
         if spell.damage:
             dmg_text = f"{formatDamage(spell.damage)}\n{spell.damage.damageType}"
             instructions.append(
-                self._textOp(dmg_text, SPELL.DAMAGE_TEXT, FONT.STATS_PATH, FONT_STYLE.SIZES.STATS)
+                self._textOp(
+                    dmg_text, SPELL.DAMAGE_TEXT, FONT.STATS_PATH, FONT_STYLE.SIZES.STATS
+                )
             )
         if not spell.components.verbal:
             instructions.append(self._iconOp(IMAGE.ICONS.STRIKE, SPELL.MATERIAL.SPOKEN))
         if not spell.components.material:
-            instructions.append(self._iconOp(IMAGE.ICONS.STRIKE, SPELL.MATERIAL.MATERIAL))
+            instructions.append(
+                self._iconOp(IMAGE.ICONS.STRIKE, SPELL.MATERIAL.MATERIAL)
+            )
         if not spell.components.gestural:
-            instructions.append(self._iconOp(IMAGE.ICONS.STRIKE, SPELL.MATERIAL.GESTURAL))
+            instructions.append(
+                self._iconOp(IMAGE.ICONS.STRIKE, SPELL.MATERIAL.GESTURAL)
+            )
         if spell.components.material:
             if spell.components.material.name:
                 instructions.append(
@@ -463,12 +509,15 @@ class ImageHandler:
             TargetType.SELF: IMAGE.ICONS.TARGETS.SELF,
             TargetType.SPHERE: IMAGE.ICONS.TARGETS.SPHERE,
         }
-        instructions.append(self._iconOp(targetIcons.get(spell.target, IMAGE.ICONS.TARGETS.SELF), SPELL.TARGET))
+        instructions.append(
+            self._iconOp(
+                targetIcons.get(spell.target, IMAGE.ICONS.TARGETS.SELF), SPELL.TARGET
+            )
+        )
 
         level_dir = join(PATHS.SPELL_OUTPUT, f"level{spell.level}")
         outputPath = join(level_dir, f"{spell.id}.png")
         self._createCard(card, instructions, outputPath)
-
 
     def createSpellCards(self) -> None:
         spells: list[Spell] = getSpells()
