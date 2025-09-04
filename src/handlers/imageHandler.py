@@ -12,6 +12,7 @@ from config.constants import (
     TEXT,
     FONT,
     LayoutElement,
+    CARD,
 )
 from classes.types import (
     AttributeType,
@@ -327,7 +328,8 @@ class ImageHandler:
                     backgroundPath = IMAGE.BACKGROUNDS.SILVER_ITEM
                 case Currency.COPPER:
                     backgroundPath = IMAGE.BACKGROUNDS.COPPER_ITEM
-            return Image.open(backgroundPath).convert("RGBA")
+            background = Image.open(backgroundPath).convert("RGBA")
+            return background.resize(CARD.RESOLUTION, Resampling.LANCZOS)
 
         currency = getCurrency(item.price)
         cardImage = createBackground(currency)
@@ -455,7 +457,9 @@ class ImageHandler:
         offset_x: float = 0.0,
         offset_y: float = 0.0,
     ) -> None:
-        card = Image.open(IMAGE.BACKGROUNDS.SPELL).convert("RGBA")
+        card = Image.open(IMAGE.BACKGROUNDS.SPELL).convert("RGBA").resize(
+            CARD.RESOLUTION, Resampling.LANCZOS
+        )
 
         levelIcons = {
             1: IMAGE.ICONS.LEVELS.LEVEL_1,
