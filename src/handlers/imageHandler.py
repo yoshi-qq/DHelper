@@ -38,6 +38,7 @@ from helpers.formattingHelper import (
     formatTimedelta,
     formatFloatAsInt,
     formatPriceWithSuffix,
+    wrapText,
 )
 from os.path import join
 from PIL import Image, ImageDraw, ImageFont
@@ -551,9 +552,15 @@ class ImageHandler:
             )
         if spell.components.material:
             if spell.components.material.name:
+                wrapped_name = wrapText(
+                    spell.components.material.name,
+                    FONT.STATS_PATH,
+                    FONT_STYLE.SIZES.STATS,
+                    SPELL.MATERIAL.NAME.SIZE.ABSOLUTE[0],
+                )
                 instructions.append(
                     self._textOp(
-                        spell.components.material.name,
+                        wrapped_name,
                         SPELL.MATERIAL.NAME,
                         FONT.STATS_PATH,
                         FONT_STYLE.SIZES.STATS,
@@ -562,7 +569,7 @@ class ImageHandler:
             if spell.components.material.cost is not None:
                 instructions.append(
                     self._textOp(
-                        formatFloatAsInt(spell.components.material.cost),
+                        formatPriceWithSuffix(spell.components.material.cost),
                         SPELL.MATERIAL.COST,
                         FONT.STATS_PATH,
                         SECONDARY_FONT_STYLE.SIZES.STATS,
