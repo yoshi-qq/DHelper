@@ -504,10 +504,10 @@ class ImageHandler:
                     FONT.STATS_PATH,
                     FONT_STYLE.SIZES.STATS,
                 ),
-                self._iconOp(IMAGE.ICONS.COOLDOWN, SPELL.COOLDOWN),
+                self._iconOp(IMAGE.ICONS.COOLDOWN, SPELL.CAST_TIME),
                 self._textOp(
-                    formatTimedelta(spell.cooldown),
-                    SPELL.COOLDOWN_TEXT,
+                    str(spell.castingTime),
+                    SPELL.CAST_TIME_TEXT,
                     FONT.STATS_PATH,
                     FONT_STYLE.SIZES.STATS,
                 ),
@@ -524,12 +524,12 @@ class ImageHandler:
                 self._iconOp(IMAGE.ICONS.GESTURAL, SPELL.MATERIAL.GESTURAL),
                 self._iconOp(IMAGE.ICONS.CONCENTRATION, SPELL.CONCENTRATION),
                 self._iconOp(IMAGE.ICONS.RITUAL, SPELL.RITUAL),
-                self._textOp(
-                    str(spell.castingTime),
-                    SPELL.CAST_TIME,
-                    FONT.STATS_PATH,
-                    FONT_STYLE.SIZES.STATS,
-                ),
+                # self._textOp(
+                #     str(spell.castingTime),
+                #     SPELL.CAST_TIME,
+                #     FONT.STATS_PATH,
+                #     FONT_STYLE.SIZES.STATS,
+                # ),
             ]
         )
 

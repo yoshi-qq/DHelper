@@ -255,7 +255,7 @@ class _SpellConstants:
     def __init__(self) -> None:
         sY = _SpellConstants.SMALLS_Y_OFFSET
         mY = _SpellConstants.MID_Y_OFFSET
-        mX = _SpellConstants.MID_X_OFFSET
+        # mX = _SpellConstants.MID_X_OFFSET
         lY = _SpellConstants.LOWER_Y_OFFSET
         self.TITLE: LayoutElement = LayoutElement(200, 55, 135, 55)
         self.LEVEL: LayoutElement = LayoutElement(109, 61, 56, 56)
@@ -271,10 +271,11 @@ class _SpellConstants:
         self.RANGE_TEXT: LayoutElement = LayoutElement(300, 460+lY, 36, 26)
         self.MATERIAL: _MaterialConstants = _MaterialConstants()
         self.CONCENTRATION: LayoutElement = LayoutElement(150, 355+lY+ sY, 25, 25)
-        self.CAST_TIME: LayoutElement = LayoutElement(185+mX, 385+lY, 40, 25)
+        self.CAST_TIME: LayoutElement = LayoutElement(105, 395 +lY+ mY, 36, 36)
+        self.CAST_TIME_TEXT: LayoutElement = LayoutElement(105, 425 + lY+ mY, 36, 26)
         self.RITUAL: LayoutElement = LayoutElement(220, 355 + lY+ sY, 25, 25)
         self.SAVING_THROW: LayoutElement = LayoutElement(255, 350+lY, 40, 18)
-        self.SUB_RANGE: LayoutElement = LayoutElement(185-mX, 385+lY, 50, 20)
+        self.SUB_RANGE: LayoutElement = LayoutElement(185, 385+lY, 50, 20)
         self.TARGET: LayoutElement = LayoutElement(185, 360+lY, 40, 40)
         self.OVERLEVEL: LayoutElement = LayoutElement(
             320, 275+lY, 30, 190
