@@ -5,5 +5,516 @@
         "flip": false,
         "offset_x": 0.0,
         "offset_y": -22.058823529411764
+    },
+    "saeurespritzer": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "beistand": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "alarm": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "gestalt_veraendern": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "tierfreundschaft": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "tierbote": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "tierform": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "tote_beleben": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "gegenstaende_beleben": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "schutzhuelle_gegen_lebendes": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "antimagisches_feld": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "antipathie_sympathie": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "arkanes_auge": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "arkanes_tor": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "arkanes_schloss": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "ruestung_von_agathys": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "arme_von_hadar": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "astrale_projektion": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "vorahnung": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "aura_des_lebens": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "aura_der_reinheit": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "aura_der_gesundheit": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "erwecken": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "verderben": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "verbannendes_niederstrecken": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "verbannung": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "rindenhaut": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "leuchtfeuer_der_hoffnung": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "tiersinn": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "fluch": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "arkane_hand": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "klingenbarriere": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "klingenbann": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "segnen": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "duerre": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "blendendes_niederstrecken": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "blindheit_taubheit": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "flimmern": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "verschwimmen": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "brandmarkendes_niederstrecken": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "brennende_haende": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "blitze_herbeirufen": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "gefuehle_besaenftigen": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "kettenblitz": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "person_bezaubern": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "kalte_hand": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "chromatische_kugel": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "todeskreis": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "kreis_der_macht": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "hellsehen": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "klon": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "dolchwolke": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "todeswolke": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "spruehende_farben": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "befehl": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "heiliges_gespraech": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "einswerden_mit_der_natur": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "erzwungenes_duell": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "sprachen_verstehen": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "zwang": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "kaeltekegel": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "verwirrung": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "tiere_beschwoeren": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "schusshagel_beschwoeren": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "celestisches_wesen_beschwoeren": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "elementar_beschwoeren": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "feenwesen_beschwoeren": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "schwache_elementare_beschwoeren": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "pfeilsalve_beschwoeren": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "wesen_des_waldes_beschwoeren": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "kontakt_zu_anderen_ebenen": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "ansteckung": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
+    },
+    "notfall": {
+        "rotate": 0.0,
+        "scale": 1.0,
+        "flip": false,
+        "offset_x": 0.0,
+        "offset_y": 0.0
     }
 }

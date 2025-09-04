@@ -4,6 +4,7 @@ import json
 from config.constants import (
     # New hierarchical constants
     FONT_STYLE,
+    SECONDARY_FONT_STYLE,
     IMAGE,
     ITEM,
     PATHS,
@@ -118,6 +119,7 @@ class ImageHandler:
         layout: LayoutElement,
         fontPath: str,
         maxSize: int,
+        primary: bool = True,
     ) -> Callable[[Image.Image], None]:
         def op(background: Image.Image) -> None:
             draw = ImageDraw.Draw(background)
@@ -133,7 +135,7 @@ class ImageHandler:
                 ),
                 text,
                 font=font,
-                fill=FONT_STYLE.COLORS.STATS,
+                fill=FONT_STYLE.COLORS.STATS if primary else SECONDARY_FONT_STYLE.COLORS.STATS,
             )
 
         return op
@@ -563,7 +565,8 @@ class ImageHandler:
                         formatFloatAsInt(spell.components.material.cost),
                         SPELL.MATERIAL.COST,
                         FONT.STATS_PATH,
-                        FONT_STYLE.SIZES.STATS,
+                        SECONDARY_FONT_STYLE.SIZES.STATS,
+                        False,
                     )
                 )
         if not spell.concentration:

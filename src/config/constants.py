@@ -176,8 +176,8 @@ PATHS = _PathConstants()
 
 # = Font Styling =
 class _FontColors:
-    def __init__(self) -> None:
-        self.BLUE_INK: tuple[int, int, int, int] = toRGBA("#00053b")
+    def __init__(self, primary: bool = True) -> None:
+        self.BLUE_INK: tuple[int, int, int, int] = toRGBA("#00053b" if primary else "#ffffff")
         self.TITLE: tuple[int, int, int, int] = self.BLUE_INK
         self.PRICE: tuple[int, int, int, int] = self.BLUE_INK
         self.STATS: tuple[int, int, int, int] = self.BLUE_INK
@@ -191,12 +191,13 @@ class _FontSizes:
 
 
 class _FontStyling:
-    def __init__(self) -> None:
-        self.COLORS: _FontColors = _FontColors()
+    def __init__(self, primary: bool = True) -> None:
+        self.COLORS: _FontColors = _FontColors(primary)
         self.SIZES: _FontSizes = _FontSizes()
 
 
 FONT_STYLE = _FontStyling()
+SECONDARY_FONT_STYLE = _FontStyling(primary=False)
 
 
 # = Items =
@@ -239,16 +240,16 @@ class _MaterialConstants:
     def __init__(self) -> None:
         sY = _SpellConstants.SMALLS_Y_OFFSET
         self.SPOKEN: LayoutElement = LayoutElement(150, 380 + sY, 25, 25)
-        self.MATERIAL: LayoutElement = LayoutElement(185, 380 + sY, 25, 25)
+        self.MATERIAL: LayoutElement = LayoutElement(190, 366 + sY, 50, 50)
         self.GESTURAL: LayoutElement = LayoutElement(220, 380 + sY, 25, 25)
-        self.NAME: LayoutElement = LayoutElement(185, 400 + sY, 100, 18)
-        self.COST: LayoutElement = LayoutElement(185, 420 + sY, 75, 20)
+        self.NAME: LayoutElement = LayoutElement(185, 400 + sY, 200, 18)
+        self.COST: LayoutElement = LayoutElement(186, 370 + sY, 50, 20)
 
 
 class _SpellConstants:
     SMALLS_Y_OFFSET: int = 60
     MID_Y_OFFSET: int = -15
-
+    MID_X_OFFSET: int = 25
     def __init__(self) -> None:
         sY = _SpellConstants.SMALLS_Y_OFFSET
         mY = _SpellConstants.MID_Y_OFFSET
@@ -266,10 +267,10 @@ class _SpellConstants:
         self.RANGE_TEXT: LayoutElement = LayoutElement(300, 460, 36, 26)
         self.MATERIAL: _MaterialConstants = _MaterialConstants()
         self.CONCENTRATION: LayoutElement = LayoutElement(150, 355 + sY, 25, 25)
-        self.CAST_TIME: LayoutElement = LayoutElement(185, 355 + sY, 25, 25)
+        self.CAST_TIME: LayoutElement = LayoutElement(185+self.MID_X_OFFSET, 385, 40, 25)
         self.RITUAL: LayoutElement = LayoutElement(220, 355 + sY, 25, 25)
-        self.SAVING_THROW: LayoutElement = LayoutElement(260, 365, 40, 18)
-        self.SUB_RANGE: LayoutElement = LayoutElement(185, 385, 50, 20)
+        self.SAVING_THROW: LayoutElement = LayoutElement(255, 350, 40, 18)
+        self.SUB_RANGE: LayoutElement = LayoutElement(185-self.MID_X_OFFSET, 385, 50, 20)
         self.TARGET: LayoutElement = LayoutElement(185, 360, 40, 40)
         self.OVERLEVEL: LayoutElement = LayoutElement(
             320, 275, 30, 190
