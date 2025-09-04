@@ -239,41 +239,45 @@ class _ItemConstants:
 class _MaterialConstants:
     def __init__(self) -> None:
         sY = _SpellConstants.SMALLS_Y_OFFSET
-        self.SPOKEN: LayoutElement = LayoutElement(150, 380 + sY, 25, 25)
-        self.MATERIAL: LayoutElement = LayoutElement(190, 366 + sY, 50, 50)
-        self.GESTURAL: LayoutElement = LayoutElement(220, 380 + sY, 25, 25)
-        self.NAME: LayoutElement = LayoutElement(185, 400 + sY, 200, 18)
-        self.COST: LayoutElement = LayoutElement(186, 370 + sY, 50, 20)
+        lY = _SpellConstants.LOWER_Y_OFFSET
+        self.SPOKEN: LayoutElement = LayoutElement(150, 380 +lY+ sY, 25, 25)
+        self.MATERIAL: LayoutElement = LayoutElement(190, 366 +lY+ sY, 50, 50)
+        self.GESTURAL: LayoutElement = LayoutElement(220, 380 +lY+ sY, 25, 25)
+        self.NAME: LayoutElement = LayoutElement(185, 410 +lY+ sY, 200, 35)
+        self.COST: LayoutElement = LayoutElement(186, 370 +lY+ sY, 50, 20)
 
 
 class _SpellConstants:
-    SMALLS_Y_OFFSET: int = 60
+    SMALLS_Y_OFFSET: int = 65
+    LOWER_Y_OFFSET: int = -35
     MID_Y_OFFSET: int = -15
     MID_X_OFFSET: int = 25
     def __init__(self) -> None:
         sY = _SpellConstants.SMALLS_Y_OFFSET
         mY = _SpellConstants.MID_Y_OFFSET
+        mX = _SpellConstants.MID_X_OFFSET
+        lY = _SpellConstants.LOWER_Y_OFFSET
         self.TITLE: LayoutElement = LayoutElement(200, 55, 135, 55)
         self.LEVEL: LayoutElement = LayoutElement(109, 61, 56, 56)
         self.CATEGORY: LayoutElement = LayoutElement(180, 104, 153, 26)
-        self.IMAGE: LayoutElement = LayoutElement(177, 240, 310, 190)
-        self.DURATION: LayoutElement = LayoutElement(60, 430, 36, 36)
-        self.DURATION_TEXT: LayoutElement = LayoutElement(60, 460, 36, 26)
-        self.COOLDOWN: LayoutElement = LayoutElement(105, 395 + mY, 36, 36)
-        self.COOLDOWN_TEXT: LayoutElement = LayoutElement(105, 425 + mY, 36, 26)
-        self.DAMAGE: LayoutElement = LayoutElement(255, 395 + mY, 36, 36)
-        self.DAMAGE_TEXT: LayoutElement = LayoutElement(255, 425 + mY, 36, 26)
-        self.RANGE: LayoutElement = LayoutElement(300, 430, 36, 36)
-        self.RANGE_TEXT: LayoutElement = LayoutElement(300, 460, 36, 26)
+        self.IMAGE: LayoutElement = LayoutElement(177, 200, 310, 150)
+        self.DURATION: LayoutElement = LayoutElement(60, 430+lY, 36, 36)
+        self.DURATION_TEXT: LayoutElement = LayoutElement(60, 460+lY, 36, 26)
+        self.COOLDOWN: LayoutElement = LayoutElement(105, 395 +lY+ mY, 36, 36)
+        self.COOLDOWN_TEXT: LayoutElement = LayoutElement(105, 425 + lY+ mY, 36, 26)
+        self.DAMAGE: LayoutElement = LayoutElement(255, 395 + lY+ mY, 36, 36)
+        self.DAMAGE_TEXT: LayoutElement = LayoutElement(255, 425 + lY+ mY, 36, 26)
+        self.RANGE: LayoutElement = LayoutElement(300, 430+lY, 36, 36)
+        self.RANGE_TEXT: LayoutElement = LayoutElement(300, 460+lY, 36, 26)
         self.MATERIAL: _MaterialConstants = _MaterialConstants()
-        self.CONCENTRATION: LayoutElement = LayoutElement(150, 355 + sY, 25, 25)
-        self.CAST_TIME: LayoutElement = LayoutElement(185+self.MID_X_OFFSET, 385, 40, 25)
-        self.RITUAL: LayoutElement = LayoutElement(220, 355 + sY, 25, 25)
-        self.SAVING_THROW: LayoutElement = LayoutElement(255, 350, 40, 18)
-        self.SUB_RANGE: LayoutElement = LayoutElement(185-self.MID_X_OFFSET, 385, 50, 20)
-        self.TARGET: LayoutElement = LayoutElement(185, 360, 40, 40)
+        self.CONCENTRATION: LayoutElement = LayoutElement(150, 355+lY+ sY, 25, 25)
+        self.CAST_TIME: LayoutElement = LayoutElement(185+mX, 385+lY, 40, 25)
+        self.RITUAL: LayoutElement = LayoutElement(220, 355 + lY+ sY, 25, 25)
+        self.SAVING_THROW: LayoutElement = LayoutElement(255, 350+lY, 40, 18)
+        self.SUB_RANGE: LayoutElement = LayoutElement(185-mX, 385+lY, 50, 20)
+        self.TARGET: LayoutElement = LayoutElement(185, 360+lY, 40, 40)
         self.OVERLEVEL: LayoutElement = LayoutElement(
-            320, 275, 30, 190
+            320, 275+lY, 30, 190
         )  # for later use
 
 
