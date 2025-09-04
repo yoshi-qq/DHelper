@@ -262,7 +262,7 @@ class _SpellConstants:
         self.CATEGORY: LayoutElement = LayoutElement(180, 104, 153, 26)
         self.IMAGE: LayoutElement = LayoutElement(177, 200, 310, 150)
         self.DURATION: LayoutElement = LayoutElement(60, 430+lY, 36, 36)
-        self.DURATION_TEXT: LayoutElement = LayoutElement(60, 460+lY, 36, 26)
+        self.DURATION_TEXT: LayoutElement = LayoutElement(60, 460+lY, 60, 26)
         self.COOLDOWN: LayoutElement = LayoutElement(105, 395 +lY+ mY, 36, 36)
         self.COOLDOWN_TEXT: LayoutElement = LayoutElement(105, 425 + lY+ mY, 36, 26)
         self.DAMAGE: LayoutElement = LayoutElement(255, 395 + lY+ mY, 36, 36)

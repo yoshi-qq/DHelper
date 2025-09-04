@@ -1,6 +1,18 @@
 from enum import Enum
 
 
+class Time(Enum):
+    SECOND = "Second"
+    SECONDS = "Seconds"
+    MINUTE = "Minute"
+    MINUTES = "Minutes"
+    HOUR = "Hour"
+    HOURS = "Hours"
+    DAY = "Day"
+    DAYS = "Days"
+    WEEK = "Week"
+    WEEKS = "Weeks"
+
 class PrefixText(Enum):
     WEIGHT_PREFIX = "WeightPrefix"
     WEIGHT_SUFFIX = "WeightSuffix"

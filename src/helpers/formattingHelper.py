@@ -2,6 +2,8 @@ from datetime import timedelta
 from itertools import combinations
 from PIL import ImageFont, ImageDraw, Image
 from classes.types import Damage
+from helpers.translationHelper import translate
+from classes.textKeys import Time
 
 
 def formatFloatAsInt(value: float) -> str:
@@ -177,10 +179,24 @@ def formatTimedelta(delta: timedelta) -> str:
     hours = (total % 86400) // 3600
     minutes = (total % 3600) // 60
     seconds = total % 60
+    SECOND = translate(Time.SECOND)
+    SECONDS = translate(Time.SECONDS)
+    MINUTE = translate(Time.MINUTE)
+    MINUTES = translate(Time.MINUTES)
+    HOUR = translate(Time.HOUR)
+    HOURS = translate(Time.HOURS)
+    DAY = translate(Time.DAY)
+    DAYS = translate(Time.DAYS)
     if days:
-        return f"{days} day{'s' if days != 1 else ''}"
+        return f"{days} {DAYS if days != 1 else DAY}"
     if hours:
+        if minutes == 0 and seconds == 0:
+            return f"{hours} {HOURS if hours != 1 else HOUR}"
+        if seconds == 0 and minutes % 15 == 0:
+            return f"{hours}.{minutes // 15} h"
         return f"{hours}:{minutes:02d}:{seconds:02d}"
     if minutes:
+        if seconds == 0:
+            return f"{minutes} {MINUTES if minutes != 1 else MINUTE}"
         return f"{minutes}:{seconds:02d}"
-    return f"{seconds}s"
+    return f"{seconds} {SECONDS if seconds != 1 else SECOND}"

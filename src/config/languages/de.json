@@ -1,4 +1,16 @@
 {
+  "Time": {
+    "SECOND": "Sekunde",
+    "SECONDS": "Sekunden",
+    "MINUTE": "Minute",
+    "MINUTES": "Minuten",
+    "HOUR": "Stunde",
+    "HOURS": "Stunden",
+    "DAY": "Tag",
+    "DAYS": "Tage",
+    "WEEK": "Woche",
+    "WEEKS": "Wochen"
+  },
   "PrefixText": {
     "WEIGHT_PREFIX": "Gewicht: ",
     "WEIGHT_SUFFIX": " kg",
