@@ -1,0 +1,68 @@
+{
+    "feuerball": {
+        "id": "feuerball",
+        "name": "Feuerball",
+        "level": 3,
+        "type": "EVOCATION",
+        "casterClasses": [
+            "WIZARD"
+        ],
+        "duration": 1.0,
+        "cooldown": 0.0,
+        "range": 45.0,
+        "subRange": 5.0,
+        "damage": {
+            "diceAmount": 8,
+            "diceType": 6,
+            "bonus": 0,
+            "damageType": "Fire"
+        },
+        "components": {
+            "verbal": true,
+            "gestural": true,
+            "material": {
+                "name": "Schwefel",
+                "cost": null
+            }
+        },
+        "levelBonus": "1D6",
+        "castingTime": "ACTION",
+        "ritual": false,
+        "concentration": false,
+        "target": "POINT",
+        "savingThrow": null,
+        "areaOfEffect": null
+    },
+    "saeurespritzer": {
+    "id": "saeurespritzer",
+    "name": "Säurespritzer",
+    "level": 0,
+    "type": "CONJURATION",
+    "casterClasses": [
+        "SORCERER",
+        "WIZARD"
+    ],
+    "duration": 6.0,
+    "cooldown": 0.0,
+    "range": 18.3,
+    "subRange": null,
+    "damage": {
+        "diceAmount": 1,
+        "diceType": 6,
+        "bonus": 0,
+        "damageType": "Acid"
+    },
+    "components": {
+        "verbal": true,
+        "gestural": true,
+        "material": null
+    },
+    "levelBonus": "1D6",
+    "castingTime": "ACTION",
+    "ritual": false,
+    "concentration": false,
+    "target": "CREATURE",
+    "savingThrow": "DEXTERITY",
+    "areaOfEffect": null
+    }
+}
