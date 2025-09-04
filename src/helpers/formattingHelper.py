@@ -1,4 +1,5 @@
 from datetime import timedelta
+from itertools import combinations
 from PIL import ImageFont, ImageDraw, Image
 from classes.types import Damage
 
@@ -51,21 +52,35 @@ def getMaxFontSize(
     return size
 
 
-def wrapText(text: str, fontPath: str, maxSize: int, maxWidth: float) -> str:
-    """Insert a line break to maximize font size within the given width."""
+def wrapText(
+    text: str,
+    fontPath: str,
+    maxSize: int,
+    maxWidth: float,
+    maxHeight: float = float("inf"),
+) -> str:
+    """Insert line breaks to maximize font size within the given width and height."""
     words = text.split()
     if len(words) <= 1:
         return text
 
     bestText = text
-    bestSize = getMaxFontSize(text, fontPath, maxSize, maxWidth)
+    bestSize = getMaxFontSize(text, fontPath, maxSize, maxWidth, maxHeight)
 
-    for splitPoint in range(1, len(words)):
-        candidate = " ".join(words[:splitPoint]) + "\n" + " ".join(words[splitPoint:])
-        size = getMaxFontSize(candidate, fontPath, maxSize, maxWidth)
-        if size > bestSize:
-            bestSize = size
-            bestText = candidate
+    positions = list(range(1, len(words)))
+    for r in range(1, len(words)):
+        for breaks in combinations(positions, r):
+            lines: list[str] = []
+            last = 0
+            for b in breaks:
+                lines.append(" ".join(words[last:b]))
+                last = b
+            lines.append(" ".join(words[last:]))
+            candidate = "\n".join(lines)
+            size = getMaxFontSize(candidate, fontPath, maxSize, maxWidth, maxHeight)
+            if size > bestSize:
+                bestSize = size
+                bestText = candidate
 
     return bestText
 
@@ -158,9 +173,12 @@ def formatDamage(d: Damage, withType: bool = False) -> str:
 def formatTimedelta(delta: timedelta) -> str:
     """Return a human readable representation of a timedelta."""
     total = int(delta.total_seconds())
-    hours = total // 3600
+    days = total // 86400
+    hours = (total % 86400) // 3600
     minutes = (total % 3600) // 60
     seconds = total % 60
+    if days:
+        return f"{days} day{'s' if days != 1 else ''}"
     if hours:
         return f"{hours}:{minutes:02d}:{seconds:02d}"
     if minutes:
