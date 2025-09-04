@@ -23,7 +23,12 @@ from classes.types import (
     Spell,
     TargetType,
 )
-from helpers.translationHelper import translate, shortName
+from helpers.translationHelper import (
+    translate,
+    shortName,
+    get_print_missing,
+    get_skip_missing,
+)
 from helpers.dataHelper import getWeapons, getArmors, getItems, getSpells
 from helpers.formattingHelper import (
     getMaxFontSize,
@@ -324,44 +329,60 @@ class ImageHandler:
         currency = getCurrency(item.price)
         cardImage = createBackground(currency)
 
-        instructions: List[Callable[[Image.Image], None]] = [
-            self._imageOp(
-                self.getItemAssetPath(item),
-                ITEM.IMAGE,
-                rotate,
-                flip,
-                scale,
-                offset_x,
-                offset_y,
-            ),
-            self._textOp(
-                formatPriceWithSuffix(item.price / currency.value),
-                ITEM.PRICE,
-                FONT.PRICE_PATH,
-                FONT_STYLE.SIZES.PRICE,
-            ),
-            self._textOp(
-                item.name,
-                ITEM.TITLE,
-                FONT.TITLE_PATH,
-                FONT_STYLE.SIZES.TITLE,
-            ),
-            (
-                self._simpleStatsOp(item.weight, item.description)
-                if isinstance(item, SimpleItem)
-                else (
-                    self._armorStatsOp(item)
-                    if isinstance(item, Armor)
-                    else self._statsOp(
-                        item.weight,
-                        getattr(item, "damage", None),
-                        getattr(item, "versatileDamage", None),
-                        getattr(item, "attributes", []),
-                        getattr(item, "ranges", {}),
-                    )
+        instructions: List[Callable[[Image.Image], None]] = []
+
+        image_path = self.getItemAssetPath(item)
+        if not os.path.exists(image_path):
+            if get_skip_missing():
+                raise FileNotFoundError(image_path)
+            if get_print_missing():
+                self.recordMissingItem(item.id)
+            else:
+                raise FileNotFoundError(image_path)
+        else:
+            instructions.append(
+                self._imageOp(
+                    image_path,
+                    ITEM.IMAGE,
+                    rotate,
+                    flip,
+                    scale,
+                    offset_x,
+                    offset_y,
                 )
-            ),
-        ]
+            )
+
+        instructions.extend(
+            [
+                self._textOp(
+                    formatPriceWithSuffix(item.price / currency.value),
+                    ITEM.PRICE,
+                    FONT.PRICE_PATH,
+                    FONT_STYLE.SIZES.PRICE,
+                ),
+                self._textOp(
+                    item.name,
+                    ITEM.TITLE,
+                    FONT.TITLE_PATH,
+                    FONT_STYLE.SIZES.TITLE,
+                ),
+                (
+                    self._simpleStatsOp(item.weight, item.description)
+                    if isinstance(item, SimpleItem)
+                    else (
+                        self._armorStatsOp(item)
+                        if isinstance(item, Armor)
+                        else self._statsOp(
+                            item.weight,
+                            getattr(item, "damage", None),
+                            getattr(item, "versatileDamage", None),
+                            getattr(item, "attributes", []),
+                            getattr(item, "ranges", {}),
+                        )
+                    )
+                ),
+            ]
+        )
 
         self._createCard(cardImage, instructions, self.getItemOutputPath(item))
 
@@ -448,49 +469,66 @@ class ImageHandler:
             self._textOp(
                 str(spell.type), SPELL.CATEGORY, FONT.TITLE_PATH, FONT_STYLE.SIZES.TITLE
             ),
-            self._imageOp(
-                join(IMAGE.PATHS.SPELLS, f"{spell.id}.{IMAGE.FORMAT}"),
-                SPELL.IMAGE,
-                rotate,
-                flip,
-                scale,
-                offset_x,
-                offset_y,
-            ),
-            self._iconOp(IMAGE.ICONS.DURATION, SPELL.DURATION),
-            self._textOp(
-                formatTimedelta(spell.duration),
-                SPELL.DURATION_TEXT,
-                FONT.STATS_PATH,
-                FONT_STYLE.SIZES.STATS,
-            ),
-            self._iconOp(IMAGE.ICONS.COOLDOWN, SPELL.COOLDOWN),
-            self._textOp(
-                formatTimedelta(spell.cooldown),
-                SPELL.COOLDOWN_TEXT,
-                FONT.STATS_PATH,
-                FONT_STYLE.SIZES.STATS,
-            ),
-            self._iconOp(IMAGE.ICONS.DAMAGE, SPELL.DAMAGE),
-            self._iconOp(IMAGE.ICONS.RANGE, SPELL.RANGE),
-            self._textOp(
-                f"{formatFloatAsInt(spell.range)}m",
-                SPELL.RANGE_TEXT,
-                FONT.STATS_PATH,
-                FONT_STYLE.SIZES.STATS,
-            ),
-            self._iconOp(IMAGE.ICONS.SPOKEN, SPELL.MATERIAL.SPOKEN),
-            self._iconOp(IMAGE.ICONS.MATERIAL, SPELL.MATERIAL.MATERIAL),
-            self._iconOp(IMAGE.ICONS.GESTURAL, SPELL.MATERIAL.GESTURAL),
-            self._iconOp(IMAGE.ICONS.CONCENTRATION, SPELL.CONCENTRATION),
-            self._iconOp(IMAGE.ICONS.RITUAL, SPELL.RITUAL),
-            self._textOp(
-                str(spell.castingTime),
-                SPELL.CAST_TIME,
-                FONT.STATS_PATH,
-                FONT_STYLE.SIZES.STATS,
-            ),
         ]
+
+        spell_image_path = join(IMAGE.PATHS.SPELLS, f"{spell.id}.{IMAGE.FORMAT}")
+        if not os.path.exists(spell_image_path):
+            if get_skip_missing():
+                raise FileNotFoundError(spell_image_path)
+            if get_print_missing():
+                self.recordMissingSpell(spell.id)
+            else:
+                raise FileNotFoundError(spell_image_path)
+        else:
+            instructions.append(
+                self._imageOp(
+                    spell_image_path,
+                    SPELL.IMAGE,
+                    rotate,
+                    flip,
+                    scale,
+                    offset_x,
+                    offset_y,
+                )
+            )
+
+        instructions.extend(
+            [
+                self._iconOp(IMAGE.ICONS.DURATION, SPELL.DURATION),
+                self._textOp(
+                    formatTimedelta(spell.duration),
+                    SPELL.DURATION_TEXT,
+                    FONT.STATS_PATH,
+                    FONT_STYLE.SIZES.STATS,
+                ),
+                self._iconOp(IMAGE.ICONS.COOLDOWN, SPELL.COOLDOWN),
+                self._textOp(
+                    formatTimedelta(spell.cooldown),
+                    SPELL.COOLDOWN_TEXT,
+                    FONT.STATS_PATH,
+                    FONT_STYLE.SIZES.STATS,
+                ),
+                self._iconOp(IMAGE.ICONS.DAMAGE, SPELL.DAMAGE),
+                self._iconOp(IMAGE.ICONS.RANGE, SPELL.RANGE),
+                self._textOp(
+                    f"{formatFloatAsInt(spell.range)}m",
+                    SPELL.RANGE_TEXT,
+                    FONT.STATS_PATH,
+                    FONT_STYLE.SIZES.STATS,
+                ),
+                self._iconOp(IMAGE.ICONS.SPOKEN, SPELL.MATERIAL.SPOKEN),
+                self._iconOp(IMAGE.ICONS.MATERIAL, SPELL.MATERIAL.MATERIAL),
+                self._iconOp(IMAGE.ICONS.GESTURAL, SPELL.MATERIAL.GESTURAL),
+                self._iconOp(IMAGE.ICONS.CONCENTRATION, SPELL.CONCENTRATION),
+                self._iconOp(IMAGE.ICONS.RITUAL, SPELL.RITUAL),
+                self._textOp(
+                    str(spell.castingTime),
+                    SPELL.CAST_TIME,
+                    FONT.STATS_PATH,
+                    FONT_STYLE.SIZES.STATS,
+                ),
+            ]
+        )
 
         if spell.damage:
             dmg_text = f"{formatDamage(spell.damage)}\n{spell.damage.damageType}"
