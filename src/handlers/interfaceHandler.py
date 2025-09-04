@@ -1752,8 +1752,22 @@ class InterfaceHandler:
         )
         preview_spells: List[Spell] = []
         skip_missing = get_skip_missing()
+        print_missing = get_print_missing()
         for sp in spells:
-            if show_all or sp.id not in cache:
+            if show_all:
+                preview_spells.append(sp)
+            elif sp.id not in cache:
+                if print_missing:
+                    spell_image = join(IMAGE.PATHS.SPELLS, f"{sp.id}.{IMAGE.FORMAT}")
+                    if not os.path.exists(spell_image):
+                        try:
+                            self.image_handler.createSpellCard(sp)
+                        except FileNotFoundError:
+                            if skip_missing:
+                                self.image_handler.recordMissingSpell(sp.id)
+                            else:
+                                raise
+                        continue
                 preview_spells.append(sp)
             else:
                 t = cache[sp.id]
@@ -1797,8 +1811,22 @@ class InterfaceHandler:
         )
         preview_items: List[Item] = []
         skip_missing = get_skip_missing()
+        print_missing = get_print_missing()
         for item in items:
-            if show_all or item.id not in cache:
+            if show_all:
+                preview_items.append(item)
+            elif item.id not in cache:
+                if print_missing:
+                    asset_path = self.image_handler.getItemAssetPath(item)
+                    if not os.path.exists(asset_path):
+                        try:
+                            self.image_handler.createItemCard(item)
+                        except FileNotFoundError:
+                            if skip_missing:
+                                self.image_handler.recordMissingItem(item.id)
+                            else:
+                                raise
+                        continue
                 preview_items.append(item)
             else:
                 t = cache[item.id]
@@ -1839,8 +1867,22 @@ class InterfaceHandler:
         )
         preview_items: List[SimpleItem] = []
         skip_missing = get_skip_missing()
+        print_missing = get_print_missing()
         for item in items:
-            if show_all or item.id not in cache:
+            if show_all:
+                preview_items.append(item)
+            elif item.id not in cache:
+                if print_missing:
+                    asset_path = self.image_handler.getItemAssetPath(item)
+                    if not os.path.exists(asset_path):
+                        try:
+                            self.image_handler.createItemCard(item)
+                        except FileNotFoundError:
+                            if skip_missing:
+                                self.image_handler.recordMissingItem(item.id)
+                            else:
+                                raise
+                        continue
                 preview_items.append(item)
             else:
                 t = cache[item.id]
@@ -1881,8 +1923,22 @@ class InterfaceHandler:
         )
         preview_items: List[Armor] = []
         skip_missing = get_skip_missing()
+        print_missing = get_print_missing()
         for item in items:
-            if show_all or item.id not in cache:
+            if show_all:
+                preview_items.append(item)
+            elif item.id not in cache:
+                if print_missing:
+                    asset_path = self.image_handler.getItemAssetPath(item)
+                    if not os.path.exists(asset_path):
+                        try:
+                            self.image_handler.createItemCard(item)
+                        except FileNotFoundError:
+                            if skip_missing:
+                                self.image_handler.recordMissingItem(item.id)
+                            else:
+                                raise
+                        continue
                 preview_items.append(item)
             else:
                 t = cache[item.id]

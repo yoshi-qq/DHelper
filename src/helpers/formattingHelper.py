@@ -51,6 +51,25 @@ def getMaxFontSize(
     return size
 
 
+def wrapText(text: str, fontPath: str, maxSize: int, maxWidth: float) -> str:
+    """Insert a line break to maximize font size within the given width."""
+    words = text.split()
+    if len(words) <= 1:
+        return text
+
+    bestText = text
+    bestSize = getMaxFontSize(text, fontPath, maxSize, maxWidth)
+
+    for splitPoint in range(1, len(words)):
+        candidate = " ".join(words[:splitPoint]) + "\n" + " ".join(words[splitPoint:])
+        size = getMaxFontSize(candidate, fontPath, maxSize, maxWidth)
+        if size > bestSize:
+            bestSize = size
+            bestText = candidate
+
+    return bestText
+
+
 def findOptimalAttributeLayout(
     attributes: list[str],
     fixedRows: list[str],
