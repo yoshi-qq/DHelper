@@ -39,7 +39,7 @@ from helpers.translationHelper import (
     set_print_missing,
     LANG_DIR,
 )
-from config.constants import GAME, PATHS, IMAGE
+from config.constants import GAME, PATHS, IMAGE, CARD
 from helpers.dataHelper import (
     getWeapons,
     addWeapon,
@@ -481,7 +481,12 @@ class InterfaceHandler:
                 top = tk.Toplevel(window)
                 self._set_icon(top)
                 top.title(f"{item.name} Card")
-                tk_img = ImageTk.PhotoImage(img)
+                # Scale the image for display (divide by 5 to reduce size)
+                width, height = CARD.RESOLUTION
+                preview_width = width // 5
+                preview_height = height // 5
+                scaled_img = img.resize((preview_width, preview_height), Image.Resampling.LANCZOS)
+                tk_img = ImageTk.PhotoImage(scaled_img)
                 lbl = ttk.Label(top, image=tk_img)
                 lbl.image = tk_img  # type: ignore (anti garbage collection)
                 lbl.pack()
@@ -1700,7 +1705,12 @@ class InterfaceHandler:
                 top = tk.Toplevel(window)
                 self._set_icon(top)
                 top.title(sp.name)
-                tk_img = ImageTk.PhotoImage(img)
+                # Scale the image for display (divide by 5 to reduce size)
+                width, height = CARD.RESOLUTION
+                preview_width = width // 5
+                preview_height = height // 5
+                scaled_img = img.resize((preview_width, preview_height), Image.Resampling.LANCZOS)
+                tk_img = ImageTk.PhotoImage(scaled_img)
                 lbl = ttk.Label(top, image=tk_img)
                 lbl.image = tk_img  # type: ignore
                 lbl.pack()
@@ -2093,7 +2103,12 @@ class PreviewWindow(tk.Toplevel):
     def _update_image(self) -> None:
         if self.display is None:
             return
-        self.tk_img = ImageTk.PhotoImage(self.display)
+        # Scale the image for preview (divide by 5 to reduce size)
+        width, height = CARD.RESOLUTION
+        preview_width = width // 5
+        preview_height = height // 5
+        scaled_image = self.display.resize((preview_width, preview_height), Image.Resampling.LANCZOS)
+        self.tk_img = ImageTk.PhotoImage(scaled_image)
         self.label.configure(image=self.tk_img)
 
     def _update_scale(self, _value: str) -> None:
@@ -2265,7 +2280,12 @@ class SpellPreviewWindow(tk.Toplevel):
     def _update_image(self) -> None:
         if self.display is None:
             return
-        self.tk_img = ImageTk.PhotoImage(self.display)
+        # Scale the image for preview (divide by 5 to reduce size)
+        width, height = CARD.RESOLUTION
+        preview_width = width // 5
+        preview_height = height // 5
+        scaled_image = self.display.resize((preview_width, preview_height), Image.Resampling.LANCZOS)
+        self.tk_img = ImageTk.PhotoImage(scaled_image)
         self.label.configure(image=self.tk_img)
 
     def _update_scale(self, _value: str) -> None:

@@ -257,7 +257,7 @@ class _SpellConstants:
         mY = _SpellConstants.MID_Y_OFFSET
         # mX = _SpellConstants.MID_X_OFFSET
         lY = _SpellConstants.LOWER_Y_OFFSET
-        self.TITLE: LayoutElement = LayoutElement(1000, 275, 675, 275)
+        self.TITLE: LayoutElement = LayoutElement(1000, 275, 675, 250)
         self.LEVEL: LayoutElement = LayoutElement(545, 305, 280, 280)
         self.CATEGORY: LayoutElement = LayoutElement(900, 520, 765, 130)
         self.IMAGE: LayoutElement = LayoutElement(885, 1000, 1550, 750)
