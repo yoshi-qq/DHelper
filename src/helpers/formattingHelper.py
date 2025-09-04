@@ -69,8 +69,17 @@ def wrapText(
     bestText = text
     bestSize = getMaxFontSize(text, fontPath, maxSize, maxWidth, maxHeight)
 
+    # Limit the number of combinations to prevent exponential explosion
+    # For texts with many words, use a more efficient greedy approach
+    if len(words) > 8:
+        # Use greedy approach for long texts
+        return _wrapTextGreedy(text, fontPath, maxSize, maxWidth, maxHeight)
+
+    # For shorter texts, try different break combinations but limit the search
     positions = list(range(1, len(words)))
-    for r in range(1, len(words)):
+    max_breaks = min(3, len(words) - 1)  # Limit to max 3 line breaks
+
+    for r in range(1, max_breaks + 1):
         for breaks in combinations(positions, r):
             lines: list[str] = []
             last = 0
@@ -83,6 +92,51 @@ def wrapText(
             if size > bestSize:
                 bestSize = size
                 bestText = candidate
+
+    return bestText
+
+
+def _wrapTextGreedy(
+    text: str,
+    fontPath: str,
+    maxSize: int,
+    maxWidth: float,
+    maxHeight: float = float("inf"),
+) -> str:
+    """Greedy text wrapping approach for longer texts."""
+    words = text.split()
+    if len(words) <= 1:
+        return text
+
+    bestText = text
+    bestSize = getMaxFontSize(text, fontPath, maxSize, maxWidth, maxHeight)
+
+    # Try simple splits at different positions
+    for split_point in range(1, len(words)):
+        lines = [
+            " ".join(words[:split_point]),
+            " ".join(words[split_point:])
+        ]
+        candidate = "\n".join(lines)
+        size = getMaxFontSize(candidate, fontPath, maxSize, maxWidth, maxHeight)
+        if size > bestSize:
+            bestSize = size
+            bestText = candidate
+
+    # Try three-line splits for very long texts
+    if len(words) > 6:
+        mid1 = len(words) // 3
+        mid2 = 2 * len(words) // 3
+        lines = [
+            " ".join(words[:mid1]),
+            " ".join(words[mid1:mid2]),
+            " ".join(words[mid2:])
+        ]
+        candidate = "\n".join(lines)
+        size = getMaxFontSize(candidate, fontPath, maxSize, maxWidth, maxHeight)
+        if size > bestSize:
+            bestSize = size
+            bestText = candidate
 
     return bestText
 
