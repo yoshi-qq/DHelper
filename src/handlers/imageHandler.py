@@ -123,13 +123,13 @@ class ImageHandler:
         primary: bool = True,
     ) -> Callable[[Image.Image], None]:
         def op(background: Image.Image) -> None:
-            draw = ImageDraw.Draw(background)
+            draw: ImageDraw.ImageDraw = ImageDraw.Draw(background)
             fontSize = getMaxFontSize(text, fontPath, maxSize, layout.SIZE.ABSOLUTE[0])
             font = ImageFont.truetype(fontPath, fontSize)
             bbox = draw.textbbox((0, 0), text, font=font)
             w = bbox[2] - bbox[0]
             h = bbox[3] - bbox[1]
-            draw.text(
+            draw.text(  # type: ignore[reportUnknownMemberType]
                 (
                     layout.POSITION.ABSOLUTE[0] - w / 2,
                     layout.POSITION.ABSOLUTE[1] - h / 2,
@@ -215,10 +215,10 @@ class ImageHandler:
             )
             statsString = "\n".join(optimalRows)
 
-            draw = ImageDraw.Draw(background)
+            draw: ImageDraw.ImageDraw = ImageDraw.Draw(background)
             statsX, statsY = ITEM.STATS.POSITION.ABSOLUTE
             statsFont = ImageFont.truetype(FONT.STATS_PATH, optimalFontSize)
-            draw.text(
+            draw.text(  # type: ignore[reportUnknownMemberType]
                 (statsX, statsY),
                 statsString,
                 font=statsFont,
@@ -364,7 +364,13 @@ class ImageHandler:
                     FONT_STYLE.SIZES.PRICE,
                 ),
                 self._textOp(
-                    item.name,
+                    wrapText(
+                        item.name,
+                        FONT.TITLE_PATH,
+                        FONT_STYLE.SIZES.TITLE,
+                        ITEM.TITLE.SIZE.ABSOLUTE[0],
+                        ITEM.TITLE.SIZE.ABSOLUTE[1],
+                    ),
                     ITEM.TITLE,
                     FONT.TITLE_PATH,
                     FONT_STYLE.SIZES.TITLE,
@@ -467,7 +473,16 @@ class ImageHandler:
         instructions: List[Callable[[Image.Image], None]] = [
             self._iconOp(levelIcon, SPELL.LEVEL, center=True),
             self._textOp(
-                spell.name, SPELL.TITLE, FONT.TITLE_PATH, FONT_STYLE.SIZES.TITLE
+                wrapText(
+                    spell.name,
+                    FONT.TITLE_PATH,
+                    FONT_STYLE.SIZES.TITLE,
+                    SPELL.TITLE.SIZE.ABSOLUTE[0],
+                    SPELL.TITLE.SIZE.ABSOLUTE[1],
+                ),
+                SPELL.TITLE,
+                FONT.TITLE_PATH,
+                FONT_STYLE.SIZES.TITLE,
             ),
             self._textOp(
                 str(spell.type), SPELL.CATEGORY, FONT.TITLE_PATH, FONT_STYLE.SIZES.TITLE
@@ -557,6 +572,7 @@ class ImageHandler:
                     FONT.STATS_PATH,
                     FONT_STYLE.SIZES.STATS,
                     SPELL.MATERIAL.NAME.SIZE.ABSOLUTE[0],
+                    SPELL.MATERIAL.NAME.SIZE.ABSOLUTE[1],
                 )
                 instructions.append(
                     self._textOp(
