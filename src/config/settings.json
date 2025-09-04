@@ -1,5 +1,6 @@
 {
   "language": "de",
   "theme": "dark",
-  "skip_missing": true
+  "skip_missing": true,
+  "print_missing": false
 }

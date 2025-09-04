@@ -105,6 +105,7 @@
     "LANGUAGE_LABEL": "Sprache",
     "THEME_LABEL": "Thema",
     "SKIP_MISSING_LABEL": "Fehlende Bilder überspringen",
+    "PRINT_MISSING_LABEL": "Fehlende Bilder drucken",
     "LIGHT_OPTION": "Hell",
     "DARK_OPTION": "Dunkel"
   },

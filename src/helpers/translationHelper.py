@@ -9,15 +9,21 @@ SETTINGS_PATH = join(dirname(dirname(__file__)), "config", "settings.json")
 _current_lang = "en"
 _current_theme = "light"
 _skip_missing = False
+_print_missing = False
 _translations: dict[str, dict[str, str]] = {}
 
 
 def _load_settings() -> None:
-    global _current_lang, _current_theme, _skip_missing
+    global _current_lang, _current_theme, _skip_missing, _print_missing
     if not os.path.exists(SETTINGS_PATH):
         with open(SETTINGS_PATH, "w", encoding="utf-8") as f:
             json.dump(
-                {"language": "en", "theme": "light", "skip_missing": False},
+                {
+                    "language": "en",
+                    "theme": "light",
+                    "skip_missing": False,
+                    "print_missing": False,
+                },
                 f,
                 ensure_ascii=False,
                 indent=2,
@@ -25,12 +31,14 @@ def _load_settings() -> None:
         _current_lang = "en"
         _current_theme = "light"
         _skip_missing = False
+        _print_missing = False
         return
     with open(SETTINGS_PATH, "r", encoding="utf-8") as f:
         data = json.load(f)
     _current_lang = data.get("language", "en")
     _current_theme = data.get("theme", "light")
     _skip_missing = data.get("skip_missing", False)
+    _print_missing = data.get("print_missing", False)
 
 
 def _save_settings() -> None:
@@ -40,6 +48,7 @@ def _save_settings() -> None:
                 "language": _current_lang,
                 "theme": _current_theme,
                 "skip_missing": _skip_missing,
+                "print_missing": _print_missing,
             },
             f,
             ensure_ascii=False,
@@ -81,6 +90,16 @@ def get_skip_missing() -> bool:
 def set_skip_missing(value: bool) -> None:
     global _skip_missing
     _skip_missing = value
+    _save_settings()
+
+
+def get_print_missing() -> bool:
+    return _print_missing
+
+
+def set_print_missing(value: bool) -> None:
+    global _print_missing
+    _print_missing = value
     _save_settings()
 
 

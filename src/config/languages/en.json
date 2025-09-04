@@ -78,6 +78,7 @@
     "LANGUAGE_LABEL": "Language",
     "THEME_LABEL": "Theme",
     "SKIP_MISSING_LABEL": "Skip missing images",
+    "PRINT_MISSING_LABEL": "Print missing images",
     "LIGHT_OPTION": "Light",
     "DARK_OPTION": "Dark"
   },

@@ -35,6 +35,8 @@ from helpers.translationHelper import (
     get_theme,
     get_skip_missing,
     set_skip_missing,
+    get_print_missing,
+    set_print_missing,
     LANG_DIR,
 )
 from config.constants import GAME, PATHS, IMAGE
@@ -307,16 +309,24 @@ class InterfaceHandler:
             variable=skip_var,
         ).grid(row=2, column=0, columnspan=2, padx=5, pady=2)
 
+        print_var = tk.BooleanVar(value=get_print_missing())
+        ttk.Checkbutton(
+            frame,
+            text=translate(UIText.PRINT_MISSING_LABEL),
+            variable=print_var,
+        ).grid(row=3, column=0, columnspan=2, padx=5, pady=2)
+
         def apply() -> None:
             set_language(lang_var.get())
             reverse = {translate(v): k for k, v in theme_map.items()}
             set_theme(reverse.get(theme_var.get(), "light"))
             set_skip_missing(skip_var.get())
+            set_print_missing(print_var.get())
             self._apply_theme()
             self._build_main_menu()
 
         ttk.Button(frame, text=translate(UIText.SAVE_BUTTON), command=apply).grid(
-            row=3, column=0, columnspan=2, pady=10
+            row=4, column=0, columnspan=2, pady=10
         )
 
     # ===== Manage Weapons =====
