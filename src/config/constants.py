@@ -185,9 +185,9 @@ class _FontColors:
 
 class _FontSizes:
     def __init__(self) -> None:
-        self.TITLE: int = 50
-        self.PRICE: int = 50
-        self.STATS: int = 18
+        self.TITLE: int = 50 * 4
+        self.PRICE: int = 50 * 4
+        self.STATS: int = 18 * 4
 
 
 class _FontStyling:
@@ -263,16 +263,16 @@ class _SpellConstants:
         self.IMAGE: LayoutElement = LayoutElement(885, 1000, 1550, 750)
         self.DURATION: LayoutElement = LayoutElement(300, 2150 + lY, 180, 180)
         self.DURATION_TEXT: LayoutElement = LayoutElement(300, 2300 + lY, 300, 130)
-        self.COOLDOWN: LayoutElement = LayoutElement(525, 1975 + lY + mY, 180, 180)
-        self.COOLDOWN_TEXT: LayoutElement = LayoutElement(525, 2125 + lY + mY, 180, 130)
+        # self.COOLDOWN: LayoutElement = LayoutElement(525, 1975 + lY + mY, 180, 180)
+        # self.COOLDOWN_TEXT: LayoutElement = LayoutElement(525, 2125 + lY + mY, 180, 130)
         self.DAMAGE: LayoutElement = LayoutElement(1275, 1975 + lY + mY, 180, 180)
-        self.DAMAGE_TEXT: LayoutElement = LayoutElement(1275, 2125 + lY + mY, 180, 130)
+        self.DAMAGE_TEXT: LayoutElement = LayoutElement(1275, 2125 + lY + mY, 300, 130)
         self.RANGE: LayoutElement = LayoutElement(1500, 2150 + lY, 180, 180)
-        self.RANGE_TEXT: LayoutElement = LayoutElement(1500, 2300 + lY, 180, 130)
+        self.RANGE_TEXT: LayoutElement = LayoutElement(1500, 2300 + lY, 300, 130)
         self.MATERIAL: _MaterialConstants = _MaterialConstants()
         self.CONCENTRATION: LayoutElement = LayoutElement(750, 1775 + lY + sY, 125, 125)
         self.CAST_TIME: LayoutElement = LayoutElement(525, 1975 + lY + mY, 180, 180)
-        self.CAST_TIME_TEXT: LayoutElement = LayoutElement(525, 2125 + lY + mY, 180, 130)
+        self.CAST_TIME_TEXT: LayoutElement = LayoutElement(525, 2125 + lY + mY, 300, 130)
         self.RITUAL: LayoutElement = LayoutElement(1100, 1775 + lY + sY, 125, 125)
         self.SAVING_THROW: LayoutElement = LayoutElement(1275, 1750 + lY, 200, 90)
         self.SUB_RANGE: LayoutElement = LayoutElement(925, 1925 + lY, 250, 100)
